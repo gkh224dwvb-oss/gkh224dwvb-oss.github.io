@@ -45,7 +45,7 @@
       a: `Safety &amp; Environment is one of the five sectors the SAA Group works in, alongside recruitment and manpower supply. For details on a specific requirement, our team can help on <b>+971 2 627 0622</b>.`,
       f: ['Services', 'Contact details'] },
     { id: 'adipec', k: ['adipec', 'exhibition', 'expo', 'show', 'event', 'stand', 'booth', 'adnec', 'november', 'meet', 'meeting', 'conference'],
-      a: `Meet our Acting Manager and Head of Operations, <b>Mohamed El Naggar</b>, and the SAA team at <b>ADIPEC 2026</b>, <b>2–5 November</b> at ADNEC Centre, Abu Dhabi. Our stand number will be confirmed soon. <a href="adipec.html#meet">Request a meeting</a>.`,
+      a: `Meet our Acting Manager and Head of Operations, <b>Mohamed El Naggar</b>, and the SAA team at <b>ADIPEC 2026</b>, <b>2–5 November</b> at ADNEC Centre, Abu Dhabi, on <b>stand 16535</b>. <a href="adipec.html#meet">Request a meeting</a>.`,
       f: ['How do I hire through SAA?', 'Contact details'] },
     { id: 'contact', k: ['contact', 'phone', 'call', 'telephone', 'number', 'email', 'mail', 'fax', 'address', 'location', 'where', 'office', 'reach', 'po box', 'map', 'whatsapp'],
       a: `You can reach us at:<ul><li>Tel: <b>+971 2 627 0622</b></li><li>Fax: +971 2 626 8577</li><li>Email: <b>saaest@eim.ae</b></li><li>P.O. Box 27595, Abu Dhabi, UAE</li></ul>${ext(EXT.map, 'Open our location in Maps')}`,
