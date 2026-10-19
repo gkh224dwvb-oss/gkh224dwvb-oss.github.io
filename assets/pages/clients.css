@@ -13,6 +13,10 @@
 .ch-meta dd.num { font-family: var(--f-display); font-weight: 900; font-stretch: 120%; font-size: var(--t-xl); line-height: 1; }
 .ch-meta div:last-child dd.num { font-size: clamp(1.1rem, .9rem + .7vw, 1.6rem); line-height: 1.15; }
 .ch-plus { color: var(--accent); }
+/* three sectors (SA, 19 Oct 2026): the two numbers side by side, the sectors on a full-width row under them */
+.ch-meta { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.ch-meta div:last-child { grid-column: 1 / -1; }
+.ch-meta div:last-child dd.ch-sectors { display: flex; flex-wrap: wrap; column-gap: .3em; row-gap: .1em; }
 .c-band { padding-top: clamp(40px, 5vw, 72px); }
 .c-note { margin-top: clamp(28px, 3vw, 44px); font-size: var(--t-sm); max-width: 70ch; }
 @media (max-width: 860px) {
@@ -21,4 +25,5 @@
 @media (max-width: 520px) {
   .ch-meta { grid-template-columns: 1fr 1fr; gap: 16px; }
   .ch-meta div:last-child { grid-column: 1 / -1; }
+  .ch-meta div:last-child dd.ch-sectors { font-size: 1.15rem; }
 }

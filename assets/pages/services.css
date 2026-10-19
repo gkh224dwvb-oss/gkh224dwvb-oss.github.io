@@ -453,6 +453,9 @@
 }
 .sv-big sup { font-size: .45em; vertical-align: .9em; color: var(--teal); margin-left: .04em; }
 .sv-plus { color: var(--teal); }
+/* three sectors (SA, 19 Oct 2026): one per line, sized to fit the cell */
+.sv-sectors { display: grid; gap: .1em; font-size: clamp(1.25rem, 2.05vw, 2.1rem); line-height: 1; }
+@media (max-width: 860px) { .sv-sectors { font-size: clamp(1.8rem, 7.5vw, 2.6rem); } }
 .sv-cell p { color: var(--ink-muted); max-width: 34ch; }
 
 /* client logo grid: drawn by assets/js/clients.js (styles in assets/css/clients.css); hidden while the list is empty */

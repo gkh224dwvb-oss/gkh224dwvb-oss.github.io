@@ -1,6 +1,7 @@
 /* =========================================================================
    SAA GROUP: Clients page (clients.html)
-   Keeps the "Clients listed" number in the hero in step with assets/data/clients.js.
+   Keeps a [data-client-count] number in step with assets/data/clients.js. The hero now shows SA's own
+   figure ("50+ clients served", 19 Oct 2026) instead, so this only acts if that attribute comes back.
    ========================================================================= */
 (function () {
   'use strict';

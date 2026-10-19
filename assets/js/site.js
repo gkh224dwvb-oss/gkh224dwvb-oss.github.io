@@ -55,7 +55,7 @@
     <a class="logo" href="${u('index.html')}" data-cursor-hover>
       <img class="logo-d" src="${u('assets/img/logo-emblem-white.png')}" alt="" width="46" height="42">
       <img class="logo-l" src="${u('assets/img/logo-emblem-navy.png')}" alt="" width="46" height="42">
-      <span class="logo-text"><b>SAA GROUP</b><span>Est. 1993 · Abu Dhabi</span></span><span class="sr-only">, home</span>
+      <span class="logo-text"><b>SAA GROUP</b><span>Since 1993 · Abu Dhabi</span></span><span class="sr-only">, home</span>
     </a>
     <nav class="nav" aria-label="Main">
       ${PAGES.filter(p => !['home', 'adipec'].includes(p.id)).map(p => `<a class="nav-link${p.id === 'apply' ? ' nav-apply' : ''}" href="${u(p.href)}"${cur(p.id)}>${p.label}</a>`).join('')}
@@ -102,7 +102,7 @@
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <a class="logo" href="${u('index.html')}"><img src="${u('assets/img/logo-emblem-white.png')}" alt="" width="46" height="42"><span class="logo-text"><b>SAA GROUP</b><span>Est. 1993 · Abu Dhabi</span></span><span class="sr-only">, home</span></a>
+        <a class="logo" href="${u('index.html')}"><img src="${u('assets/img/logo-emblem-white.png')}" alt="" width="46" height="42"><span class="logo-text"><b>SAA GROUP</b><span>Since 1993 · Abu Dhabi</span></span><span class="sr-only">, home</span></a>
         <p class="foot-about">Recruitment, manpower supply, onshore and offshore oil and gas fields and facilities services.</p>
       </div>
       <div><h2>Company</h2><ul>
