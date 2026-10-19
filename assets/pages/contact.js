@@ -113,26 +113,26 @@
        work, navy ink for the marker and brackets, and lit dots that darken (rather than brighten) */
     const PALETTES = {
       dark: {
-        dot: f => 'rgba(94,214,204,' + (.07 + .22 * f * f).toFixed(3) + ')',
-        disc: ['rgba(0,161,155,.11)', 'rgba(0,161,155,.04)', 'rgba(0,161,155,.08)'],
-        cross: 'rgba(94,214,204,.17)', diag: 'rgba(94,214,204,.12)', ring: 'rgba(94,214,204,.15)', bezel: 'rgba(94,214,204,.45)',
-        ticks: ['rgba(94,214,204,.6)', 'rgba(94,214,204,.34)', 'rgba(94,214,204,.17)'],
-        label: 'rgba(147,168,188,.8)', hub: 'rgba(94,214,204,.7)',
-        sweep: ['rgba(0,161,155,0)', 'rgba(0,161,155,.06)', 'rgba(25,194,184,.22)', 'rgba(94,214,204,.32)'], wedge: ['25,194,184', .26],
-        lit: m => 'rgba(' + Math.round(94 + 140 * m * m) + ',' + Math.round(214 + 38 * m) + ',' + Math.round(204 + 46 * m) + ',' + (.18 + .8 * m).toFixed(3) + ')',
-        edge: ['rgba(94,214,204,.08)', 'rgba(220,250,246,.95)'], pulse: ['94,214,204', .5], bearing: ['94,214,204', .5],
-        glow: [['170,244,236', .8], ['0,161,155', .38]], blip: '242,255,253', blipMin: .3, lockRing: '94,214,204', brackets: '220,250,246'
+        dot: f => 'rgba(98,184,218,' + (.07 + .22 * f * f).toFixed(3) + ')',
+        disc: ['rgba(27,113,148,.11)', 'rgba(27,113,148,.04)', 'rgba(27,113,148,.08)'],
+        cross: 'rgba(98,184,218,.17)', diag: 'rgba(98,184,218,.12)', ring: 'rgba(98,184,218,.15)', bezel: 'rgba(98,184,218,.45)',
+        ticks: ['rgba(98,184,218,.6)', 'rgba(98,184,218,.34)', 'rgba(98,184,218,.17)'],
+        label: 'rgba(147,168,188,.8)', hub: 'rgba(98,184,218,.7)',
+        sweep: ['rgba(27,113,148,0)', 'rgba(27,113,148,.06)', 'rgba(46,141,181,.22)', 'rgba(98,184,218,.32)'], wedge: ['46,141,181', .26],
+        lit: m => 'rgba(' + Math.round(98 + 138 * m * m) + ',' + Math.round(184 + 63 * m) + ',' + Math.round(218 + 33 * m) + ',' + (.18 + .8 * m).toFixed(3) + ')',
+        edge: ['rgba(98,184,218,.08)', 'rgba(223,243,248,.95)'], pulse: ['98,184,218', .5], bearing: ['98,184,218', .5],
+        glow: [['179,224,239', .8], ['27,113,148', .38]], blip: '244,251,253', blipMin: .3, lockRing: '98,184,218', brackets: '223,243,248'
       },
       light: {
-        dot: f => 'rgba(11,37,69,' + (.1 + .24 * f * f).toFixed(3) + ')',
-        disc: ['rgba(0,161,155,.12)', 'rgba(0,161,155,.04)', 'rgba(0,161,155,.1)'],
-        cross: 'rgba(4,110,104,.24)', diag: 'rgba(4,110,104,.18)', ring: 'rgba(4,110,104,.2)', bezel: 'rgba(4,110,104,.6)',
-        ticks: ['rgba(4,110,104,.75)', 'rgba(4,110,104,.45)', 'rgba(4,110,104,.24)'],
-        label: 'rgba(70,96,122,.95)', hub: 'rgba(4,110,104,.85)',
-        sweep: ['rgba(0,161,155,0)', 'rgba(0,161,155,.07)', 'rgba(0,161,155,.2)', 'rgba(0,150,144,.32)'], wedge: ['0,161,155', .26],
-        lit: m => 'rgba(' + Math.round(4 * m) + ',' + Math.round(161 - 75 * m) + ',' + Math.round(155 - 63 * m) + ',' + (.24 + .74 * m).toFixed(3) + ')',
-        edge: ['rgba(0,161,155,.1)', 'rgba(4,110,104,.95)'], pulse: ['0,150,144', .62], bearing: ['4,110,104', .6],
-        glow: [['0,161,155', .5], ['0,161,155', .2]], blip: '11,37,69', blipMin: .45, lockRing: '0,150,144', brackets: '11,37,69'
+        dot: f => 'rgba(25,46,73,' + (.1 + .24 * f * f).toFixed(3) + ')',
+        disc: ['rgba(27,113,148,.12)', 'rgba(27,113,148,.04)', 'rgba(27,113,148,.1)'],
+        cross: 'rgba(21,95,128,.24)', diag: 'rgba(21,95,128,.18)', ring: 'rgba(21,95,128,.2)', bezel: 'rgba(21,95,128,.6)',
+        ticks: ['rgba(21,95,128,.75)', 'rgba(21,95,128,.45)', 'rgba(21,95,128,.24)'],
+        label: 'rgba(70,96,122,.95)', hub: 'rgba(21,95,128,.85)',
+        sweep: ['rgba(27,113,148,0)', 'rgba(27,113,148,.07)', 'rgba(27,113,148,.2)', 'rgba(27,113,148,.32)'], wedge: ['27,113,148', .26],
+        lit: m => 'rgba(' + Math.round(27 - 11 * m) + ',' + Math.round(113 - 58 * m) + ',' + Math.round(148 - 64 * m) + ',' + (.24 + .74 * m).toFixed(3) + ')',
+        edge: ['rgba(27,113,148,.1)', 'rgba(21,95,128,.95)'], pulse: ['27,113,148', .62], bearing: ['21,95,128', .6],
+        glow: [['27,113,148', .5], ['27,113,148', .2]], blip: '25,46,73', blipMin: .45, lockRing: '27,113,148', brackets: '25,46,73'
       }
     };
     let P = isLight() ? PALETTES.light : PALETTES.dark;
@@ -253,8 +253,8 @@
         g.addColorStop(f * .55, P.sweep[1]);
         g.addColorStop(f * .96, P.sweep[2]);
         g.addColorStop(f, P.sweep[3]);
-        g.addColorStop(f + .002, 'rgba(0,161,155,0)');
-        g.addColorStop(1, 'rgba(0,161,155,0)');
+        g.addColorStop(f + .002, 'rgba(27,113,148,0)');
+        g.addColorStop(1, 'rgba(27,113,148,0)');
         ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
       } else {
         const n = 20;
@@ -328,7 +328,7 @@
       const gg = ctx.createRadialGradient(mx, my, 0, mx, my, gr);
       gg.addColorStop(0, 'rgba(' + P.glow[0][0] + ',' + (P.glow[0][1] * vis).toFixed(3) + ')');
       gg.addColorStop(.35, 'rgba(' + P.glow[1][0] + ',' + (P.glow[1][1] * vis).toFixed(3) + ')');
-      gg.addColorStop(1, 'rgba(0,161,155,0)');
+      gg.addColorStop(1, 'rgba(27,113,148,0)');
       ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(mx, my, gr, 0, TAU); ctx.fill();
       ctx.fillStyle = 'rgba(' + P.blip + ',' + Math.max(P.blipMin, vis).toFixed(3) + ')';
       ctx.beginPath(); ctx.arc(mx, my, 4.5, 0, TAU); ctx.fill();

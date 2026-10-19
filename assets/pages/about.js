@@ -93,9 +93,9 @@
         const a = Math.min(.78, (.07 + .36 * Math.pow(u, 1.1)) * (major ? 1.75 : 1));
         if (light) {
           /* daylight: misty teal ridges at the back deepen to navy at the front; major ridges in deep teal */
-          const r = major ? 4 : Math.round(11 * u), g = major ? 110 : Math.round(161 - 124 * u), b = major ? 104 : Math.round(155 - 86 * u);
+          const r = major ? 21 : Math.round(27 - 2 * u), g = major ? 95 : Math.round(113 - 67 * u), b = major ? 128 : Math.round(148 - 75 * u);
           ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (a * (major ? .95 : .9)).toFixed(3) + ')';
-        } else ctx.strokeStyle = 'rgba(94,214,204,' + a.toFixed(3) + ')';
+        } else ctx.strokeStyle = 'rgba(98,184,218,' + a.toFixed(3) + ')';
         ctx.lineWidth = major ? 1.4 : 1;
         ctx.stroke();
       }

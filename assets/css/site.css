@@ -1,38 +1,41 @@
 /* =========================================================================
    SAA GROUP — shared design system (v2)
    Concept: "Deep field". The site behaves like a night-time descent into an
-   energy field: deep navy space, teal light, oversized expanded type, and
+   energy field: deep navy space, SAA teal light, oversized expanded type, and
    motion that is cinematic but purposeful. Soft-white "daylight" sections
    give reading rest between dark set pieces.
    Every page links this file. Page-specific styles live in assets/pages/.
    ========================================================================= */
 
 :root {
-  /* Brand colours. SAA blue is sampled from the official logo; navy/teal are approximations until SAA confirms exact values */
-  --navy-990: #020A16;
-  --navy-950: #04101F;
-  --navy-900: #071A33;
-  --navy: #0B2545;
-  --navy-700: #163A63;
-  --navy-500: #2B5585;
-  --saa-blue: #2E6080;       /* sampled from the official SAA logo background */
-  --teal: #00A19B;
-  --teal-400: #19C2B8;
-  --teal-300: #5ED6CC;
-  --teal-100: #BFEDE8;
-  --teal-050: #E6F6F4;
+  /* Brand colours from SAA's ADIPEC booth board (SA, 19 Oct 2026): deep navy, SAA teal, soft white, red accent.
+     tools/recolour.py moved every old colour literal to this palette. */
+  --navy-990: #12233A;
+  --navy-950: #192E49;
+  --navy-900: #1F3756;
+  --navy: #192E49;
+  --navy-700: #2A4A72;
+  --navy-500: #3D6593;
+  --saa-blue: #1B7194;       /* the SAA L.L.C logo colour = booth SAA teal */
+  --teal: #1B7194;
+  --teal-400: #2E8DB5;
+  --teal-300: #62B8DA;
+  --teal-100: #C4E3F0;
+  --teal-050: #E8F3F9;
+  --red: #E4332D;            /* booth red accent: small marks only (dots, bars), never body text */
   --white: #F5F7F6;          /* soft white */
   --paper: #FFFFFF;
 
   /* Roles */
-  --ink: #0B2545;            /* text on light */
+  --ink: #192E49;            /* text on light */
   --ink-muted: #56687C;
   --line: #D6DFE5;
-  --on-dark: #EAF1F3;        /* text on surfaces that are navy in BOTH colour modes (buttons, footer) */
-  --on-dark-muted: #93A8BC;
-  --teal-ink: #046E68;       /* teal text on light: 5.7:1 on --white, 6.1:1 on --paper */
-  --teal-display: #009690;   /* brand teal for large display text on light (3.4:1+) */
-  --on-teal-2: rgba(2, 10, 22, .88); /* secondary navy text on teal: 5.5:1 */
+  --on-dark: #EAF0F3;        /* text on surfaces that are navy in BOTH colour modes (buttons, footer) */
+  --on-dark-muted: #A3B6C9;
+  --teal-ink: #155F80;       /* teal text on light: 6.5:1 on --white, 7:1 on --paper */
+  --teal-display: #1B7194;   /* brand teal for large display text on light (5:1) */
+  --on-teal: #FFFFFF;        /* text and icons on an SAA teal fill: 5.1:1 on --teal */
+  --on-teal-2: rgba(255, 255, 255, .9); /* secondary text on teal: 4.7:1 */
   --focus: var(--teal-300);  /* focus ring; set per surface below (.light, .cta-band, .on-*) */
 
   /* Type */
@@ -72,21 +75,22 @@
   --bg: var(--navy-950);           /* page background */
   --bg-deep: var(--navy-990);      /* deeper bands: marquee, menu, preloader */
   --bg-raise: var(--navy-900);     /* raised panels */
-  --bg-rgb: 4, 16, 31;             /* = --bg, for rgba(var(--bg-rgb), a) scrims */
-  --deep-rgb: 2, 10, 22;           /* = --bg-deep, for shadows/halos behind text and field fills */
-  --fg: #EAF1F3;                   /* text */
-  --fg-muted: #93A8BC;
-  --fg-faint: #768EA8;             /* 5.6:1 on navy-950; still a step below --fg-muted */
-  --fg-rgb: 234, 241, 243;         /* = --fg, for rgba(var(--fg-rgb), a) tints and hairlines */
-  --line-dark: rgba(234, 241, 243, .12);
+  --bg-rgb: 25, 46, 73;             /* = --bg, for rgba(var(--bg-rgb), a) scrims */
+  --deep-rgb: 18, 35, 58;           /* = --bg-deep, for shadows/halos behind text and field fills */
+  --fg: #EAF0F3;                   /* text */
+  --fg-muted: #A3B6C9;             /* 6.7:1 on navy-950 */
+  --fg-faint: #8DA2B8;             /* 4.9:1 on navy-950, 4.6:1 on navy-900; still a step below --fg-muted */
+  --fg-rgb: 234, 240, 243;         /* = --fg, for rgba(var(--fg-rgb), a) tints and hairlines */
+  --line-dark: rgba(234, 240, 243, .12);
   --accent: var(--teal-300);       /* teal text, icons and thin lines */
   --accent-fill: var(--teal-300);  /* teal dots, fills and glows (not text) */
   --accent-display: var(--teal-300); /* big teal display type and outlined text */
-  --accent-rgb: 94, 214, 204;      /* = --teal-300, for rgba() */
-  --glow: rgba(0, 161, 155, .55);
+  --accent-rgb: 98, 184, 218;      /* = --teal-300, for rgba() */
+  --on-accent: var(--navy-990);    /* text on an --accent-fill fill: 7.6:1 */
+  --glow: rgba(46, 141, 181, .55);
   --hero-1: var(--navy-700); --hero-2: var(--navy); --hero-3: var(--navy-950);   /* inner-page hero gradient */
-  --card-bg: linear-gradient(160deg, rgba(234,241,243,.05), rgba(234,241,243,.015));
-  --field-bg: rgba(2, 10, 22, .45);
+  --card-bg: linear-gradient(160deg, rgba(234,240,243,.05), rgba(234,240,243,.015));
+  --field-bg: rgba(18, 35, 58, .45);
   --err: #FF8A80;
   --shadow: rgba(0, 0, 0, .6);
   --shadow-deep: rgba(0, 0, 0, .75);
@@ -97,22 +101,23 @@
   --bg-raise: #FFFFFF;
   --bg-rgb: 246, 249, 250;
   --deep-rgb: 255, 255, 255;
-  --fg: #0B2545;                   /* 14.9:1 on --bg */
+  --fg: #192E49;                   /* 14.9:1 on --bg */
   --fg-muted: #46607A;             /* 6.2:1 on --bg, 5.6:1 on --bg-deep */
   --fg-faint: #556B83;             /* 5.3:1 on --bg, 4.8:1 on --bg-deep */
-  --fg-rgb: 11, 37, 69;
-  --line-dark: rgba(11, 37, 69, .14);
+  --fg-rgb: 25, 46, 73;
+  --line-dark: rgba(25, 46, 73, .14);
   --accent: var(--teal-ink);       /* 5.4:1 on --bg */
   --accent-fill: var(--teal);
-  --accent-display: #00857F;       /* 3.5:1 on the palest hero teal (#CFE9EA), 3.9:1 on --bg-deep */
-  --accent-rgb: 0, 161, 155;
-  --glow: rgba(0, 161, 155, .32);
-  --hero-1: #CFE9EA; --hero-2: #E6F1F3; --hero-3: var(--bg);
+  --accent-display: #1B7194;       /* 4.3:1 on the palest hero tint (#D0E1EB), 4.6:1 on --bg-deep */
+  --accent-rgb: 27, 113, 148;
+  --on-accent: #FFFFFF;            /* --accent-fill is SAA teal here */
+  --glow: rgba(27, 113, 148, .32);
+  --hero-1: #D0E1EB; --hero-2: #E7EDF4; --hero-3: var(--bg);
   --card-bg: linear-gradient(160deg, #FFFFFF, rgba(255, 255, 255, .72));
   --field-bg: #FFFFFF;
   --err: #B42318;
-  --shadow: rgba(11, 37, 69, .22);
-  --shadow-deep: rgba(11, 37, 69, .3);
+  --shadow: rgba(25, 46, 73, .22);
+  --shadow-deep: rgba(25, 46, 73, .3);
   --focus: var(--teal-ink);
   color-scheme: light;
 }
@@ -140,23 +145,23 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; }
 p { margin: 0; }
 h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; line-height: 1; letter-spacing: -.015em; text-wrap: balance; }
-::selection { background: var(--teal); color: var(--navy-990); }
+::selection { background: var(--teal); color: var(--on-teal); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
-/* Focus ring colour follows the surface: teal light on navy, deep teal on soft white, navy on teal */
+/* Focus ring colour follows the surface: teal light on navy, deep teal on soft white, white on teal */
 .light, .light-paper, .card-light, .on-light { --focus: var(--teal-ink); }
-.cta-band, .on-teal { --focus: var(--navy-990); }
+.cta-band, .on-teal { --focus: var(--on-teal); }
 .light .card-dark, .light-paper .card-dark, .on-dark { --focus: var(--accent); }
 .saa-focus-target:focus { outline: none; }
 
 /* Skip link: hidden until focused */
 .skip-link {
   position: fixed; left: 16px; top: calc(12px + env(safe-area-inset-top, 0px)); z-index: 600;
-  padding: 12px 20px; border-radius: 999px; background: var(--teal); color: var(--navy-990);
+  padding: 12px 20px; border-radius: 999px; background: var(--teal); color: var(--on-teal);
   font: 600 var(--t-sm)/1.2 var(--f-body); letter-spacing: .02em;
   transform: translateY(-180%); transition: transform .3s var(--ease);
 }
 .skip-link:focus { transform: none; }
-.skip-link:focus-visible { outline: 2px solid var(--navy-990); outline-offset: -5px; }
+.skip-link:focus-visible { outline: 2px solid var(--on-teal); outline-offset: -5px; }
 
 .wrap { width: 100%; max-width: calc(var(--maxw) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
 .section { padding-block: var(--section); position: relative; }
@@ -203,7 +208,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .placeholder {
   display: inline-block; font-family: var(--f-mono); font-size: max(.78em, 12px); letter-spacing: .06em; font-weight: 500;
   padding: .12em .6em; border-radius: 6px; border: 1px dashed currentColor; color: var(--accent);
-  background: repeating-linear-gradient(-45deg, rgba(0,161,155,.16) 0 6px, rgba(0,161,155,.04) 6px 12px);
+  background: repeating-linear-gradient(-45deg, rgba(27,113,148,.16) 0 6px, rgba(27,113,148,.04) 6px 12px);
 }
 .light .placeholder, .light-paper .placeholder { color: var(--teal-ink); }
 
@@ -212,7 +217,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
   position: relative; display: inline-flex; align-items: center; justify-content: center; gap: .7em;
   padding: 1.05em 1.6em; border-radius: 999px; border: 0; cursor: pointer; overflow: hidden; isolation: isolate;
   font: 600 var(--t-sm)/1 var(--f-body); letter-spacing: .02em; white-space: nowrap;
-  background: var(--teal); color: var(--navy-990);
+  background: var(--teal); color: var(--on-teal);
   transition: transform .4s var(--ease), box-shadow .4s var(--ease), color .4s var(--ease);
 }
 .btn::before {
@@ -220,17 +225,17 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
   background: var(--fg); transform: translateY(101%); transition: transform .5s var(--ease);
 }
 .btn:hover::before { transform: none; }
-.btn:hover { box-shadow: 0 18px 40px -14px var(--glow); }
+.btn:hover { color: var(--navy-990); box-shadow: 0 18px 40px -14px var(--glow); }
 .btn .arr { width: 1.1em; height: 1.1em; transition: transform .4s var(--ease); }
 .btn:hover .arr { transform: translateX(4px); }
 .btn.ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--line-dark); }
 .btn.ghost::before { background: var(--teal); }
-.btn.ghost:hover { color: var(--navy-990); box-shadow: inset 0 0 0 1.5px var(--teal); }
+.btn.ghost:hover { color: var(--on-teal); box-shadow: inset 0 0 0 1.5px var(--teal); }
 /* light mode: the hover sweep is navy with light text (as on the soft-white sections) */
 :root[data-theme="light"] .btn::before { background: var(--navy); }
 :root[data-theme="light"] .btn:hover { color: var(--on-dark); }
 :root[data-theme="light"] .btn.ghost::before { background: var(--teal); }
-:root[data-theme="light"] .btn.ghost:hover { color: var(--navy-990); }
+:root[data-theme="light"] .btn.ghost:hover { color: var(--on-teal); }
 :root[data-theme="light"] :where(.btn.ghost) { box-shadow: inset 0 0 0 1.5px rgba(var(--fg-rgb), .26); } /* firmer outline on near-white */
 .light .btn.ghost, .light-paper .btn.ghost { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
 /* light mode: --line all but vanishes on the #E6EEF2 sections; same specificity, so page rules still win */
@@ -267,7 +272,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .nav { display: flex; align-items: center; gap: clamp(16px, 2.2vw, 34px); }
 .nav-link { position: relative; white-space: nowrap; font-size: .92rem; font-weight: 500; color: var(--fg); opacity: .78; padding-block: 8px; transition: opacity .3s; }
 .nav-link:hover, .nav-link[aria-current="page"] { opacity: 1; }
-.nav-link::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-fill); transform: translateX(-50%) scale(0); transition: transform .35s var(--ease); }
+.nav-link::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 5px; height: 5px; border-radius: 50%; background: var(--red);   /* booth red mark */ transform: translateX(-50%) scale(0); transition: transform .35s var(--ease); }
 .nav-link:hover::after, .nav-link[aria-current="page"]::after { transform: translateX(-50%) scale(1); }
 .nav-link.nav-apply { color: var(--accent); opacity: 1; }
 .nav .btn { padding: .85em 1.25em; font-size: .85rem; }
@@ -297,7 +302,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 /* Pages whose hero stays dark in light mode set <body data-hero="dark">: the header keeps dark
    colours over it until it turns solid on scroll (or the menu opens). */
 :root[data-theme="light"]:not(.menu-open) body[data-hero="dark"] .site-header:not(.scrolled) {
-  --fg: #EAF1F3; --fg-muted: #93A8BC; --fg-rgb: 234, 241, 243; --line-dark: rgba(234, 241, 243, .12);
+  --fg: #EAF0F3; --fg-muted: #A3B6C9; --fg-rgb: 234, 240, 243; --line-dark: rgba(234, 240, 243, .12);
   --accent: var(--teal-300); --accent-fill: var(--teal-300); --focus: var(--teal-300);
 }
 :root[data-theme="light"]:not(.menu-open) body[data-hero="dark"] .site-header:not(.scrolled) .logo-d { display: block; }
@@ -384,7 +389,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 }
 .marquee-item:nth-child(even) { color: transparent; -webkit-text-stroke: 1.2px var(--accent-display); }
 :root[data-theme="light"] .marquee-item:nth-child(even) { -webkit-text-stroke-width: 1.6px; } /* a 1.2px teal hairline washes out on the pale band */
-.marquee-item i { width: .45em; height: .45em; border-radius: 50%; background: var(--teal); flex: none; }
+.marquee-item i { width: .45em; height: .45em; border-radius: 50%; background: var(--red); flex: none; }   /* booth red mark */
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ---------- Cards & common blocks ---------- */
@@ -399,17 +404,18 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .figure-num sup { font-size: .45em; vertical-align: .9em; color: var(--accent); margin-left: .05em; }
 
 /* CTA band used at the bottom of every page */
-.cta-band { position: relative; overflow: hidden; isolation: isolate; background: var(--teal); color: var(--navy-990); padding-block: clamp(80px, 11vw, 160px); }
-.cta-band .mega { color: var(--navy-990); }
+.cta-band { position: relative; overflow: hidden; isolation: isolate; background: var(--teal); color: var(--on-teal); padding-block: clamp(80px, 11vw, 160px); }
+.cta-band .mega { color: var(--on-teal); }
 .cta-band .lead { color: var(--on-teal-2); }
 .cta-inner { display: grid; gap: 34px; }
 .cta-kicker { color: var(--on-teal-2); }
 .cta-band .btn { background: var(--navy-990); color: var(--on-dark); }
 .cta-band .btn::before { background: var(--paper); }
+.cta-band .btn:not(:hover)::before { transform: translateY(104%); }   /* parked fully clear: no white hairline under the navy button */
 .cta-band .btn:hover { color: var(--navy-990); }
 :root[data-theme="light"] .cta-band .btn::before { background: var(--paper); }
 :root[data-theme="light"] .cta-band .btn:hover { color: var(--navy-990); }
-.cta-band .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(2,10,22,.18); pointer-events: none; z-index: -1; }
+.cta-band .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .16); pointer-events: none; z-index: -1; }
 .cta-ring-1 { width: 70vw; height: 70vw; right: -20vw; top: -30vw; }
 .cta-ring-2 { width: 46vw; height: 46vw; right: -8vw; top: -18vw; }
 
@@ -427,8 +433,8 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .foot-word {
   margin-top: clamp(56px, 8vw, 110px); font-family: var(--f-display); font-weight: 900; font-stretch: 125%;
   font-size: min(12vw, 11rem); line-height: .8; letter-spacing: -.05em; text-align: center;
-  color: transparent; -webkit-text-stroke: 1px rgba(94, 214, 204, .28); user-select: none; white-space: nowrap;
-  background: linear-gradient(180deg, rgba(94,214,204,.16), transparent 75%); -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-stroke: 1px rgba(98, 184, 218, .28); user-select: none; white-space: nowrap;
+  background: linear-gradient(180deg, rgba(98,184,218,.16), transparent 75%); -webkit-background-clip: text; background-clip: text;
 }
 .foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding-block: 26px calc(26px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line-dark); font-size: var(--t-xs); }
 .foot-legal { display: flex; flex-wrap: wrap; gap: 0 22px; }
@@ -439,7 +445,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .foot-legal a:hover, .foot-link:hover { color: var(--teal-300); }
 @media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
 /* Phones: keep the last footer line and page-end forms clear of the Ask SAA pill */
-@media (min-width: 521px) { .foot-bottom { padding-right: max(var(--gutter), calc(216px - max(0px, (100vw - 1432px) / 2))); } }
+@media (min-width: 521px) { .foot-bottom { padding-right: max(var(--gutter), calc(248px - max(0px, (100vw - 1432px) / 2))); } }
 @media (max-width: 520px) {
   .foot-bottom { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
   .clear-fab { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
@@ -452,7 +458,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .cursor-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--accent-fill); }
 .cursor {
   width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 1px solid rgba(var(--accent-rgb), .6);
-  display: grid; place-items: center; font: 600 .62rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--navy-990);
+  display: grid; place-items: center; font: 600 .62rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--on-accent);
   transition: opacity .3s, width .45s var(--ease), height .45s var(--ease), margin .45s var(--ease), background .45s var(--ease), border-color .45s;
 }
 .cursor.hover { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(var(--accent-rgb), .12); border-color: var(--accent-fill); }
@@ -460,6 +466,12 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .cursor.down { transform: scale(.85); }
 /* add data-cursor-invert next to data-cursor on teal surfaces so the label stays visible */
 .cursor-invert .cursor.label { background: var(--navy-990); border-color: var(--navy-990); color: var(--teal-300); }
+/* over the SAA teal CTA band the teal cursor would vanish: it turns white there (navy over the band's white button sweep) */
+:root:has(.cta-band:hover) .cursor-dot { background: var(--on-teal); }
+:root:has(.cta-band:hover) .cursor { border-color: rgba(255, 255, 255, .7); }
+:root:has(.cta-band:hover) .cursor.hover { background: rgba(255, 255, 255, .12); border-color: var(--on-teal); }
+:root:has(.cta-band .btn:hover) .cursor-dot { background: var(--navy-990); }
+:root:has(.cta-band .btn:hover) .cursor.hover { background: rgba(18, 35, 58, .08); border-color: var(--navy-990); }
 @media (hover: none), (pointer: coarse) { .cursor, .cursor-dot { display: none; } }
 
 /* ---------- Preloader & page transition ---------- */
@@ -471,7 +483,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .preloader img { width: 72px; height: 72px; }
 .preloader .pl-count { font-family: var(--f-display); font-weight: 900; font-stretch: 125%; font-size: clamp(3rem, 10vw, 7rem); line-height: 1; font-variant-numeric: tabular-nums; }
 .preloader .pl-bar { width: min(260px, 60vw); height: 2px; background: var(--line-dark); overflow: hidden; }
-.preloader .pl-bar i { display: block; height: 100%; width: 100%; background: var(--teal); transform-origin: left; transform: scaleX(0); }
+.preloader .pl-bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--teal), var(--accent-fill)); transform-origin: left; transform: scaleX(0); }
 .preloader .pl-cap { font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--fg-muted); }
 .no-js .preloader, .preloaded .preloader { display: none; }
 
@@ -485,13 +497,13 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .js [data-reveal="fade"] { opacity: 1; }
 
 /* Scroll progress line */
-.progress { position: fixed; left: 0; top: 0; height: 2px; width: 100%; z-index: 120; background: var(--teal); transform-origin: left; transform: scaleX(0); pointer-events: none; }
+.progress { position: fixed; left: 0; top: 0; height: 2px; width: 100%; z-index: 120; background: var(--red);   /* booth red mark */ transform-origin: left; transform: scaleX(0); pointer-events: none; }
 
 /* ---------- Chatbot ---------- */
 .chat-fab {
   position: fixed; right: max(18px, env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 300;
   display: inline-flex; align-items: center; gap: 12px; padding: 8px 20px 8px 8px; border: 0; border-radius: 999px; cursor: pointer;
-  background: rgba(7, 26, 51, .82); color: var(--fg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: rgba(31, 55, 86, .95); color: var(--fg); backdrop-filter: blur(14px);   /* .95 keeps the teal caption at 4.6:1 even over white */ -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 20px 50px -14px var(--shadow), inset 0 0 0 1px rgba(var(--accent-rgb), .35);
   font: 600 .9rem var(--f-body); transition: transform .4s var(--ease), opacity .3s, visibility .3s;
 }
@@ -499,10 +511,10 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 /* ring drawn inside the dark pill so it reads on any section behind it */
 .chat-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: 999px; }
 .menu-open .chat-fab { opacity: 0; visibility: hidden; transform: translateY(12px); }
-.chat-orb { position: relative; width: 42px; height: 42px; border-radius: 50%; flex: none; background: radial-gradient(circle at 30% 30%, var(--teal-300), var(--teal) 55%, #006a66); box-shadow: 0 0 24px var(--glow); }
+.chat-orb { position: relative; width: 42px; height: 42px; border-radius: 50%; flex: none; background: radial-gradient(circle at 30% 30%, var(--teal-300), var(--teal) 42%, #11425D); box-shadow: 0 0 24px var(--glow); }   /* the white icon sits on SAA teal (4.3:1) */
 .chat-orb::before, .chat-orb::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--accent-fill); opacity: 0; animation: orb 3s var(--ease) infinite; }
 .chat-orb::after { animation-delay: 1.5s; }
-.chat-orb svg { position: absolute; inset: 0; margin: auto; width: 20px; height: 20px; color: var(--navy-990); }
+.chat-orb svg { position: absolute; inset: 0; margin: auto; width: 20px; height: 20px; color: var(--on-teal); }
 @keyframes orb { 0% { transform: scale(.85); opacity: .8; } 100% { transform: scale(1.6); opacity: 0; } }
 .chat-fab .sub { display: block; font: 400 .7rem var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
 .chat-fab .txt { display: grid; text-align: left; line-height: 1.25; }
@@ -511,7 +523,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
   position: fixed; right: max(18px, env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 310;
   width: min(420px, calc(100vw - 32px)); height: min(680px, calc(100dvh - 110px)); display: flex; flex-direction: column;
   border-radius: 26px; overflow: hidden; color: var(--fg);
-  background: linear-gradient(180deg, rgba(11,37,69,.96), rgba(4,16,31,.98)); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  background: linear-gradient(180deg, rgba(31, 55, 86, .98), rgba(25, 46, 73, .98) 160px); backdrop-filter: blur(24px);   /* raised navy head, chat log on --bg */ -webkit-backdrop-filter: blur(24px);
   box-shadow: 0 50px 120px -20px var(--shadow-deep), inset 0 0 0 1px rgba(var(--accent-rgb), .22);
   transform-origin: bottom right; animation: chatIn .5s var(--ease);
 }
@@ -522,14 +534,14 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .chat-top { display: flex; align-items: center; gap: 14px; padding: 18px 18px 16px 20px; border-bottom: 1px solid var(--line-dark); }
 .chat-top b { display: block; font-family: var(--f-display); font-weight: 800; font-stretch: 110%; font-size: 1.05rem; letter-spacing: .01em; }
 .chat-top span { display: inline-flex; align-items: center; gap: 7px; font-size: .75rem; color: var(--fg-muted); }
-.chat-top span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #3DDC97; box-shadow: 0 0 10px #3DDC97; }
+.chat-top span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-fill); box-shadow: 0 0 10px rgba(var(--accent-rgb), .8); }
 .chat-close { margin-left: auto; width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(var(--fg-rgb), .08); display: grid; place-items: center; }
 .chat-close:hover { background: rgba(var(--fg-rgb), .16); }
 .chat-log { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; overscroll-behavior: contain; }
 .chat-msg { max-width: 88%; padding: 12px 15px; border-radius: 18px; font-size: .93rem; line-height: 1.55; overflow-wrap: anywhere; animation: msgIn .4s var(--ease) both; }
 @keyframes msgIn { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
 .chat-msg.bot { align-self: flex-start; background: rgba(var(--fg-rgb), .06); border: 1px solid var(--line-dark); border-bottom-left-radius: 6px; }
-.chat-msg.me { align-self: flex-end; background: var(--teal); color: var(--navy-990); border-bottom-right-radius: 6px; font-weight: 500; }
+.chat-msg.me { align-self: flex-end; background: var(--teal); color: var(--on-teal); border-bottom-right-radius: 6px; font-weight: 500; }
 .chat-msg a, .chat-msg .chat-link { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .chat-msg .chat-link { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; }
 .chat-msg ul { margin: 6px 0 0; padding-left: 18px; }
@@ -539,14 +551,14 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 @keyframes dots { 0%, 60%, 100% { transform: none; opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }
 .chat-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 20px 14px; }
 .chat-chip { padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(var(--accent-rgb), .4); background: transparent; color: var(--accent); font-size: .8rem; font-weight: 500; cursor: pointer; transition: background .25s, color .25s; }
-.chat-chip:hover { background: var(--teal); color: var(--navy-990); }
+.chat-chip:hover { background: var(--teal); color: var(--on-teal); }
 .chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line-dark); }
 .chat-form input { flex: 1; min-width: 0; padding: 13px 16px; border-radius: 14px; border: 1px solid var(--line-dark); background: rgba(var(--deep-rgb), .5); color: var(--fg); font: inherit; font-size: 1rem; }
 .chat-form input::placeholder { color: var(--fg-faint); }
-.chat-form input:focus { outline: none; border-color: var(--teal); }
+.chat-form input:focus { outline: none; border-color: var(--focus); }
 /* light mode: a white field with the firmer form edge (low specificity: the focus border still wins) */
 :root[data-theme="light"] :where(.chat-form input) { background: var(--field-bg); border-color: rgba(var(--fg-rgb), .24); }
-.chat-form button { width: 50px; border-radius: 14px; border: 0; cursor: pointer; background: var(--teal); color: var(--navy-990); display: grid; place-items: center; }
+.chat-form button { width: 50px; border-radius: 14px; border: 0; cursor: pointer; background: var(--teal); color: var(--on-teal); display: grid; place-items: center; }
 .chat-note { text-align: center; font-size: .75rem; color: var(--fg-faint); padding: 0 12px 12px; }
 @media (max-width: 520px) {
   /* label stays in the accessibility tree as the button's name; only the orb shows */
@@ -566,7 +578,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .light-paper .field input, .light-paper .field select, .light-paper .field textarea { background: var(--white); color: var(--ink); border-color: var(--line); }
 /* light mode: a firmer edge so white fields read on the near-white page (low specificity: focus and page styles still win) */
 :root[data-theme="light"] :where(.field input, .field select, .field textarea) { border-color: rgba(var(--fg-rgb), .24); }
-.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 4px rgba(0,161,155,.18); }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--focus); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .18); }
 .field textarea { min-height: 120px; resize: vertical; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-row > * { min-width: 0; }

@@ -17,6 +17,10 @@
     emirati: 'careers.html?role=emiratisation#applyForm',
     map: 'https://www.google.com/maps?q=24.4912691,54.3608709'
   };
+  /* other languages: assets/js/i18n.js translates the built-in answers and chips (T), and the dictionary
+     can add keywords per answer id (window.SAA_I18N.kw) so a question typed in that language finds its answer */
+  const I18N = window.SAAI18n, LANG = I18N ? I18N.lang : 'en';
+  const T = s => (I18N ? I18N.t(s) : s);
   const ext = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${text}<span class="sr-only"> (opens in a new tab)</span></a>`;
 
   const KB = [
@@ -80,8 +84,13 @@
   };
   const START = ['Services', 'Find a job', 'Meet at ADIPEC', 'Contact details'];
   const FALLBACK = { a: `I don't have that information yet. Our team can help directly on <b>+971 2 627 0622</b> or at <b>saaest@eim.ae</b>.`, f: ['Services', 'Find a job', 'Contact details'] };
+  const MSG = {
+    hello: 'Marhaba! I\'m the SAA Assistant. Ask me about our manpower services, jobs and Emiratisation, ADIPEC 2026, or how to reach our team.',
+    limit: 'You have sent a lot of messages in a short time. Please wait a minute before you ask again, or call our team on <b>+971 2 627 0622</b>.'
+  };
 
-  const norm = s => ' ' + s.toLowerCase().replace(/[^a-z0-9؀-ۿ\s]/g, ' ').replace(/\s+/g, ' ') + ' ';
+  const norm = s => ' ' + s.toLowerCase().replace(LANG === 'en' ? /[^a-z0-9؀-ۿ\s]/g : /[^\p{L}\p{M}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ') + ' ';
+  const KW = (I18N && LANG !== 'en' && window.SAA_I18N && window.SAA_I18N.kw) || {};
   function match(q) {
     const t = norm(q); let best = null, score = 0;
     for (const e of KB) {
@@ -89,6 +98,11 @@
       for (const k of e.k) {
         const kk = k.toLowerCase();
         if (kk.length <= 3 ? t.includes(' ' + kk + ' ') : t.includes(kk)) s += kk.includes(' ') ? 3 : kk.length > 5 ? 2 : 1.5;
+      }
+      /* the language's own keywords: Chinese has no spaces between words, so they match anywhere */
+      for (const k of KW[e.id] || []) {
+        const kk = norm(k).trim();
+        if (kk && (/^[a-z0-9]{1,3}$/.test(kk) ? t.includes(' ' + kk + ' ') : t.includes(kk))) s += kk.includes(' ') ? 3 : kk.length > 5 ? 2 : 1.5;
       }
       if (s > score) { score = s; best = e; }
     }
@@ -119,10 +133,11 @@
   const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   const based = html => (BASE ? html.replace(/href="(?!https?:|mailto:|tel:|#|\/)/g, 'href="' + BASE) : html);
-  function add(html, who) { const d = document.createElement('div'); d.className = 'chat-msg ' + who; d.innerHTML = who === 'bot' ? based(html) : html; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+  /* messages are left alone by i18n.js: answers arrive translated (T), and the visitor's words are theirs */
+  function add(html, who) { const d = document.createElement('div'); d.className = 'chat-msg ' + who; d.setAttribute('data-i18n-skip', ''); d.innerHTML = who === 'bot' ? based(html) : html; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
   function setChips(list) {
     chips.innerHTML = '';
-    list.forEach(l => { const b = document.createElement('button'); b.type = 'button'; b.className = 'chat-chip'; b.textContent = l; b.onclick = () => ask(l); chips.appendChild(b); });
+    list.forEach(l => { const b = document.createElement('button'); b.type = 'button'; b.className = 'chat-chip'; b.textContent = T(l); b.onclick = () => ask(l); chips.appendChild(b); });
   }
   async function reply(q) {
     const url = endpoint();
@@ -135,7 +150,7 @@
       } catch (_) { /* fall back to built-in answers */ } finally { timer && clearTimeout(timer); }
     }
     const id = CHIPS[q]; const e = id ? KB.find(x => x.id === id) : match(q);
-    return { a: e.a, f: e.f, raw: e.a.replace(/<span class="sr-only">[^<]*<\/span>/g, '').replace(/<[^>]+>/g, '') };
+    return { a: T(e.a), f: e.f, raw: e.a.replace(/<span class="sr-only">[^<]*<\/span>/g, '').replace(/<[^>]+>/g, '') };
   }
   /* simple client-side throttle: one send per second, at most 20 a minute */
   function gate() {
@@ -150,11 +165,11 @@
     const g = gate();
     if (g === 'fast') return false;
     if (g === 'limit') {
-      if (Date.now() - warned > 20000) { warned = Date.now(); add('You have sent a lot of messages in a short time. Please wait a minute before you ask again, or call our team on <b>+971 2 627 0622</b>.', 'bot'); }
+      if (Date.now() - warned > 20000) { warned = Date.now(); add(T(MSG.limit), 'bot'); }
       return false;
     }
     busy = true;
-    add(esc(q), 'me'); chips.innerHTML = ''; history.push({ role: 'user', content: q });
+    add(esc(CHIPS[q] ? T(q) : q), 'me'); chips.innerHTML = ''; history.push({ role: 'user', content: q });
     const typing = add('<span class="chat-typing"><i></i><i></i><i></i></span>', 'bot'); typing.style.padding = '0';
     const [res] = await Promise.all([reply(q), new Promise(r => setTimeout(r, 700))]);
     typing.remove(); add(res.a, 'bot'); history.push({ role: 'assistant', content: res.raw }); setChips(res.f || START); busy = false;
@@ -174,7 +189,7 @@
     opener = document.activeElement !== document.body ? document.activeElement : null;
     panel.hidden = false; fab.hidden = true; fab.setAttribute('aria-expanded', 'true');
     setModal(phone.matches);
-    if (!started) { started = true; add('Marhaba! I\'m the SAA Assistant. Ask me about our manpower services, jobs and Emiratisation, ADIPEC 2026, or how to reach our team.', 'bot'); setChips(START); }
+    if (!started) { started = true; add(T(MSG.hello), 'bot'); setChips(START); }
     setTimeout(() => input.focus({ preventScroll: true }), 60);
   }
   function close() {
@@ -214,5 +229,5 @@
     if (!(await ask(v)) && !input.value) input.value = v; /* throttled: give the text back */
   });
   document.addEventListener('click', e => { const t = e.target.closest('[data-open-chat]'); if (t) { e.preventDefault(); open(); } });
-  window.SAA_CHAT = { open, ask, KB };
+  window.SAA_CHAT = { open, ask, KB, CHIPS, MSG, FALLBACK };
 })();

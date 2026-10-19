@@ -7,15 +7,15 @@
    ========================================================================= */
 
 .lg-hero, .lg-body {
-  --teal-ink: #066E68;      /* teal text on soft white: 5.7:1 */
-  --teal-ink-strong: #05605B;
+  /* teal text uses the site --teal-ink (#155F80: 6.5:1 on soft white, 6:1 on the light-mode #E6EEF2) */
+  --teal-ink-strong: #144D65;   /* placeholder text on its teal stripes */
 }
 
 /* ---------- Hero ---------- */
 .lg-hero {
   padding-bottom: clamp(48px, 7vw, 96px);
   background:
-    radial-gradient(50% 60% at 84% 42%, rgba(0, 161, 155, .15), transparent 70%),
+    radial-gradient(50% 60% at 84% 42%, rgba(27, 113, 148, .15), transparent 70%),
     radial-gradient(110% 80% at 80% 0%, var(--hero-1) 0%, var(--hero-2) 35%, var(--hero-3) 85%);
 }
 .lg-hero .wrap { position: relative; }
@@ -48,17 +48,17 @@
 .lg-seal .sl-turn-rev { transform-origin: 200px 200px; animation: lgTurn 140s linear infinite reverse; }
 .lg-seal .sl-ring { fill: none; stroke: rgba(var(--fg-rgb), .12); stroke-width: 1; }
 .lg-seal .sl-dash { fill: none; stroke: rgba(var(--accent-rgb), .4); stroke-width: 1; stroke-dasharray: 1.5 7; }
-.lg-seal .sl-arc { fill: none; stroke: var(--accent-fill); stroke-width: 2; stroke-linecap: round; opacity: .8; filter: drop-shadow(0 0 6px rgba(0, 161, 155, .8)); }
-.lg-seal text { font-family: var(--f-mono); font-size: 13px; font-weight: 500; letter-spacing: .12em; fill: rgba(94, 214, 204, .62); text-transform: uppercase; }
+.lg-seal .sl-arc { fill: none; stroke: var(--accent-fill); stroke-width: 2; stroke-linecap: round; opacity: .8; filter: drop-shadow(0 0 6px rgba(27, 113, 148, .8)); }
+.lg-seal text { font-family: var(--f-mono); font-size: 13px; font-weight: 500; letter-spacing: .12em; fill: rgba(98, 184, 218, .62); text-transform: uppercase; }
 .lg-seal .sl-glow { fill: url(#lgSealGlow); }
 .lg-seal image { opacity: .9; }
 /* light mode: the seal is drawn in deep teal and navy ink, with the navy emblem */
 .lg-seal .sl-l { display: none; }
 :root[data-theme="light"] .lg-seal image:not(.sl-l) { display: none; }
 :root[data-theme="light"] .lg-seal .sl-l { display: inline; }
-:root[data-theme="light"] .lg-seal .sl-ring { stroke: rgba(11, 37, 69, .16); }
-:root[data-theme="light"] .lg-seal .sl-arc { opacity: 1; filter: drop-shadow(0 0 4px rgba(0, 161, 155, .3)); }
-:root[data-theme="light"] .lg-seal text { fill: rgba(4, 110, 104, .78); }
+:root[data-theme="light"] .lg-seal .sl-ring { stroke: rgba(25, 46, 73, .16); }
+:root[data-theme="light"] .lg-seal .sl-arc { opacity: 1; filter: drop-shadow(0 0 4px rgba(27, 113, 148, .3)); }
+:root[data-theme="light"] .lg-seal text { fill: rgba(21, 95, 128, .78); }
 @keyframes lgTurn { to { transform: rotate(360deg); } }
 
 @media (max-width: 760px) {
@@ -114,7 +114,7 @@
   transition: border-color .4s var(--ease), transform .4s var(--ease), box-shadow .4s var(--ease);
 }
 .lg-card::before { content: ""; position: absolute; left: 0; top: 0; height: 3px; width: 44px; background: var(--teal); transition: width .6s var(--ease); }
-.lg-card:hover { border-color: rgba(0, 161, 155, .45); transform: translateY(-3px); box-shadow: 0 22px 40px -28px rgba(11, 37, 69, .45); }
+.lg-card:hover { border-color: rgba(27, 113, 148, .45); transform: translateY(-3px); box-shadow: 0 22px 40px -28px rgba(25, 46, 73, .45); }
 .lg-card:hover::before { width: 100%; }
 .lg-ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--teal-050); color: var(--teal-ink); margin-bottom: 4px; }
 .lg-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -139,7 +139,7 @@
 
 .lg-note {
   display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: start;
-  padding: 18px 20px; border-radius: var(--r-sm); background: var(--teal-050); border: 1px solid rgba(0, 161, 155, .22);
+  padding: 18px 20px; border-radius: var(--r-sm); background: var(--teal-050); border: 1px solid rgba(27, 113, 148, .22);
   font-size: var(--t-sm); line-height: 1.6;
 }
 .lg-note svg { width: 20px; height: 20px; margin-top: 2px; fill: none; stroke: var(--teal-ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -170,8 +170,8 @@
 
 /* contact card */
 .lg-contact { margin-top: 1.2em; padding: clamp(22px, 3vw, 32px); border-radius: var(--r); background: var(--navy); color: var(--fg); display: grid; gap: 18px; }
-.lg-contact .lg-keep { border-top-color: rgba(234, 241, 243, .14); }
-.lg-contact .lg-keep > div { border-bottom-color: rgba(234, 241, 243, .14); }
+.lg-contact .lg-keep { border-top-color: rgba(234, 240, 243, .14); }
+.lg-contact .lg-keep > div { border-bottom-color: rgba(234, 240, 243, .14); }
 .lg-contact dt { color: var(--teal-300); font: 500 var(--t-xs)/1.5 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; }
 .lg-contact dd { color: var(--fg); }
 .lg-contact a:not(.btn) { color: var(--fg); }

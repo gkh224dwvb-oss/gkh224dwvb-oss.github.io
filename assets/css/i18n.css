@@ -1,0 +1,170 @@
+/* =========================================================================
+   SAA GROUP — languages (assets/js/i18n.js): the switch, type per script, right-to-left
+   English is untouched: every rule below is scoped to the switch or to <html data-lang>.
+   ========================================================================= */
+
+/* While i18n.js swaps the text the page stays hidden; if it never runs, the page shows after 1.5 s.
+   (The reduced-motion rule in site.css shortens durations, not delays, so this still waits.) */
+html.i18n-wait body { visibility: hidden; animation: saa-i18n-show 0s linear 1.5s forwards; }
+@keyframes saa-i18n-show { to { visibility: visible; } }
+
+/* Russian: the Cyrillic part of the body and mono fonts (only downloaded when Cyrillic text is on the page).
+   Archivo has no Cyrillic, so Russian headings use the system sans. Each weight is its own face, as in
+   fonts.css: one face spanning 400 to 600 would be picked for weight 500 ahead of the Latin 500 face, and
+   English text at that weight would fall back to a system font. (The Plex Sans file is variable.) */
+@font-face {
+  font-family: 'IBM Plex Sans'; font-style: normal; font-weight: 400; font-stretch: 100%; font-display: swap;
+  src: url(../fonts/ibm-plex-sans-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'IBM Plex Sans'; font-style: normal; font-weight: 500; font-stretch: 100%; font-display: swap;
+  src: url(../fonts/ibm-plex-sans-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'IBM Plex Sans'; font-style: normal; font-weight: 600; font-stretch: 100%; font-display: swap;
+  src: url(../fonts/ibm-plex-sans-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url(../fonts/ibm-plex-mono-400-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url(../fonts/ibm-plex-mono-500-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* ---------- The switch: a globe in the header, a row of languages in the phone menu ---------- */
+.lang-switch { position: relative; flex: none; }
+.lang-toggle {
+  width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  display: grid; place-items: center; background: rgba(var(--fg-rgb), .08); color: var(--fg); transition: background-color .3s;
+}
+.lang-toggle:hover, .lang-switch.open .lang-toggle { background: rgba(var(--fg-rgb), .16); }
+.lang-toggle svg { width: 21px; height: 21px; }
+.lang-menu {
+  position: absolute; top: calc(100% + 10px); inset-inline-end: 0; z-index: 130; margin: 0; padding: 6px; list-style: none;
+  min-width: 184px; border-radius: 14px; background: var(--bg-raise, var(--bg)); color: var(--fg);
+  border: 1px solid var(--line-dark); box-shadow: 0 22px 50px var(--shadow, rgba(0, 0, 0, .4));   /* the 404 page has no --shadow */
+}
+.lang-opt {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%;
+  padding: 11px 14px; border: 0; border-radius: 9px; background: none; color: inherit; cursor: pointer;
+  font: 500 1rem/1.25 var(--f-body); text-align: start; letter-spacing: normal; text-transform: none;
+}
+.lang-opt:hover, .lang-opt:focus-visible { background: rgba(var(--fg-rgb), .08); }
+.lang-opt:focus-visible { outline-offset: -2px; }
+.lang-menu .lang-opt[aria-current]::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-fill, var(--accent)); flex: none; }
+.lang-menu .lang-opt[aria-current] { color: var(--accent); }
+/* light mode over a hero that stays dark: the header keeps dark colours, so does its list */
+:root[data-theme="light"]:not(.menu-open) body[data-hero="dark"] .site-header:not(.scrolled) .lang-menu { background: var(--navy-900); }
+/* Next to the sun/moon the globe sits 8px away, a pair of round switches, rather than a whole nav gap
+   (the clamp is the gap site.css gives the nav from 521px up). */
+@media (min-width: 521px) {
+  .site-header .nav { --nav-gap: clamp(16px, 2.2vw, 34px); }
+  .site-header .lang-switch { margin-inline-start: calc(8px - var(--nav-gap)); }
+}
+/* Where the header row is full the phone menu carries the languages instead: from 521px to 640px (the ADIPEC
+   button and the burger share the row with the logo), on English phones, whose strapline needs the width,
+   and on every phone under 390px. Other languages keep the globe on phones from 390px up, so a visitor
+   who cannot read the page still finds English in the header. */
+@media (min-width: 521px) and (max-width: 640px) { .site-header .lang-switch { display: none; } }
+@media (max-width: 520px) { html:not([data-lang]) .site-header .lang-switch { display: none; } }
+@media (max-width: 389px) { .site-header .lang-switch { display: none; } }
+/* desktop from 1181px to 1345px: the nav gaps run 14px to 28px (site.css has 19px to 29px up to 1320px), so
+   the eight links, both switches and the ADIPEC button fit beside a full-width logo */
+@media (min-width: 1181px) and (max-width: 1345px) { .site-header .nav { --nav-gap: calc(8.6vw - 88px); gap: var(--nav-gap); } }
+
+.menu-langs { margin-top: 36px; }
+.menu-langs ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.menu-panel .menu-langs li { overflow: visible; padding: 0; margin: 0; }
+.menu-langs .lang-opt {
+  width: auto; padding: 10px 16px; border-radius: 999px; font-size: .95rem;
+  border: 1px solid var(--line-dark); background: rgba(var(--fg-rgb), .04);
+}
+.menu-langs .lang-opt[aria-current] { background: var(--accent-fill, var(--accent)); border-color: transparent; color: var(--on-accent, var(--navy-990)); }
+.menu-langs + .menu-foot { margin-top: 28px; }
+
+/* ---------- Type per script ---------- */
+/* The site's Latin fonts stay first, so names such as SAA or ADNOC keep the house style; the other
+   script falls through to the visitor's system fonts, named here in order of preference. Mono labels
+   take the script's own font: a monospace space between Arabic or Hindi words reads as a gap. */
+html[data-lang="ar"] {
+  --f-ar: "SF Arabic", "Geeza Pro", "Noto Sans Arabic", "Noto Naskh Arabic", "Segoe UI", Tahoma, sans-serif;
+  --f-display: "Archivo", var(--f-ar); --f-body: "IBM Plex Sans", var(--f-ar); --f-mono: var(--f-ar);
+}
+html[data-lang="ur"] {
+  --f-ur: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Urdu Typesetting", "SF Arabic", "Geeza Pro", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --f-display: "Archivo", var(--f-ur); --f-body: "IBM Plex Sans", var(--f-ur); --f-mono: var(--f-ur);
+}
+html[data-lang="hi"] {
+  --f-hi: "Kohinoor Devanagari", "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif;
+  --f-display: "Archivo", var(--f-hi); --f-body: "IBM Plex Sans", var(--f-hi); --f-mono: var(--f-hi);
+}
+html[data-lang="zh"] {
+  --f-zh: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+  --f-display: "Archivo", var(--f-zh); --f-body: "IBM Plex Sans", var(--f-zh); --f-mono: var(--f-zh);
+}
+html[data-lang="ru"] {
+  --f-display: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Letter-spacing pulls joined Arabic and Urdu letters apart and breaks Devanagari, and capitals do not
+   exist in these scripts: labels lose both. Chinese reads better without the tracking too. */
+html:is([data-lang="ar"], [data-lang="ur"], [data-lang="hi"], [data-lang="zh"]) body *:not(svg *) { letter-spacing: normal !important; }
+html:is([data-lang="ar"], [data-lang="ur"], [data-lang="hi"], [data-lang="zh"]) :is(.mono, .eyebrow) { text-transform: none; font-size: max(.8rem, var(--t-xs)); }
+/* split text keeps its fonts' joins and ligatures in these scripts (it animates by word, see i18n.js) */
+html:is([data-lang="ar"], [data-lang="ur"], [data-lang="hi"]) [data-split] { font-kerning: auto; font-variant-ligatures: normal; }
+
+/* Display type: the Latin line-heights (.86 to 1) clip these scripts' tall marks */
+html:is([data-lang="ar"], [data-lang="hi"]) :is(h1, h2, h3, h4, .display, .mega, .h2, .h3) { line-height: 1.28; }
+html[data-lang="zh"] :is(h1, h2, h3, h4, .display, .mega, .h2, .h3) { line-height: 1.18; letter-spacing: 0; }
+html[data-lang="ur"] :is(h1, h2, h3, h4, .display, .mega, .h2, .h3) { line-height: 1.75; }
+html[data-lang="ur"] body { line-height: 2; }
+html[data-lang="ar"] body, html[data-lang="hi"] body { line-height: 1.75; }
+/* the masks that words rise out of need room above and below for the same marks */
+html:is([data-lang="ar"], [data-lang="hi"], [data-lang="zh"]) .split-word { padding: .12em .03em .28em; margin: -.12em -.03em -.28em; }
+html[data-lang="ur"] .split-word { padding: .35em .03em .55em; margin: -.35em -.03em -.55em; }
+/* Russian words are long: let headings hyphenate rather than run off a phone screen */
+html[data-lang="ru"] :is(h1, h2, h3, h4, .display, .mega, .h2, .h3, .lead) { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+html[data-lang="ru"] :is(.display, .mega, .page-hero h1) { letter-spacing: -.02em; }
+
+/* ---------- Right to left (Arabic, Urdu) ---------- */
+/* The page mirrors through dir="rtl": flex rows, grids and text-align start follow it. These are the
+   pieces built with left/right, transforms or animation that would not mirror on their own. */
+[dir="rtl"] .skip-link { left: auto; right: 16px; }
+html[dir="rtl"] .menu-panel { clip-path: circle(0% at 48px 40px); }   /* the menu opens from the burger, now on the left */
+html[dir="rtl"].menu-open .menu-panel { clip-path: circle(150% at 48px 40px); }
+/* arrows point the way the text reads: the scale property mirrors them and still lets hover transforms
+   (a nudge along the line) apply, now towards the left */
+[dir="rtl"] svg:has(> path[d^="M5 12h14M13 6l6 6-6 6"]) { scale: -1 1; }
+/* marquees and other tracks animate with translateX(-50%): keep their own row left to right,
+   the words inside still read right to left */
+[dir="rtl"] :is(.marquee, .marquee-track, .h-track) { direction: ltr; }
+[dir="rtl"] :is(.marquee, .marquee-track, .h-track) > * { direction: rtl; }
+/* phone numbers, emails and addresses inside Arabic text stay in their own order */
+[dir="rtl"] a[href^="tel:"], [dir="rtl"] a[href^="mailto:"] { unicode-bidi: isolate; direction: ltr; }
+/* underlines and bars grow from the side the text starts on */
+[dir="rtl"] .tlink::after { transform-origin: left; }
+[dir="rtl"] .tlink:hover::after { transform-origin: right; }
+[dir="rtl"] :is(.progress, .preloader .pl-bar i) { transform-origin: right; }
+[dir="rtl"] .figure-num sup { margin-left: 0; margin-right: .05em; }
+/* footer, chat and cookie choices */
+[dir="rtl"] :is(.foot-legal a, .foot-link, .chat-fab .txt) { text-align: right; }
+[dir="rtl"] .chat-close, [dir="rtl"] .cc-tag { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .chat-msg ul { padding-left: 0; padding-right: 18px; }
+[dir="rtl"] .cc-more > * + * { margin-left: 0; margin-right: 14px; }
+[dir="rtl"] .cc-switch:checked::before { transform: translateX(-20px); }
+[dir="rtl"] .cc-switch::before { left: auto; right: 4px; }
+/* the forms' hidden spam-trap field sits far off the left edge, which right-to-left pages would scroll to */
+[dir="rtl"] .hp-field { left: auto !important; right: -10000px; }
+/* 404 page header: the switches stay grouped at the far end */
+[dir="rtl"] .top .theme-toggle { margin-left: 0; margin-right: auto; }
+/* Home: on phones the coordinates sit on the right in RTL, where the Ask SAA button is */
+@media (max-width: 520px) { [dir="rtl"] .hero-foot { padding-right: 84px; } }
+/* phone menu: the number stays on the right of a Latin item such as "ADIPEC 2026" */
+[dir="rtl"] .menu-panel li small { unicode-bidi: isolate; }

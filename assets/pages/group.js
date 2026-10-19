@@ -33,10 +33,10 @@ const isLight = () => !!window.SAATheme && window.SAATheme.get() === 'light';
    ========================================================================= */
 /* night: teal light on navy. Daylight: navy line work, deep teal accents, softer glows */
 const HERO_PAL = {
-  dark: { dust: '94,214,204', dustK: 1, glow: ['rgba(0,161,155,.28)', 'rgba(0,161,155,.07)'], ring: '94,214,204', ringK: 1, fil: '94,214,204', filK: 1,
-    coreRing: 'rgba(94,214,204,.55)', coreDot: 'rgba(242,255,253,.95)', halo: '94,214,204', haloK: 1, node: '234,241,243' },
-  light: { dust: '4,110,104', dustK: .8, glow: ['rgba(0,161,155,.2)', 'rgba(0,161,155,.05)'], ring: '11,37,69', ringK: 1.1, fil: '4,110,104', filK: 1.3,
-    coreRing: 'rgba(4,110,104,.75)', coreDot: 'rgba(11,37,69,.95)', halo: '0,161,155', haloK: .8, node: '11,37,69' }
+  dark: { dust: '98,184,218', dustK: 1, glow: ['rgba(27,113,148,.28)', 'rgba(27,113,148,.07)'], ring: '98,184,218', ringK: 1, fil: '98,184,218', filK: 1,
+    coreRing: 'rgba(98,184,218,.55)', coreDot: 'rgba(244,251,253,.95)', halo: '98,184,218', haloK: 1, node: '234,240,243' },
+  light: { dust: '21,95,128', dustK: .8, glow: ['rgba(27,113,148,.15)', 'rgba(27,113,148,.04)'], ring: '25,46,73', ringK: 1.1, fil: '21,95,128', filK: 1.3,
+    coreRing: 'rgba(21,95,128,.75)', coreDot: 'rgba(25,46,73,.95)', halo: '27,113,148', haloK: .8, node: '25,46,73' }
 };
 function heroField(canvas) {
   const ctx = canvas.getContext('2d');
@@ -80,7 +80,7 @@ function heroField(canvas) {
     ctx.translate(cx, cy); ctx.rotate(-.16);
 
     const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-    g.addColorStop(0, P.glow[0]); g.addColorStop(.3, P.glow[1]); g.addColorStop(1, 'rgba(0,161,155,0)');
+    g.addColorStop(0, P.glow[0]); g.addColorStop(.3, P.glow[1]); g.addColorStop(1, 'rgba(27,113,148,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, rx, 0, TAU); ctx.fill();
 
     ctx.lineWidth = 1;
@@ -208,16 +208,16 @@ function createConstellation(stage, canvas, labels) {
   const themed = [];
   const uLight = { value: 0 };
   const tm = (mat, night, day, dayMap) => { themed.push({ mat, night, day, blend: mat.blending, map: mat.map, dayMap }); return mat; };
-  const lineMat = (color, opacity, day = 0x0B2545) => tm(new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false, blending: ADD }), color, day);
+  const lineMat = (color, opacity, day = 0x192E49) => tm(new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false, blending: ADD }), color, day);
   /* opacity factors applied in update(): night values are the original ones */
   const NIGHT_K = { glow: 1, edge: 1, fill: 1, tick: 1, wave: 1 };
   const DAY_K = { glow: .62, edge: .9, fill: 1.4, tick: .8, wave: .55 };
   let K = NIGHT_K;
 
-  const glowTeal = glowTexture([[0, 'rgba(160,240,232,0.9)'], [.18, 'rgba(94,214,204,0.45)'], [.5, 'rgba(0,161,155,0.1)'], [1, 'rgba(0,161,155,0)']]);
-  const haloTex = glowTexture([[0, 'rgba(94,214,204,0.5)'], [.3, 'rgba(0,161,155,0.2)'], [.62, 'rgba(0,161,155,0.05)'], [1, 'rgba(0,161,155,0)']]);
-  const glowDay = glowTexture([[0, 'rgba(0,161,155,0.6)'], [.18, 'rgba(0,161,155,0.3)'], [.5, 'rgba(0,161,155,0.07)'], [1, 'rgba(0,161,155,0)']]);
-  const haloDay = glowTexture([[0, 'rgba(0,161,155,0.3)'], [.3, 'rgba(0,161,155,0.13)'], [.62, 'rgba(0,161,155,0.035)'], [1, 'rgba(0,161,155,0)']]);
+  const glowTeal = glowTexture([[0, 'rgba(168,219,236,0.9)'], [.18, 'rgba(98,184,218,0.45)'], [.5, 'rgba(27,113,148,0.1)'], [1, 'rgba(27,113,148,0)']]);
+  const haloTex = glowTexture([[0, 'rgba(98,184,218,0.5)'], [.3, 'rgba(27,113,148,0.2)'], [.62, 'rgba(27,113,148,0.05)'], [1, 'rgba(27,113,148,0)']]);
+  const glowDay = glowTexture([[0, 'rgba(27,113,148,0.6)'], [.18, 'rgba(27,113,148,0.3)'], [.5, 'rgba(27,113,148,0.07)'], [1, 'rgba(27,113,148,0)']]);
+  const haloDay = glowTexture([[0, 'rgba(27,113,148,0.3)'], [.3, 'rgba(27,113,148,0.13)'], [.62, 'rgba(27,113,148,0.035)'], [1, 'rgba(27,113,148,0)']]);
 
   /* ---------- core ---------- */
   const core = add(new THREE.Group());
@@ -228,15 +228,15 @@ function createConstellation(stage, canvas, labels) {
     fragmentShader: `uniform float uPulse, uLight; varying vec3 vN; varying vec3 vV;
       void main(){
         float f = 1.0 - max(dot(normalize(vN), normalize(vV)), 0.0);
-        vec3 deep = vec3(0.016, 0.050, 0.105);
-        vec3 teal = vec3(0.37, 0.84, 0.80);
-        vec3 col = mix(deep, vec3(0.03, 0.16, 0.24), smoothstep(0.2, 0.9, f));
+        vec3 deep = vec3(0.071, 0.137, 0.227);
+        vec3 teal = vec3(0.385, 0.731, 0.856);
+        vec3 col = mix(deep, vec3(0.101, 0.211, 0.337), smoothstep(0.2, 0.9, f));
         col += teal * pow(f, 2.6) * (0.9 + 0.3 * uPulse);
-        col += vec3(0.92, 1.0, 0.98) * pow(f, 7.0) * 0.6;
+        col += vec3(0.935, 0.983, 0.988) * pow(f, 7.0) * 0.6;
         if (uLight > 0.5) {
           /* daylight: a pearl sphere that deepens to a teal rim */
-          col = mix(vec3(0.99, 1.0, 1.0), vec3(0.83, 0.92, 0.93), smoothstep(0.1, 0.9, f));
-          col = mix(col, vec3(0.0, 0.58, 0.56), pow(f, 2.4) * (0.75 + 0.2 * uPulse));
+          col = mix(vec3(0.99, 1.0, 1.0), vec3(0.834, 0.89, 0.935), smoothstep(0.1, 0.9, f));
+          col = mix(col, vec3(0.094, 0.378, 0.51), pow(f, 2.4) * (0.75 + 0.2 * uPulse));
         }
         gl_FragColor = vec4(col, 1.0);
       }`
@@ -249,7 +249,7 @@ function createConstellation(stage, canvas, labels) {
   const logoTex = new THREE.TextureLoader().load('assets/img/logo-emblem-white.png', () => api.renderOnce());
   logoTex.colorSpace = THREE.SRGBColorSpace;
   logoTex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-  const emblem = add(new THREE.Sprite(tm(new THREE.SpriteMaterial({ map: logoTex, transparent: true, depthWrite: false }), 0xFFFFFF, 0x0B2545)), core);
+  const emblem = add(new THREE.Sprite(tm(new THREE.SpriteMaterial({ map: logoTex, transparent: true, depthWrite: false }), 0xFFFFFF, 0x192E49)), core);
   emblem.scale.set(1.12, 1.12 * 480 / 528, 1);      // official proportions, never distorted
   emblem.renderOrder = 5;
 
@@ -259,7 +259,7 @@ function createConstellation(stage, canvas, labels) {
     const pre = add(new THREE.Group(), core);
     const tl = add(new THREE.Group(), pre); tl.rotation.x = tilt; tl.rotation.z = k ? -.5 : .35;
     const spin = add(new THREE.Group(), tl);
-    add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(circlePoints(r, 180)), lineMat(0x5ED6CC, op, 0x046E68)), spin);
+    add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(circlePoints(r, 180)), lineMat(0x62B8DA, op, 0x155F80)), spin);
     const bead = add(new THREE.Sprite(tm(new THREE.SpriteMaterial({ map: glowTeal, transparent: true, depthWrite: false, blending: ADD }), 0xFFFFFF, 0xFFFFFF, glowDay)), spin);
     bead.position.set(r, 0, 0); bead.scale.set(.42, .42, 1);
     gyros.push({ pre, spin, sp });
@@ -272,12 +272,12 @@ function createConstellation(stage, canvas, labels) {
       v.push(Math.cos(a) * r1, 0, Math.sin(a) * r1, Math.cos(a) * r2, 0, Math.sin(a) * r2);
     }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
-    add(new THREE.LineSegments(g, lineMat(0x5ED6CC, .28)), sys);
+    add(new THREE.LineSegments(g, lineMat(0x62B8DA, .28)), sys);
   }
 
   /* ---------- orbit structure ---------- */
   const orbitGeo = new THREE.BufferGeometry().setFromPoints(circlePoints(R, 256));
-  const orbit = add(new THREE.LineLoop(orbitGeo, lineMat(0x5ED6CC, .34)));
+  const orbit = add(new THREE.LineLoop(orbitGeo, lineMat(0x62B8DA, .34)));
   {
     const v = [];
     for (let k = 0; k < 180; k++) {
@@ -285,9 +285,9 @@ function createConstellation(stage, canvas, labels) {
       v.push(Math.cos(a0) * r, 0, Math.sin(a0) * r, Math.cos(a1) * r, 0, Math.sin(a1) * r);
     }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
-    add(new THREE.LineSegments(g, lineMat(0x5ED6CC, .16)), sys);
+    add(new THREE.LineSegments(g, lineMat(0x62B8DA, .16)), sys);
   }
-  add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(circlePoints(R * .66, 160)), lineMat(0x5ED6CC, .08)));
+  add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(circlePoints(R * .66, 160)), lineMat(0x62B8DA, .08)));
 
   const local = i => new THREE.Vector3(Math.sin(i * STEP) * R, 0, Math.cos(i * STEP) * R);
   /* chords between neighbouring companies */
@@ -295,7 +295,7 @@ function createConstellation(stage, canvas, labels) {
     const v = [];
     for (let i = 0; i < N; i++) { const a = local(i), b = local((i + 1) % N); v.push(a.x, a.y, a.z, b.x, b.y, b.z); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
-    add(new THREE.LineSegments(g, lineMat(0x5ED6CC, .12)), sys);
+    add(new THREE.LineSegments(g, lineMat(0x62B8DA, .12)), sys);
   }
 
   /* ---------- filaments: core -> each company ---------- */
@@ -315,9 +315,9 @@ function createConstellation(stage, canvas, labels) {
       float a = (0.2 + 0.55 * uActive) + pulse * (0.3 + 1.0 * uActive) + tip * 1.4;
       a *= ends * uFade;
       if (uGlow > 0.5) a *= pow(vF, 2.0) * 0.32;
-      vec3 col = mix(vec3(0.0, 0.66, 0.63), vec3(0.88, 1.0, 0.98), clamp(pulse * 0.6 + tip + uActive * 0.25, 0.0, 1.0));
+      vec3 col = mix(vec3(0.18, 0.553, 0.71), vec3(0.903, 0.968, 0.982), clamp(pulse * 0.6 + tip + uActive * 0.25, 0.0, 1.0));
       if (uLight > 0.5) {   /* daylight: teal threads whose pulses run dark */
-        col = mix(vec3(0.0, 0.6, 0.58), vec3(0.02, 0.24, 0.33), clamp(pulse * 0.6 + tip + uActive * 0.25, 0.0, 1.0));
+        col = mix(vec3(0.097, 0.391, 0.527), vec3(0.03, 0.212, 0.324), clamp(pulse * 0.6 + tip + uActive * 0.25, 0.0, 1.0));
         a = min(a, 1.0) * 0.85;
       }
       gl_FragColor = vec4(col, a);
@@ -338,23 +338,23 @@ function createConstellation(stage, canvas, labels) {
     const g = add(new THREE.Group(), sys);
     const shape = add(new THREE.Group(), g);
     shape.rotation.set(.35 + i * .2, i * .7, .1);
-    const edgeMat = tm(new THREE.LineBasicMaterial({ color: 0xEAF1F3, transparent: true, opacity: .9, depthWrite: false }), 0xEAF1F3, 0x0B2545);
+    const edgeMat = tm(new THREE.LineBasicMaterial({ color: 0xEAF0F3, transparent: true, opacity: .9, depthWrite: false }), 0xEAF0F3, 0x192E49);
     add(new THREE.LineSegments(new THREE.EdgesGeometry(shapes[i]), edgeMat), shape);
-    const fillMat = tm(new THREE.MeshBasicMaterial({ color: 0x00A19B, transparent: true, opacity: .14, depthWrite: false, blending: ADD }), 0x00A19B, 0x00A19B);
+    const fillMat = tm(new THREE.MeshBasicMaterial({ color: 0x1B7194, transparent: true, opacity: .14, depthWrite: false, blending: ADD }), 0x1B7194, 0x1B7194);
     add(new THREE.Mesh(shapes[i], fillMat), shape);
-    add(new THREE.Mesh(new THREE.SphereGeometry(.055, 16, 12), tm(new THREE.MeshBasicMaterial({ color: 0xF2FFFD }), 0xF2FFFD, 0x0B2545)), g);
+    add(new THREE.Mesh(new THREE.SphereGeometry(.055, 16, 12), tm(new THREE.MeshBasicMaterial({ color: 0xF4FBFD }), 0xF4FBFD, 0x192E49)), g);
     const glowMat = tm(new THREE.SpriteMaterial({ map: glowTeal, transparent: true, depthWrite: false, blending: ADD, opacity: .6 }), 0xFFFFFF, 0xFFFFFF, glowDay);
     const glow = add(new THREE.Sprite(glowMat), g);
     glow.scale.set(1.5, 1.5, 1);
 
     /* selection ring: billboarded in world space */
     const ring = add(new THREE.Group());
-    const ringMat = lineMat(0x5ED6CC, 0, 0x046E68);
+    const ringMat = lineMat(0x62B8DA, 0, 0x155F80);
     add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(ringPts), ringMat), ring);
     const tv = [];
     for (let k = 0; k < 4; k++) { const a = k / 4 * TAU + TAU / 8; tv.push(Math.cos(a) * .82, Math.sin(a) * .82, 0, Math.cos(a) * .98, Math.sin(a) * .98, 0); }
     const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(tv, 3));
-    const tickMat = lineMat(0xEAF1F3, 0);
+    const tickMat = lineMat(0xEAF0F3, 0);
     add(new THREE.LineSegments(tg, tickMat), ring);
 
     /* filament */
@@ -389,8 +389,8 @@ function createConstellation(stage, canvas, labels) {
     }`;
   const ptsFS = `uniform float uLight; varying float vA;
     void main(){ vec2 d = gl_PointCoord - 0.5; float r = length(d); float a = smoothstep(0.5, 0.0, r); a *= a;
-      if (uLight > 0.5) { gl_FragColor = vec4(mix(vec3(0.0, 0.55, 0.53), vec3(0.04, 0.15, 0.27), a * 0.6), a * vA * 0.8); return; }
-      gl_FragColor = vec4(mix(vec3(0.37, 0.84, 0.80), vec3(0.94, 1.0, 1.0), a * 0.6), a * vA); }`;
+      if (uLight > 0.5) { gl_FragColor = vec4(mix(vec3(0.089, 0.36, 0.483), vec3(0.129, 0.237, 0.379), a * 0.6), a * vA * 0.8); return; }
+      gl_FragColor = vec4(mix(vec3(0.385, 0.731, 0.856), vec3(0.951, 0.977, 0.991), a * 0.6), a * vA); }`;
   const ptsUni = { uTime: { value: 0 }, uPx: { value: 1 }, uAsm: { value: 0 }, uLight };
   const ptsMat = tm(new THREE.ShaderMaterial({ uniforms: ptsUni, vertexShader: ptsVS, fragmentShader: ptsFS, transparent: true, depthWrite: false, blending: ADD }));
   let seed = 11;
@@ -418,7 +418,7 @@ function createConstellation(stage, canvas, labels) {
   add(cloud(lite ? 260 : LOW ? 460 : 700, false));
 
   /* ---------- pulse wave from the core across the orbit plane ---------- */
-  const waveMat = tm(new THREE.MeshBasicMaterial({ color: 0x5ED6CC, transparent: true, opacity: 0, depthWrite: false, blending: ADD, side: THREE.DoubleSide }), 0x5ED6CC, 0x00A19B);
+  const waveMat = tm(new THREE.MeshBasicMaterial({ color: 0x62B8DA, transparent: true, opacity: 0, depthWrite: false, blending: ADD, side: THREE.DoubleSide }), 0x62B8DA, 0x1B7194);
   const wave = add(new THREE.Mesh(new THREE.RingGeometry(.985, 1, 180).rotateX(-Math.PI / 2), waveMat));
 
   /* ---------- colour mode: recolour, swap glow textures and blending ---------- */

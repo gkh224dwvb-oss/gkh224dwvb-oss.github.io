@@ -45,6 +45,7 @@
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const TEL = '<a href="tel:+97126270622">+971 2 627 0622</a>', MAIL = '<a href="mailto:saaest@eim.ae">saaest@eim.ae</a>';
   window.SAA_EXT = EXT;
+  const I18N = window.SAAI18n;   /* assets/js/i18n.js: the language switch, and how split text breaks per language */
 
   function renderChrome() {
     const header = document.querySelector('[data-include="header"]');
@@ -64,6 +65,7 @@
           <g mask="url(#ttMask)"><circle class="tt-core" cx="12" cy="12" r="5" fill="currentColor"/></g>
           <g class="tt-rays" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 1.8v2.4M12 19.8v2.4M1.8 12h2.4M19.8 12h2.4M4.8 4.8l1.7 1.7M17.5 17.5l1.7 1.7M4.8 19.2l1.7-1.7M17.5 6.5l1.7-1.7"/></g></svg>
       </button>
+      ${I18N ? I18N.ui('head') : ''}
       <a class="btn" href="${u('adipec.html')}" data-magnetic${cur('adipec')}>ADIPEC 2026 ${ARROW}</a>
       <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="menuPanel"><span></span><span></span></button>
     </nav>
@@ -72,13 +74,15 @@
 <nav class="menu-panel" id="menuPanel" aria-label="Menu" aria-hidden="true" inert data-lenis-prevent>
   <div class="wrap">
     <ol>${PAGES.map((p, i) => `<li><a href="${u(p.href)}"${cur(p.id)}><small>${String(i + 1).padStart(2, '0')}</small>${p.label}</a></li>`).join('')}</ol>
+    ${I18N ? I18N.ui('menu') : ''}
     <div class="menu-foot">${TEL}${MAIL}<span>P.O. Box 27595, Abu Dhabi</span></div>
   </div>
 </nav>`;
 
     const cta = document.querySelector('[data-include="cta"]');
     if (cta) {
-      const t = esc(cta.dataset.title || 'Let’s staff your next project.');
+      /* the title is split for its reveal straight away, so it is translated here, before the split */
+      const t = esc(I18N ? I18N.t(cta.dataset.title || 'Let’s staff your next project.') : cta.dataset.title || 'Let’s staff your next project.');
       const l = esc(cta.dataset.lead || 'Tell us the roles, the numbers and the location. Onshore or offshore, our team in Abu Dhabi will come back to you.');
       const b = esc(cta.dataset.button || 'Talk to SAA');
       const h = (cta.dataset.href || 'contact.html').trim(), out = /^https?:/i.test(h);
@@ -253,12 +257,12 @@
   function split(el) {
     if (el.dataset.splitDone) return el.querySelectorAll('.split-char');
     el.dataset.splitDone = '1';
-    const mode = el.dataset.split || 'chars';
+    const mode = I18N ? I18N.splitMode(el.dataset.split || 'chars') : el.dataset.split || 'chars';
     const walk = node => {
       [...node.childNodes].forEach(n => {
         if (n.nodeType === 3) {
           const frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(w => {
+          (I18N ? I18N.words(n.textContent) : n.textContent.split(/(\s+)/)).forEach(w => {
             if (!w) return;
             if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(' ')); return; }
             const ws = document.createElement('span'); ws.className = 'split-word';

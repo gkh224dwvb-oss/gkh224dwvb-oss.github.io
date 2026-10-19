@@ -13,24 +13,24 @@
   padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + clamp(36px, 6vh, 64px));
   padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
   background:
-    radial-gradient(70% 55% at 50% 118%, rgba(0, 161, 155, .26), transparent 70%),
-    radial-gradient(60% 50% at 82% 12%, rgba(0, 161, 155, .12), transparent 70%),
+    radial-gradient(70% 55% at 50% 118%, rgba(27, 113, 148, .26), transparent 70%),
+    radial-gradient(60% 50% at 82% 12%, rgba(27, 113, 148, .12), transparent 70%),
     radial-gradient(110% 80% at 80% 0%, var(--hero-1) 0%, var(--hero-2) 35%, var(--hero-3) 85%);
 }
 .svc-hero::after { height: 22%; }
 .sh-stars, .sh-glow { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .sh-stars {
   background-image:
-    radial-gradient(1px 1px at 12% 18%, rgba(234, 241, 243, .7), transparent 60%),
-    radial-gradient(1px 1px at 27% 42%, rgba(234, 241, 243, .45), transparent 60%),
-    radial-gradient(1.4px 1.4px at 38% 12%, rgba(191, 237, 232, .8), transparent 60%),
-    radial-gradient(1px 1px at 55% 30%, rgba(234, 241, 243, .5), transparent 60%),
-    radial-gradient(1px 1px at 63% 9%, rgba(234, 241, 243, .6), transparent 60%),
-    radial-gradient(1.2px 1.2px at 71% 36%, rgba(191, 237, 232, .55), transparent 60%),
-    radial-gradient(1px 1px at 84% 22%, rgba(234, 241, 243, .5), transparent 60%),
-    radial-gradient(1px 1px at 92% 46%, rgba(234, 241, 243, .4), transparent 60%),
-    radial-gradient(1px 1px at 6% 52%, rgba(234, 241, 243, .35), transparent 60%),
-    radial-gradient(1.3px 1.3px at 47% 58%, rgba(191, 237, 232, .35), transparent 60%);
+    radial-gradient(1px 1px at 12% 18%, rgba(234, 240, 243, .7), transparent 60%),
+    radial-gradient(1px 1px at 27% 42%, rgba(234, 240, 243, .45), transparent 60%),
+    radial-gradient(1.4px 1.4px at 38% 12%, rgba(196, 227, 240, .8), transparent 60%),
+    radial-gradient(1px 1px at 55% 30%, rgba(234, 240, 243, .5), transparent 60%),
+    radial-gradient(1px 1px at 63% 9%, rgba(234, 240, 243, .6), transparent 60%),
+    radial-gradient(1.2px 1.2px at 71% 36%, rgba(196, 227, 240, .55), transparent 60%),
+    radial-gradient(1px 1px at 84% 22%, rgba(234, 240, 243, .5), transparent 60%),
+    radial-gradient(1px 1px at 92% 46%, rgba(234, 240, 243, .4), transparent 60%),
+    radial-gradient(1px 1px at 6% 52%, rgba(234, 240, 243, .35), transparent 60%),
+    radial-gradient(1.3px 1.3px at 47% 58%, rgba(196, 227, 240, .35), transparent 60%);
   opacity: .9; animation: shTwinkle 6s ease-in-out infinite alternate;
 }
 @keyframes shTwinkle { from { opacity: .55; } to { opacity: 1; } }
@@ -67,7 +67,7 @@
 }
 .sh-h-end { flex: none; color: var(--fg-muted); font-size: .66rem; }
 .sh-land, .sh-sea { flex: 1; min-width: 0; height: 28px; }
-.sh-land path { fill: none; stroke: rgba(191, 237, 232, .55); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.sh-land path { fill: none; stroke: rgba(196, 227, 240, .55); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
 .sh-sea { position: relative; overflow: hidden; }
 .sh-sea svg { position: absolute; left: 0; top: 0; width: 200%; height: 100%; max-width: none; animation: shWave 7s linear infinite; }
 .sh-sea path { fill: none; stroke: var(--teal-400); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
@@ -83,7 +83,7 @@
 }
 /* light mode: a daylight sky (no stars), the dune line in navy and the sea line in brand teal */
 :root[data-theme="light"] .sh-stars { display: none; }
-:root[data-theme="light"] .sh-land path { stroke: rgba(11, 37, 69, .5); }
+:root[data-theme="light"] .sh-land path { stroke: rgba(25, 46, 73, .5); }
 :root[data-theme="light"] .sh-sea path { stroke: var(--teal); }
 
 @media (max-width: 960px) {
@@ -169,7 +169,7 @@
 .field.is-live .fcap.is-on { opacity: 1; }
 .field.is-live .fcap-label { grid-column: 1 / -1; }
 .field.is-live .fcap-text { padding-bottom: .4em; }
-.field.is-live .fcap[data-side="off"] .fcap-label { color: var(--teal-400); }
+.field.is-live .fcap[data-side="off"] .fcap-label { color: var(--teal-300); }
 :root[data-theme="light"] .field.is-live .fcap[data-side="off"] .fcap-label { color: var(--accent); }
 
 @media (max-width: 860px) {
@@ -192,7 +192,7 @@
 /* Software-rendered browsers only (no GPU): no backdrop blur over the live scene */
 .svc-lite .site-header.scrolled, .svc-lite .chat-fab { -webkit-backdrop-filter: none; backdrop-filter: none; }
 .svc-lite .site-header.scrolled { background: rgba(var(--bg-rgb), .92); }
-.svc-lite .chat-fab { background: rgba(7, 26, 51, .95); }
+.svc-lite .chat-fab { background: rgba(31, 55, 86, .95); }
 :root[data-theme="light"].svc-lite .chat-fab { background: rgba(255, 255, 255, .96); }
 
 /* ---------- Five sectors (accordion) ---------- */
@@ -222,7 +222,7 @@
   font-size: clamp(1.45rem, .75rem + 2.85vw, 3.6rem); line-height: 1; letter-spacing: -.022em;
   min-width: 0; overflow-wrap: break-word; transition: translate .6s var(--ease), color .4s var(--ease);
 }
-.acc-tag { color: var(--teal-ink); white-space: nowrap; padding: .55em .95em; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(7, 128, 121, .35); font-size: .66rem; }
+.acc-tag { color: var(--teal-ink); white-space: nowrap; padding: .55em .95em; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(23, 90, 117, .35); font-size: .66rem; }
 .acc-tog {
   position: relative; justify-self: end; width: 52px; height: 52px; border-radius: 50%;
   border: 1px solid var(--line); color: var(--ink); background: var(--paper);
@@ -235,10 +235,10 @@
 .acc-tog::after { rotate: 90deg; }
 .acc-item.is-open .acc-tog { background: var(--navy); border-color: var(--navy); color: var(--on-dark); rotate: 180deg; }
 .acc-item.is-open .acc-tog::after { rotate: 0deg; }
-.acc-item.is-open .acc-ico { background: var(--teal); border-color: var(--teal); color: var(--navy-990); }
+.acc-item.is-open .acc-ico { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
 @media (hover: hover) and (pointer: fine) {
   .acc-btn:hover::after { transform: scaleX(1); transform-origin: left; }
-  .acc-btn:hover .acc-name { translate: 10px 0; color: #065F5A; }
+  .acc-btn:hover .acc-name { translate: 10px 0; color: #114358; }
   .acc-btn:hover .acc-ico { rotate: -10deg; border-color: var(--teal); }
   .acc-btn:hover .acc-tog { border-color: var(--navy); }
 }
@@ -265,22 +265,22 @@
   position: relative; margin: 0; overflow: hidden; isolation: isolate; border-radius: var(--r-lg); aspect-ratio: 4 / 3;
   display: grid; place-items: center; color: var(--teal-300);
   background:
-    radial-gradient(70% 60% at 50% 38%, rgba(0, 161, 155, .22), transparent 70%),
+    radial-gradient(70% 60% at 50% 38%, rgba(27, 113, 148, .22), transparent 70%),
     linear-gradient(160deg, var(--navy-700), var(--navy-900) 55%, var(--navy-990));
-  box-shadow: 0 40px 80px -46px rgba(11, 37, 69, .8);
+  box-shadow: 0 40px 80px -46px rgba(25, 46, 73, .8);
 }
 .acc-art::before {
   content: ""; position: absolute; inset: 0; z-index: -1; opacity: .6;
-  background-image: linear-gradient(rgba(234, 241, 243, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(234, 241, 243, .05) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(234, 240, 243, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(234, 240, 243, .05) 1px, transparent 1px);
   background-size: 32px 32px; background-position: center;
   -webkit-mask-image: radial-gradient(75% 70% at 50% 45%, #000, transparent); mask-image: radial-gradient(75% 70% at 50% 45%, #000, transparent);
 }
 .acc-art svg { width: 88%; height: auto; overflow: visible; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.acc-art .fig { fill: #0B2442; }
+.acc-art .fig { fill: #213C5F; }
 .acc-art .dim { opacity: .45; }
 .acc-art .dot { fill: currentColor; stroke: none; }
 .acc-art .arc { stroke: var(--teal-100); stroke-width: 2.2; }
-.aa-corners i { position: absolute; width: 16px; height: 16px; border: 0 solid rgba(94, 214, 204, .55); }
+.aa-corners i { position: absolute; width: 16px; height: 16px; border: 0 solid rgba(98, 184, 218, .55); }
 .aa-corners i:nth-child(1) { left: 16px; top: 16px; border-left-width: 1px; border-top-width: 1px; }
 .aa-corners i:nth-child(2) { right: 16px; top: 16px; border-right-width: 1px; border-top-width: 1px; }
 .aa-corners i:nth-child(3) { left: 16px; bottom: 16px; border-left-width: 1px; border-bottom-width: 1px; }
@@ -290,15 +290,15 @@
 :root[data-theme="light"] .acc-art {
   color: var(--navy);
   background:
-    radial-gradient(70% 60% at 50% 38%, rgba(0, 161, 155, .12), transparent 70%),
-    linear-gradient(160deg, #FFFFFF, #F1F6F8 55%, #E4EDF1);
-  box-shadow: 0 40px 80px -46px rgba(11, 37, 69, .4), inset 0 0 0 1px rgba(11, 37, 69, .08);
+    radial-gradient(70% 60% at 50% 38%, rgba(27, 113, 148, .12), transparent 70%),
+    linear-gradient(160deg, #FFFFFF, #F1F6F8 55%, #E4ECF1);
+  box-shadow: 0 40px 80px -46px rgba(25, 46, 73, .4), inset 0 0 0 1px rgba(25, 46, 73, .08);
 }
-:root[data-theme="light"] .acc-art::before { background-image: linear-gradient(rgba(11, 37, 69, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(11, 37, 69, .07) 1px, transparent 1px); }
+:root[data-theme="light"] .acc-art::before { background-image: linear-gradient(rgba(25, 46, 73, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(25, 46, 73, .07) 1px, transparent 1px); }
 :root[data-theme="light"] .acc-art .fig, :root[data-theme="light"] #svWorker [fill] { fill: #FFFFFF; }
 :root[data-theme="light"] .acc-art .dot { fill: var(--teal); }
 :root[data-theme="light"] .acc-art .arc { stroke: var(--teal); }
-:root[data-theme="light"] .aa-corners i { border-color: rgba(0, 161, 155, .6); }
+:root[data-theme="light"] .aa-corners i { border-color: rgba(27, 113, 148, .6); }
 
 @media (max-width: 960px) {
   .acc-content { grid-template-columns: minmax(0, 1fr); padding-left: 0; }
@@ -326,16 +326,16 @@
 .deliver-bg {
   position: absolute; inset: 0; pointer-events: none;
   background:
-    radial-gradient(50% 40% at 10% 20%, rgba(0, 161, 155, .14), transparent 70%),
-    radial-gradient(60% 50% at 100% 100%, rgba(22, 58, 99, .55), transparent 70%);
+    radial-gradient(50% 40% at 10% 20%, rgba(27, 113, 148, .14), transparent 70%),
+    radial-gradient(60% 50% at 100% 100%, rgba(42, 74, 114, .55), transparent 70%);
 }
 /* daylight: the aqua light sits above the bottom edge and the band ends on plain --bg, so the white
    Who we serve band meets it on one even line */
 :root[data-theme="light"] .deliver-bg {
   background:
     linear-gradient(180deg, transparent 86%, var(--bg)),
-    radial-gradient(50% 40% at 10% 20%, rgba(0, 161, 155, .1), transparent 70%),
-    radial-gradient(60% 50% at 100% 64%, rgba(207, 233, 234, .9), transparent 70%);
+    radial-gradient(50% 40% at 10% 20%, rgba(27, 113, 148, .1), transparent 70%),
+    radial-gradient(60% 50% at 100% 64%, rgba(208, 225, 235, .9), transparent 70%);
 }
 .deliver-grid { position: relative; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); gap: 48px clamp(40px, 7vw, 120px); align-items: start; }
 .deliver-head { position: sticky; top: calc(var(--nav-h) + 40px); display: grid; gap: 22px; justify-items: start; }
@@ -374,8 +374,8 @@
 .step-num {
   font-family: var(--f-display); font-weight: 900; font-stretch: 125%; font-size: clamp(3rem, 1.8rem + 4vw, 6.4rem);
   line-height: .82; letter-spacing: -.04em; font-variant-numeric: tabular-nums; justify-self: start;
-  color: transparent; -webkit-text-stroke: 1.5px rgba(var(--accent-rgb), .4);
-  background: linear-gradient(180deg, #F2FFFD 10%, var(--teal-300) 55%, var(--teal)); -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(var(--accent-rgb), .55);
+  background: linear-gradient(180deg, #F4FBFD 10%, var(--teal-300) 55%, var(--teal-400)); -webkit-background-clip: text; background-clip: text;
   background-size: 100% 0%; background-repeat: no-repeat; background-position: 0 100%;
   transition: background-size 1s var(--ease), -webkit-text-stroke-color .6s var(--ease);
 }
@@ -385,7 +385,7 @@
 .step.is-on .step-node { background: var(--accent-fill); border-color: var(--accent-fill); box-shadow: 0 0 18px var(--accent-fill); }
 .step.is-on .step-node::after { opacity: .5; scale: 1; }
 /* daylight: steps not yet reached keep a teal-ink outline (a pale mint one would vanish on the light band) */
-:root[data-theme="light"] .steps-wrap.is-live .step:not(.is-on) .step-num { -webkit-text-stroke-color: rgba(4, 110, 104, .66); }
+:root[data-theme="light"] .steps-wrap.is-live .step:not(.is-on) .step-num { -webkit-text-stroke-color: rgba(21, 95, 128, .66); }
 .step.is-on .step-num { background-size: 100% 100%; -webkit-text-stroke-color: transparent; }
 .step.is-on .step-title { color: var(--fg); }
 .step.is-on .step-text { color: var(--fg-muted); }
@@ -398,14 +398,14 @@
 .liaison { position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 0 32px; align-items: start; }
 .liaison-ico {
   position: relative; z-index: 1; display: grid; place-items: center; width: 44px; height: 44px; margin-left: -11px;
-  border-radius: 50%; background: var(--dl-bg); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .6), 0 0 24px rgba(0, 161, 155, .35); color: var(--accent);
+  border-radius: 50%; background: var(--dl-bg); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .6), 0 0 24px rgba(27, 113, 148, .35); color: var(--accent);
 }
 .liaison-ico svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .liaison-ico::after { content: ""; position: absolute; left: 100%; top: 50%; width: 46px; height: 1px; background: repeating-linear-gradient(90deg, var(--teal-100) 0 5px, transparent 5px 10px); opacity: .6; }
 :root[data-theme="light"] .liaison-ico::after { background: repeating-linear-gradient(90deg, var(--teal) 0 5px, transparent 5px 10px); }
 .liaison-body {
   display: grid; gap: 10px; min-width: 0; padding: clamp(22px, 3vw, 36px);
-  border-radius: var(--r-lg); background: linear-gradient(160deg, rgba(0, 161, 155, .16), rgba(0, 161, 155, .03));
+  border-radius: var(--r-lg); background: linear-gradient(160deg, rgba(27, 113, 148, .16), rgba(27, 113, 148, .03));
   box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .28);
 }
 .liaison-label { color: var(--accent); }

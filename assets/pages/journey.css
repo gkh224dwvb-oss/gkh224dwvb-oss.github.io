@@ -6,30 +6,33 @@
   height: 100vh; height: 100svh; min-height: 560px;
   display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
   padding: calc(var(--nav-h) + 14px) 0 calc(36px + env(safe-area-inset-bottom, 0px));
-  background: radial-gradient(120% 90% at 50% 0%, #0B2545 0%, #061629 45%, var(--navy-950) 100%);
+  /* page navy at every edge (the hero above and the tape below meet it without a seam), a soft navy-700 glow over the horizon */
+  background: radial-gradient(85% 60% at 50% 66%, rgba(42, 74, 114, .5), rgba(42, 74, 114, 0) 100%), var(--navy-950);
 }
 .jr-svg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none; overflow: hidden; }
 .jr-svg .ln { fill: none; stroke: var(--teal-300); stroke-width: var(--sw, 2.2); stroke-linecap: round; stroke-linejoin: round; opacity: .92; }
 .jr-svg .ln2 { fill: none; stroke: var(--teal-300); stroke-width: calc(var(--sw, 2.2) * .6); stroke-linecap: round; stroke-linejoin: round; opacity: .5; }
-.jr-svg .solid { fill: #030F1E; stroke: none; }
+.jr-svg .solid { fill: #172C47; stroke: none; }
 .jr-svg .glow { fill: #FFE6B3; stroke: none; }
 .jr-svg .jr-halo { fill: rgba(255, 214, 150, .16); stroke: none; }
-.jr-star { fill: #EAF1F3; }
+.jr-star { fill: #EAF0F3; }
 .jr-star.tw { animation: jrTw 3.2s ease-in-out infinite alternate; }
 @keyframes jrTw { from { opacity: .25; } to { opacity: .9; } }
-.jr-moon-glow { fill: rgba(234, 241, 243, .07); }
-.jr-moon-c { fill: #EAF1F3; filter: drop-shadow(0 0 10px rgba(234, 241, 243, .5)); }
+.jr-moon-glow { fill: rgba(98, 184, 218, .09); }   /* a teal-blue halo; a white tint reads as a grey disc on the booth navy */
+.jr-moon-c { fill: #EAF0F3; filter: drop-shadow(0 0 10px rgba(234, 240, 243, .5)); }
 .jr-sky, .jr-clouds, .jr-sun, .jr-sun-rays { display: none; }   /* the daytime sky, clouds and sun (light mode, at the end) */
 .jr-hz { stroke: var(--teal-300); stroke-width: calc(var(--sw, 2.2) * .7); opacity: .7; }
 .jr-gl { stroke: var(--teal-300); stroke-width: calc(var(--sw, 2.2) * .45); fill: none; }
 /* until the script takes over (or without it), only the first scene shows, fully drawn */
 .jr-scene:not([data-scene="0"]) { opacity: 0; }
 .journey.is-ready .jr-scene { opacity: 1; }
-.jr-shade { position: absolute; inset: auto 0 0 0; height: 58%; z-index: -1; pointer-events: none; background: radial-gradient(55% 75% at 0% 100%, rgba(2, 11, 23, .72), rgba(2, 11, 23, 0) 72%), linear-gradient(rgba(2, 11, 23, 0), rgba(2, 11, 23, .55) 45%, rgba(2, 11, 23, .9)); }
+.jr-shade { position: absolute; inset: auto 0 0 0; height: 58%; z-index: -1; pointer-events: none; background: radial-gradient(55% 75% at 0% 100%, rgba(var(--bg-rgb), .8), rgba(var(--bg-rgb), 0) 72%), linear-gradient(rgba(var(--bg-rgb), 0), rgba(var(--bg-rgb), .6) 45%, rgba(var(--bg-rgb), .94)); }
 
 .jr-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
 .jr-titles { display: grid; gap: 12px; min-width: 0; }
 .jr-title { font-size: var(--t-xl); font-weight: 800; font-stretch: 112%; line-height: 1.05; max-width: 22ch; }
+/* the construction crane's jib slides in behind the heading: a navy halo keeps it from reading as struck through */
+.jr-title { text-shadow: 0 0 4px rgba(var(--bg-rgb), .95), 0 0 16px rgba(var(--bg-rgb), .85); }
 .jr-hint { display: none; align-items: center; gap: 10px; color: var(--fg-muted); padding-top: 4px; transition: opacity .6s var(--ease); }
 .jr-hint svg { animation: jrBob 1.8s var(--ease) infinite; }
 @keyframes jrBob { 50% { transform: translateY(4px); } }
@@ -52,12 +55,12 @@
 .jr-track li { position: relative; z-index: 1; min-width: 0; display: flex; justify-content: center; }
 .jr-track li:first-child { justify-content: flex-start; } .jr-track li:nth-child(5) { justify-content: flex-end; }
 .jt-bar { position: absolute !important; left: 0; right: 0; top: 6px; height: 1px; z-index: 0 !important; background: rgba(var(--fg-rgb), .18); }
-.jt-fill { position: absolute; left: 0; top: -.5px; width: 100%; height: 2px; transform-origin: left; transform: scaleX(var(--p, 0)); background: linear-gradient(90deg, var(--teal-100), var(--teal-300) 50%, var(--teal)); box-shadow: 0 0 12px var(--glow); }
+.jt-fill { position: absolute; left: 0; top: -.5px; width: 100%; height: 2px; transform-origin: left; transform: scaleX(var(--p, 0)); background: linear-gradient(90deg, var(--teal-100), var(--teal-300) 50%, var(--teal-400)); box-shadow: 0 0 12px var(--glow); }   /* the leading edge stays above 3:1 on the navy (SAA teal is 2.5:1) */
 .jt-stop { display: grid; justify-items: center; gap: 10px; padding: 0 4px 4px; background: none; border: 0; color: var(--fg-faint); cursor: pointer; font: inherit; min-height: 44px; }
 .jr-track li:first-child .jt-stop { justify-items: start; padding-left: 0; } .jr-track li:nth-child(5) .jt-stop { justify-items: end; padding-right: 0; }
 .jt-stop i { width: 13px; height: 13px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 1.5px rgba(var(--fg-rgb), .45); transition: background-color .4s var(--ease), box-shadow .4s var(--ease); }
 .jt-stop span { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; transition: color .4s var(--ease); }
-.jt-stop.is-past i { background: var(--teal); box-shadow: inset 0 0 0 1.5px var(--teal); }
+.jt-stop.is-past i { background: var(--teal-400); box-shadow: inset 0 0 0 1.5px var(--teal-400); }
 .jt-stop.is-on i { background: var(--accent-fill); box-shadow: 0 0 0 5px rgba(var(--accent-rgb), .16), 0 0 18px var(--accent-fill); }
 .jt-stop.is-on span, .jt-stop:hover span { color: var(--fg); }
 .jt-stop:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 8px; }
@@ -86,7 +89,7 @@
    .solid fills painted with that same sky so they still hide the lines behind, line-drawn clouds instead of
    stars, the moon swapped for a sun (same group, so the same position logic in journey.js), warm lights toned
    down, and a light scrim behind the captions. Everything here is CSS, so the header switch repaints it live. */
-:root[data-theme="light"] .jr-stage { background: linear-gradient(#D2E7EE, #E0EDF0 40%, #EEF2EE 66%, #EDF3F3); }
+:root[data-theme="light"] .jr-stage { background: linear-gradient(#D3E3EF, #E1E9F1 40%, #EEF2EE 66%, #EDF3F3); }
 :root[data-theme="light"] .jr-sky { display: inline; fill: url(#jrDay); }
 :root[data-theme="light"] .jr-svg .ln { stroke: var(--teal-ink); opacity: .9; }
 :root[data-theme="light"] .jr-svg .ln2 { stroke: var(--teal-ink); opacity: .5; }

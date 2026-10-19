@@ -68,11 +68,11 @@
     }
     const SPR_AMBER = radial(64, [[0, 'rgba(255,246,226,1)'], [.12, 'rgba(255,210,140,.95)'], [.36, 'rgba(255,164,74,.3)'], [1, 'rgba(255,140,50,0)']]);
     const SPR_FLAME = radial(64, [[0, 'rgba(255,252,240,1)'], [.22, 'rgba(255,200,118,.92)'], [.55, 'rgba(255,140,52,.3)'], [1, 'rgba(255,120,40,0)']]);
-    const SPR_TEAL = radial(128, [[0, 'rgba(226,255,251,.85)'], [.1, 'rgba(160,236,228,.42)'], [.42, 'rgba(0,161,155,.1)'], [1, 'rgba(0,161,155,0)']]);
+    const SPR_TEAL = radial(128, [[0, 'rgba(231,247,251,.85)'], [.1, 'rgba(166,218,235,.42)'], [.42, 'rgba(27,113,148,.1)'], [1, 'rgba(27,113,148,0)']]);
     const SPR_MOON = (() => {
       const s = 96, c = document.createElement('canvas'); c.width = c.height = s;
       const g = ctx2d(c), r = s * .4;
-      g.fillStyle = '#E6F6F3'; g.beginPath(); g.arc(s / 2, s / 2, r, 0, TAU); g.fill();
+      g.fillStyle = '#E7F4F7'; g.beginPath(); g.arc(s / 2, s / 2, r, 0, TAU); g.fill();
       g.globalCompositeOperation = 'destination-out';
       g.beginPath(); g.arc(s / 2 + r * .5, s / 2 - r * .22, r * .9, 0, TAU); g.fill();
       return c;
@@ -81,7 +81,7 @@
     const SPR_SUN = radial(96, [[0, 'rgba(255,255,252,1)'], [.36, 'rgba(255,253,244,1)'], [.42, 'rgba(255,246,222,.9)'], [.5, 'rgba(255,240,210,0)'], [1, 'rgba(255,240,210,0)']]);
     const SPR_SUNGLOW = radial(128, [[0, 'rgba(255,255,255,1)'], [.12, 'rgba(255,251,238,.85)'], [.4, 'rgba(255,240,212,.3)'], [1, 'rgba(255,240,212,0)']]);
     const SPR_CLOUD = radial(64, [[0, 'rgba(255,255,255,.9)'], [.5, 'rgba(255,255,255,.5)'], [1, 'rgba(255,255,255,0)']]);
-    const SPR_DOT = radial(32, [[0, 'rgba(4,110,104,1)'], [.42, 'rgba(4,110,104,.95)'], [.62, 'rgba(0,161,155,.3)'], [1, 'rgba(0,161,155,0)']]);
+    const SPR_DOT = radial(32, [[0, 'rgba(21,95,128,1)'], [.42, 'rgba(21,95,128,.95)'], [.62, 'rgba(27,113,148,.3)'], [1, 'rgba(27,113,148,0)']]);
     const SPR_FLAME_DAY = radial(64, [[0, 'rgba(255,226,170,1)'], [.22, 'rgba(244,150,66,.95)'], [.55, 'rgba(232,112,44,.35)'], [1, 'rgba(232,112,44,0)']]);
     const SPR_HALO_DAY = radial(64, [[0, 'rgba(255,190,120,.5)'], [.4, 'rgba(255,190,120,.18)'], [1, 'rgba(255,190,120,0)']]);
 
@@ -90,29 +90,29 @@
        teal markers, the flares are toned down, and the line work turns navy on land and deep teal at sea. */
     const PAL = {
       dark: {
-        sky: [[0, '#04101F'], [.48, '#061830'], [.86, '#0B2B49'], [1, '#144A69']],
-        ground: [[0, 11, 38, 67], [.05, 7, 27, 51], [.45, 4, 18, 42], [1, 2, 10, 22]],
-        haze: [[0, 'rgba(20,74,105,0)'], [.42, 'rgba(20,74,105,.5)'], [1, 'rgba(11,38,67,0)']],
-        glows: [['120,214,206', .14], ['0,161,155', .3], ['170,240,232', .2]],
-        stars: '#DDF4F0', clouds: false, horizon: 'rgba(150,230,222,.16)',
+        sky: [[0, '#192E49'], [.48, '#1C3555'], [.86, '#223E63'], [1, '#234B72']],
+        ground: [[0, 33, 60, 96], [.05, 29, 54, 87], [.45, 26, 50, 81], [1, 18, 35, 58]],
+        haze: [[0, 'rgba(35,75,114,0)'], [.42, 'rgba(35,75,114,.5)'], [1, 'rgba(33,60,96,0)']],
+        glows: [['123,193,218', .14], ['27,113,148', .3], ['176,223,238', .2]],
+        stars: '#DEF1F5', clouds: false, horizon: 'rgba(154,212,232,.16)',
         orb: SPR_MOON, orbK: 1, orbGlow: SPR_TEAL, orbGlowA: .55,
-        land: ['rgb(176,198,198)', 'rgb(240,247,243)'], sea: ['rgb(0,132,134)', 'rgb(94,224,214)'],
-        rim: 'rgba(176,230,224,', sil: '#04101F', wake: 'rgba(191,237,232,.26)',
+        land: ['rgb(179,193,201)', 'rgb(240,247,243)'], sea: ['rgb(22,83,118)', 'rgb(104,189,221)'],
+        rim: 'rgba(178,219,232,', sil: '#192E49', wake: 'rgba(196,227,240,.26)',
         blend: 'lighter', lamp: SPR_AMBER, lampK: 1, flame: SPR_FLAME, halo: SPR_AMBER, haloA: .32,
-        refl: '#FFB561', reflA: .7, shore: [['rgba(94,214,204,.16)', 7], ['rgba(226,251,247,.55)', 1.3]], tint: null
+        refl: '#FFB561', reflA: .7, shore: [['rgba(98,184,218,.16)', 7], ['rgba(229,246,249,.55)', 1.3]], tint: null
       },
       light: {
-        sky: [[0, '#A3CDE2'], [.5, '#C6E1EC'], [.86, '#E1EEF2'], [1, '#EDF4F3']],
+        sky: [[0, '#A3CDE2'], [.5, '#C6DEEC'], [.86, '#E1EBF3'], [1, '#EDF4F3']],
         ground: [[0, 233, 239, 240], [.05, 238, 240, 238], [.45, 244, 242, 236], [1, 248, 247, 242]],
         haze: [[0, 'rgba(236,242,243,0)'], [.42, 'rgba(236,242,243,.75)'], [1, 'rgba(230,237,238,0)']],
-        glows: [['255,244,224', .55], ['0,161,155', .1], ['255,255,255', .6]],
-        stars: null, clouds: true, horizon: 'rgba(11,37,69,.16)',
+        glows: [['255,244,224', .55], ['27,113,148', .1], ['255,255,255', .6]],
+        stars: null, clouds: true, horizon: 'rgba(25,46,73,.16)',
         orb: SPR_SUN, orbK: 2.4, orbGlow: SPR_SUNGLOW, orbGlowA: .95,
-        land: ['rgb(86,110,134)', 'rgb(11,37,69)'], sea: ['rgb(0,150,144)', 'rgb(4,110,104)'],
-        rim: 'rgba(11,37,69,', sil: '#EBF2F2', wake: 'rgba(4,110,104,.3)',
+        land: ['rgb(86,110,134)', 'rgb(25,46,73)'], sea: ['rgb(27,113,148)', 'rgb(21,95,128)'],
+        rim: 'rgba(25,46,73,', sil: '#EBF2F2', wake: 'rgba(21,95,128,.3)',
         blend: 'source-over', lamp: SPR_DOT, lampK: .7, flame: SPR_FLAME_DAY, halo: SPR_HALO_DAY, haloA: .5,
-        refl: 'rgb(4,110,104)', reflA: .35, shore: [['rgba(0,161,155,.16)', 6], ['rgba(4,110,104,.6)', 1.2]],
-        tint: [[0, 'rgb(200,226,234)'], [.4, 'rgb(212,234,239)'], [1, 'rgb(228,242,244)']]
+        refl: 'rgb(21,95,128)', reflA: .35, shore: [['rgba(27,113,148,.16)', 6], ['rgba(21,95,128,.6)', 1.2]],
+        tint: [[0, 'rgb(201,220,235)'], [.4, 'rgb(213,227,240)'], [1, 'rgb(229,237,245)']]
       }
     };
     let C = PAL.dark;

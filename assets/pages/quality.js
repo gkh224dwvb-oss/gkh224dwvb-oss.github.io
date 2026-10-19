@@ -95,11 +95,11 @@
 
     /* ---- defs ---- */
     let s = '<defs>' +
-      '<radialGradient id="wDisc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#0E2D52"/><stop offset=".6" stop-color="#071A33"/><stop offset="1" stop-color="#04101F"/></radialGradient>' +
-      '<linearGradient id="wSegOn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7FE3DA"/><stop offset=".55" stop-color="#19C2B8"/><stop offset="1" stop-color="#00A19B"/></linearGradient>' +
-      '<radialGradient id="wHl" gradientUnits="userSpaceOnUse" cx="500" cy="500" r="500"><stop offset=".58" stop-color="#00A19B" stop-opacity=".02"/><stop offset=".8" stop-color="#00A19B" stop-opacity=".2"/><stop offset="1" stop-color="#5ED6CC" stop-opacity=".07"/></radialGradient>' +
+      '<radialGradient id="wDisc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#244268"/><stop offset=".6" stop-color="#1F3756"/><stop offset="1" stop-color="#192E49"/></radialGradient>' +
+      '<linearGradient id="wSegOn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A3D6EA"/><stop offset=".55" stop-color="#62B8DA"/><stop offset="1" stop-color="#3F9FC6"/></linearGradient>' +
+      '<radialGradient id="wHl" gradientUnits="userSpaceOnUse" cx="500" cy="500" r="500"><stop offset=".58" stop-color="#1B7194" stop-opacity=".02"/><stop offset=".8" stop-color="#1B7194" stop-opacity=".2"/><stop offset="1" stop-color="#62B8DA" stop-opacity=".07"/></radialGradient>' +
       '<filter id="wGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
-      '<filter id="wSegGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16" result="b"/><feColorMatrix in="b" values="0 0 0 0 0  0 0 0 0 .63  0 0 0 0 .61  0 0 0 .9 0"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
+      '<filter id="wSegGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16" result="b"/><feColorMatrix in="b" values="0 0 0 0 .1  0 0 0 0 .41  0 0 0 0 .55  0 0 0 .9 0"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
       '<path id="wHubPath" d="M374 500a126 126 0 1 1 252 0a126 126 0 1 1 -252 0"/>';
     AREAS.forEach((A, k) => {
       const a0 = k * SEG - SEG / 2, a1 = a0 + SEG;
@@ -192,7 +192,7 @@
       hubRot.setAttribute('transform', 'rotate(' + (-rot * .5).toFixed(3) + ' 500 500)');
       const icR = compact ? 232 : 214, icS = compact ? 2.7 : 1.9;
       /* idle rim labels: navy on the daylight dial needs more weight to read as well as white on navy */
-      const [lf, lr] = window.SAATheme && window.SAATheme.get() === 'light' ? [.74, .26] : [.44, .56];
+      const [lf, lr] = window.SAATheme && window.SAATheme.get() === 'light' ? [.74, .26] : [.56, .44];
       for (let k = 0; k < N; k++) {
         const act = clamp(1 - wrapD(st.v, k));
         const e = act * act * (3 - 2 * act);

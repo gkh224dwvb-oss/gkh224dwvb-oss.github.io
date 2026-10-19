@@ -60,15 +60,15 @@ vec3 skyCol(vec3 d) {
 #else
 vec3 skyCol(vec3 d) {
   float hp = max(d.y, 0.0);
-  vec3 top = vec3(0.006, 0.020, 0.046);
-  vec3 mid = vec3(0.014, 0.050, 0.100);
-  vec3 hor = vec3(0.036, 0.118, 0.190);
+  vec3 top = vec3(0.063, 0.119, 0.191);
+  vec3 mid = vec3(0.085, 0.157, 0.252);
+  vec3 hor = vec3(0.120, 0.214, 0.336);
   vec3 c = mix(hor, mid, smoothstep(0.0, 0.16, hp));
   c = mix(c, top, smoothstep(0.12, 0.62, hp));
   vec2 az2 = normalize(d.xz + vec2(1e-5));
   float focus = pow(max(dot(az2, normalize(uGlowDir.xz)), 0.0), 7.0);
-  c += vec3(0.0, 0.30, 0.29) * exp(-hp * 9.0) * (0.12 + 0.42 * focus);
-  c += vec3(0.10, 0.52, 0.50) * exp(-hp * 46.0) * focus * 0.22;
+  c += vec3(0.048, 0.195, 0.264) * exp(-hp * 9.0) * (0.12 + 0.42 * focus);
+  c += vec3(0.118, 0.403, 0.527) * exp(-hp * 46.0) * focus * 0.22;
   return c;
 }
 #endif
@@ -99,7 +99,7 @@ void main(){
     c = mix(c, cc, cl * 0.7);
 #else
     vec3 lit = skyCol(normalize(vec3(d.x, 0.0, d.z)));
-    vec3 cc = mix(vec3(0.010, 0.030, 0.058), lit, 0.45 * (1.0 - smoothstep(0.0, 0.2, d.y)));
+    vec3 cc = mix(vec3(0.070, 0.127, 0.201), lit, 0.45 * (1.0 - smoothstep(0.0, 0.2, d.y)));
     c = mix(c, cc, cl * 0.75);
 #endif
   }
@@ -198,8 +198,8 @@ void main(){
 #ifdef DAY
   /* morning sea: teal water under a sky reflection, a soft navy reflection of the platform, sun glitter toward the glow */
   float occ = max(boxSoft(vW, R, vec3(-12.5, 11.0, -8.5), vec3(12.5, 16.6, 8.5), 10.0), boxSoft(vW, R, vec3(-11.5, 16.6, -7.5), vec3(11.8, 24.0, 3.0), 10.0));
-  refl = mix(refl * vec3(0.66, 0.80, 0.87), vec3(0.13, 0.25, 0.34), occ * 0.35);
-  vec3 col = mix(vec3(0.02, 0.26, 0.34), refl, fres * 0.9);
+  refl = mix(refl * vec3(0.66, 0.80, 0.87), vec3(0.182, 0.288, 0.428), occ * 0.35);
+  vec3 col = mix(vec3(0.040, 0.205, 0.327), refl, fres * 0.9);
   vec3 Lg = normalize(vec3(uGlowDir.x, 0.05, uGlowDir.z));
   float cg = max(dot(R, Lg), 0.0);
   col += vec3(1.0, 0.97, 0.90) * (pow(cg, 900.0) * 4.0 + pow(cg, 60.0) * 0.1) * (1.0 - occ);
@@ -207,13 +207,13 @@ void main(){
   col += vec3(1.0, 0.50, 0.18) * streak(R, uFlame, vW, 1500.0, 3.2) * 0.16 * uFlick;
 #else
   float occ = max(boxHit(vW, R, vec3(-12.5, 11.0, -8.5), vec3(12.5, 16.6, 8.5)), boxHit(vW, R, vec3(-11.5, 16.6, -7.5), vec3(11.8, 24.0, 3.0)));
-  refl = mix(refl, vec3(0.012, 0.03, 0.055), occ);
-  vec3 water = vec3(0.004, 0.017, 0.036);
+  refl = mix(refl, vec3(0.073, 0.127, 0.197), occ);
+  vec3 water = vec3(0.037, 0.074, 0.124);
   vec3 col = mix(water, refl, fres);
   vec3 Lg = normalize(vec3(uGlowDir.x, 0.035, uGlowDir.z));
   float cg = max(dot(R, Lg), 0.0);
-  col += vec3(0.42, 0.86, 0.82) * (pow(cg, 900.0) * 7.0 + pow(cg, 70.0) * 0.10) * (1.0 - occ);
-  col += vec3(0.30, 0.80, 0.76) * streak(R, vW + Lg * 1000.0, vW, 260.0, 900.0) * 0.16 * (1.0 - occ);
+  col += vec3(0.439, 0.758, 0.870) * (pow(cg, 900.0) * 7.0 + pow(cg, 70.0) * 0.10) * (1.0 - occ);
+  col += vec3(0.316, 0.684, 0.820) * streak(R, vW + Lg * 1000.0, vW, 260.0, 900.0) * 0.16 * (1.0 - occ);
   float fs = streak(R, uFlame, vW, 1500.0, 3.2) * 1.3 + lobe(R, uFlame, vW, 12.0) * 0.05;
   col += vec3(1.0, 0.58, 0.24) * fs * uFlick;
   float dl = streak(R, uL0, vW, 3000.0, 6.0) + streak(R, uL1, vW, 3000.0, 6.0) + streak(R, uL2, vW, 3000.0, 6.0);
@@ -252,14 +252,14 @@ void main(){
   float coord = abs(n.x) > abs(n.z) ? vW.z : vW.x;
   float rib = smoothstep(0.40, 0.5, abs(fract(coord * 1.7) - 0.5));
   float band = smoothstep(0.44, 0.5, abs(fract(vW.y * 0.45 + 0.1) - 0.5));
-  vec3 amb = mix(vec3(0.34, 0.47, 0.52), vec3(0.80, 0.88, 0.94), n.y * 0.5 + 0.5);
-  vec3 col = vec3(0.13, 0.23, 0.35) * (amb + vec3(1.0, 0.93, 0.82) * max(dot(n, uKey), 0.0) * 1.3);
+  vec3 amb = mix(vec3(0.343, 0.455, 0.528), vec3(0.80, 0.88, 0.94), n.y * 0.5 + 0.5);
+  vec3 col = vec3(0.183, 0.292, 0.435) * (amb + vec3(1.0, 0.93, 0.82) * max(dot(n, uKey), 0.0) * 1.3);
   col *= 1.0 - 0.3 * max(rib, band) * vert;
   col += vec3(1.0, 0.55, 0.22) * pt(n, uFlame, 34.0, 0.0) * uFlick * 0.12;
   float rim = pow(1.0 - max(dot(n, V), 0.0), 4.0);
-  col += vec3(0.0, 0.63, 0.61) * rim * 0.16;
+  col += vec3(0.102, 0.410, 0.554) * rim * 0.16;
 #else
-  vec3 col = vec3(0.012, 0.030, 0.058);
+  vec3 col = vec3(0.073, 0.128, 0.200);
   vec3 lit = vec3(1.0, 0.55, 0.22) * pt(n, uFlame, 34.0, 0.0) * uFlick;
   vec3 warm = vec3(1.0, 0.70, 0.40);
   lit += warm * (pt(n, uL0, 3.4, 0.12) + pt(n, uL1, 3.4, 0.12) + pt(n, uL2, 3.0, 0.12) + pt(n, uL3, 2.6, 0.12));
@@ -268,9 +268,9 @@ void main(){
   float rib = smoothstep(0.40, 0.5, abs(fract(coord * 1.7) - 0.5));
   float band = smoothstep(0.44, 0.5, abs(fract(vW.y * 0.45 + 0.1) - 0.5));
   col += lit * (1.0 - 0.45 * max(rib, band) * vert) + lit * 0.25 * pow(1.0 - abs(dot(n, V)), 2.0);
-  col += vec3(0.02, 0.07, 0.09) * max(n.y, 0.0) * 0.5;
+  col += vec3(0.020, 0.064, 0.091) * max(n.y, 0.0) * 0.5;
   float rim = pow(1.0 - max(dot(n, V), 0.0), 4.0);
-  col += vec3(0.04, 0.28, 0.28) * rim * 0.22;
+  col += vec3(0.059, 0.199, 0.274) * rim * 0.22;
 #endif
   float dist = length(vW - uCam);
   float fog = 1.0 - exp(-pow(dist * uFogK, 2.0));
@@ -385,7 +385,7 @@ void main(){
 #ifdef DAY
   gl_FragColor = vec4(mix(vec3(0.78, 0.82, 0.86), vec3(1.0, 0.76, 0.56), vWarm), a * 0.34);
 #else
-  gl_FragColor = vec4(mix(vec3(0.05, 0.075, 0.10), vec3(0.36, 0.17, 0.07), vWarm), a);
+  gl_FragColor = vec4(mix(vec3(0.091, 0.137, 0.194), vec3(0.36, 0.17, 0.07), vWarm), a);
 #endif
 }`;
 
@@ -551,7 +551,7 @@ void main(){
 
     /* ---------- Lights (billboard sprites) ---------- */
     const S = [];
-    const WARM = [1, .72, .42], WIN = [1, .86, .62], NAV = [.62, 1, .95], AMBER = [1, .6, .22], FL = [1, .62, .28];
+    const WARM = [1, .72, .42], WIN = [1, .86, .62], NAV = [.69, .89, .94], AMBER = [1, .6, .22], FL = [1, .62, .28];
     const light = (p, size, col, inten, kind = 0, ph = Math.random()) => S.push({ p, size, col, inten, kind, ph });
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     for (let x = -12; x <= 12.1; x += 2) light([x, 16.95, 8.75], .2, WARM, 1.5);
@@ -594,7 +594,7 @@ void main(){
     });
     /* daylight: deck lamps, windows and haze are lost in the sun; the teal helideck and corner lights,
        the blinking aviation lights and the flares stay, drawn as small alpha-blended dots and soft halos */
-    const TEAL_D = [0, .6, .58], AMBER_D = [.92, .42, .1], FL_D = [1, .52, .18];
+    const TEAL_D = [.097, .391, .527], AMBER_D = [.92, .42, .1], FL_D = [1, .52, .18];
     const dayLight = s => s.col === NAV ? (Math.abs(s.p[2]) < 60 ? [TEAL_D, 1, 1.7] : null)
       : s.col === AMBER ? [AMBER_D, 1.2, 1.5] : s.kind === 1 ? [FL_D, s.inten * .45, 1] : null;
     const sprDay = new Float32Array(S.length * 4 * SPR_STRIDE), dayIdx = [];
@@ -746,7 +746,7 @@ void main(){
       const tanY = Math.tan(fov / 2);
 
       gl.viewport(0, 0, W, H);
-      if (day) gl.clearColor(.9, .94, .95, 1); else gl.clearColor(.008, .03, .06, 1);
+      if (day) gl.clearColor(.902, .928, .953, 1); else gl.clearColor(.068, .126, .203, 1);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
       /* sky */
@@ -925,7 +925,7 @@ void main(){
       .to('.beat-cap', { opacity: 1, duration: .12 }, .48)
       .to('.beat-line', { yPercent: 0, stagger: .09, duration: .26, ease: 'power3.out' }, .5)
       .to('.hero-dim', { opacity: .35, duration: .16 }, .84)
-      /* light mode only (index.css): the last frame fades into the journey's sky; nothing reads it in dark mode */
+      /* index.css: the last frame fades into the page navy (dark) or the journey's morning sky (light) */
       .fromTo('.hero-stage', { '--hero-end': 0 }, { '--hero-end': 1, duration: .18 }, .8);
   }
 

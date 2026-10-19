@@ -94,12 +94,12 @@
         ' float halo = smoothstep(0.5, 0.0, d); halo *= halo; float core = smoothstep(0.25, 0.04, d);' +
         ' if (uLight > 0.5) {' +
         '  float dot = smoothstep(0.44, 0.2, d);' +
-        '  vec3 ink = mix(vec3(0.0, 0.55, 0.53), vec3(0.016, 0.40, 0.38), vT);' +
-        '  vec3 lc = mix(ink, vec3(0.043, 0.145, 0.27), clamp((vB - 0.9) * 0.8, 0.0, 0.8));' +
+        '  vec3 ink = mix(vec3(0.089, 0.360, 0.483), vec3(0.070, 0.275, 0.363), vT);' +
+        '  vec3 lc = mix(ink, vec3(0.131, 0.238, 0.379), clamp((vB - 0.9) * 0.8, 0.0, 0.8));' +
         '  float la = min(1.0, (halo * 0.2 + dot * 0.9) * clamp(vB * 1.15, 0.0, 1.4) * uAlpha);' +
         '  gl_FragColor = vec4(lc * la, la); return; }' +
-        ' vec3 teal = mix(vec3(0.0, 0.63, 0.61), vec3(0.37, 0.84, 0.80), vT);' +
-        ' vec3 col = mix(teal, vec3(0.86, 0.99, 0.97), clamp((vB - 0.9) * 0.9, 0.0, 0.85));' +
+        ' vec3 teal = mix(vec3(0.180, 0.553, 0.710), vec3(0.420, 0.760, 0.880), vT);' +
+        ' vec3 col = mix(teal, vec3(0.880, 0.957, 0.976), clamp((vB - 0.9) * 0.9, 0.0, 0.85));' +
         ' float a = (halo * 0.6 + core * 0.95) * clamp(vB, 0.0, 2.4) * uAlpha;' +
         ' gl_FragColor = vec4(col * a, a * 0.6); }';
       const sh = (type, src) => {
@@ -379,7 +379,7 @@
         /* dark: two light teals added together; light: deep teal ink painted normally */
         c2.globalCompositeOperation = light ? 'source-over' : 'lighter';
         for (let pass = 0; pass < 2; pass++) {
-          c2.fillStyle = light ? (pass ? '#046E68' : '#00857F') : pass ? '#5ED6CC' : '#19C2B8';
+          c2.fillStyle = light ? (pass ? '#155F80' : '#1B7194') : pass ? '#62B8DA' : '#2E8DB5';
           for (let i = 0; i < N; i++) {
             if ((TI[i] > 0.5 ? 1 : 0) !== pass) continue;
             const j = i * 3, b = dyn[j + 2] * alpha;
@@ -847,6 +847,14 @@
         badge.addEventListener('pointerleave', () => { rx(0); ry(0); badge.style.setProperty('--shine', '120%'); });
       }
       gsap.from('.host-copy .eyebrow', { y: 24, opacity: 0, duration: 1, ease: 'expo.out', clearProps: 'opacity,transform', scrollTrigger: { trigger: '.host-copy', start: 'top 85%', once: true } });
+    }
+
+    /* the stand: fins rise and the render wipes in when the section arrives */
+    const stand = document.querySelector('.stand');
+    if (stand) {
+      stand.classList.add('st-anim');
+      ScrollTrigger.create({ trigger: stand, start: 'top 70%', once: true, onEnter: () => stand.classList.add('is-on') });
+      gsap.fromTo('.st-fins', { yPercent: 8 }, { yPercent: -10, ease: 'none', scrollTrigger: { trigger: stand, start: 'top bottom', end: 'bottom top', scrub: true } });
     }
 
     /* meeting */

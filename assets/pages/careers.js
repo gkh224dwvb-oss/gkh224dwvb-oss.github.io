@@ -83,15 +83,15 @@
     const spr = document.createElement('canvas'); spr.width = 8; spr.height = 256;
     const sc = spr.getContext('2d');
     const g = sc.createLinearGradient(0, 0, 0, 256);
-    g.addColorStop(0, 'rgba(242,255,253,0)'); g.addColorStop(.03, 'rgba(242,255,253,1)');
-    g.addColorStop(.12, 'rgba(94,214,204,.85)'); g.addColorStop(1, 'rgba(0,161,155,0)');
+    g.addColorStop(0, 'rgba(244,251,253,0)'); g.addColorStop(.03, 'rgba(244,251,253,1)');
+    g.addColorStop(.12, 'rgba(98,184,218,.85)'); g.addColorStop(1, 'rgba(27,113,148,0)');
     sc.fillStyle = g; sc.fillRect(2, 0, 4, 256);
     /* daylight sprite: a deep teal tip fading to brand teal, drawn with normal blending */
     const sprL = document.createElement('canvas'); sprL.width = 8; sprL.height = 256;
     const scL = sprL.getContext('2d');
     const gL = scL.createLinearGradient(0, 0, 0, 256);
-    gL.addColorStop(0, 'rgba(4,110,104,0)'); gL.addColorStop(.03, 'rgba(4,110,104,1)');
-    gL.addColorStop(.12, 'rgba(0,161,155,.8)'); gL.addColorStop(1, 'rgba(0,161,155,0)');
+    gL.addColorStop(0, 'rgba(21,95,128,0)'); gL.addColorStop(.03, 'rgba(21,95,128,1)');
+    gL.addColorStop(.12, 'rgba(27,113,148,.8)'); gL.addColorStop(1, 'rgba(27,113,148,0)');
     scL.fillStyle = gL; scL.fillRect(2, 0, 4, 256);
 
     function rnd(i, k) { const s = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return s - Math.floor(s); }
@@ -115,8 +115,8 @@
       /* faint rails (navy hairlines in daylight) */
       ctx.globalCompositeOperation = 'source-over';
       const rail = ctx.createLinearGradient(0, 0, 0, H);
-      if (day) { rail.addColorStop(0, 'rgba(11,37,69,0)'); rail.addColorStop(.55, 'rgba(11,37,69,.06)'); rail.addColorStop(1, 'rgba(11,37,69,.12)'); }
-      else { rail.addColorStop(0, 'rgba(94,214,204,0)'); rail.addColorStop(.55, 'rgba(94,214,204,.05)'); rail.addColorStop(1, 'rgba(94,214,204,.1)'); }
+      if (day) { rail.addColorStop(0, 'rgba(25,46,73,0)'); rail.addColorStop(.55, 'rgba(25,46,73,.06)'); rail.addColorStop(1, 'rgba(25,46,73,.12)'); }
+      else { rail.addColorStop(0, 'rgba(98,184,218,0)'); rail.addColorStop(.55, 'rgba(98,184,218,.05)'); rail.addColorStop(1, 'rgba(98,184,218,.1)'); }
       ctx.strokeStyle = rail; ctx.lineWidth = 1; ctx.beginPath();
       for (const l of lines) { ctx.moveTo(l.x, 0); ctx.lineTo(l.x, H); }
       ctx.stroke();
@@ -165,7 +165,7 @@
     let mx = -1e4, my = -1e4, tx = -1e4, ty = -1e4, lift = 0, liftT = 0;
 
     /* flag colours, kept thin and low in alpha so they sit inside the navy and teal palette */
-    const TEAL = [25, 194, 184], TEAL3 = [94, 214, 204];
+    const TEAL = [46, 141, 181], TEAL3 = [98, 184, 218];
     const BANDS = [
       { yc: .27, yp: .17, w: .11, wp: .07, core: [0, 115, 47], edge: TEAL, a: .58, ph: 0.0, sp: 1.0, delay: .14 },          // green
       { yc: .52, yp: .53, w: .095, wp: .06, core: [234, 241, 243], edge: TEAL3, a: .24, ph: 2.1, sp: .85, delay: .22 },     // white
@@ -180,8 +180,8 @@
        normal blending in deeper colours. Green stays flag green, the white band turns to pearl strands
        with navy-grey rims, the black band to navy silk with teal rims, and the hoist to a deeper red. */
     const DAY = {
-      bands: [{ core: [0, 115, 47], edge: [0, 128, 120], a: .72 }, { core: [255, 255, 255], edge: [58, 88, 120], a: .62 }, { core: [9, 27, 52], edge: [0, 150, 144], a: .46 }],
-      motes: [[0, 115, 47], [58, 88, 120], [0, 150, 144]],
+      bands: [{ core: [0, 115, 47], edge: [21, 86, 112], a: .72 }, { core: [255, 255, 255], edge: [58, 88, 120], a: .62 }, { core: [31, 55, 88], edge: [27, 113, 148], a: .46 }],
+      motes: [[0, 115, 47], [58, 88, 120], [27, 113, 148]],
       red: [200, 16, 46], redGlow: [214, 40, 56]
     };
     let hx = 0, center = [], width = [];
@@ -231,8 +231,8 @@
          so the pearl strands of the white band have a shade to read against) */
       const haze = .55 + .45 * easeOut(clamp(progress / .6));
       let g = ctx.createRadialGradient(W * .68, H * .64, 0, W * .68, H * .64, Math.max(W, H) * .62);
-      if (day) { g.addColorStop(0, 'rgba(0,161,155,' + (.12 * haze).toFixed(3) + ')'); g.addColorStop(.55, 'rgba(11,37,69,' + (.08 * haze).toFixed(3) + ')'); g.addColorStop(1, 'rgba(11,37,69,0)'); }
-      else { g.addColorStop(0, 'rgba(0,161,155,' + (.17 * haze).toFixed(3) + ')'); g.addColorStop(.55, 'rgba(11,37,69,' + (.32 * haze).toFixed(3) + ')'); g.addColorStop(1, 'rgba(2,10,22,0)'); }
+      if (day) { g.addColorStop(0, 'rgba(27,113,148,' + (.12 * haze).toFixed(3) + ')'); g.addColorStop(.55, 'rgba(25,46,73,' + (.08 * haze).toFixed(3) + ')'); g.addColorStop(1, 'rgba(25,46,73,0)'); }
+      else { g.addColorStop(0, 'rgba(27,113,148,' + (.17 * haze).toFixed(3) + ')'); g.addColorStop(.55, 'rgba(25,46,73,' + (.32 * haze).toFixed(3) + ')'); g.addColorStop(1, 'rgba(18,35,58,0)'); }
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       g = ctx.createRadialGradient(W * .2, H * .28, 0, W * .2, H * .28, Math.max(W, H) * .45);
       g.addColorStop(0, 'rgba(0,115,47,' + ((day ? .07 : .09) * haze).toFixed(3) + ')'); g.addColorStop(1, 'rgba(0,115,47,0)');
@@ -337,7 +337,7 @@
           ctx.globalAlpha = 1;
         }
         /* motes drifting along the band */
-        const spr = tintGlow(day ? DAY.motes[i] : b.dark ? TEAL3 : i === 1 ? [242, 255, 253] : [60, 200, 140]);
+        const spr = tintGlow(day ? DAY.motes[i] : b.dark ? TEAL3 : i === 1 ? [244, 251, 253] : [60, 200, 140]);
         for (const m of MOTES[i]) {
           if (small && m.z < 1) continue;
           const f = (m.s + t * m.v) % 1;

@@ -6,14 +6,16 @@
 <title>Page not found · SAA Group</title>
 <meta name="description" content="The page you asked for could not be found on the SAA Group website.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#04101F">
+<meta name="theme-color" content="#192E49">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/assets/img/brand/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/brand/apple-touch-icon.png">
 <script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js" defer></script>
 <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/fonts.css">
+<link rel="stylesheet" href="/assets/css/i18n.css">
 <style>
 /* SAA Group 404. Self-contained: served at any missing URL, so every link is root-absolute
    and the styles live here (site.css assumes the scripted header and footer). The only scripts are
@@ -21,9 +23,10 @@
    at the end for the header's sun/moon switch (a file, because the CSP blocks inline scripts): dark is the night scene below, light mode turns it
    into a daylight scene (overrides at the end), and switching repaints it through CSS alone. */
 :root {
-  --navy-990: #020A16; --navy-950: #04101F; --navy-900: #071A33; --navy: #0B2545; --navy-700: #163A63;
-  --teal: #00A19B; --teal-400: #19C2B8; --teal-300: #5ED6CC; --teal-100: #BFEDE8;
-  --fg: #EAF1F3; --fg-muted: #93A8BC; --line-dark: rgba(234, 241, 243, .12);
+  --navy-990: #12233A; --navy-950: #192E49; --navy-900: #1F3756; --navy: #192E49; --navy-700: #2A4A72;
+  --teal: #1B7194; --teal-400: #2E8DB5; --teal-300: #62B8DA; --teal-100: #C4E3F0; --red: #E4332D;
+  --on-teal: #FFFFFF; --on-teal-2: rgba(255, 255, 255, .9);   /* text and icons on an SAA teal fill (5.1:1) */
+  --fg: #EAF0F3; --fg-muted: #A3B6C9; --fg-faint: #8DA2B8; --line-dark: rgba(234, 240, 243, .12);
   --f-display: "Archivo", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -31,12 +34,14 @@
   --ease: cubic-bezier(.2, .8, .2, 1);
   --sh: clamp(300px, 56vh, 600px);   /* scene height */
   --hz: .64;                         /* horizon, as a share of the scene */
-  --bg: var(--navy-990); --fg-rgb: 234, 241, 243; --accent: var(--teal-300);   /* colour-mode tokens (dark values) */
+  --bg: var(--navy-950); --fg-rgb: 234, 240, 243; --accent: var(--teal-300);   /* colour-mode tokens (dark values), as in site.css */
+  --accent-fill: var(--teal-300); --on-accent: var(--navy-990);
   color-scheme: dark;
 }
 :root[data-theme="light"] {
-  --bg: #F6F9FA; --fg: #0B2545; --fg-muted: #46607A; --fg-rgb: 11, 37, 69; --line-dark: rgba(11, 37, 69, .14);
-  --accent: #046E68;                 /* teal text on light: 5.4:1 */
+  --bg: #F6F9FA; --fg: #192E49; --fg-muted: #46607A; --fg-faint: #556B83; --fg-rgb: 25, 46, 73; --line-dark: rgba(25, 46, 73, .14);
+  --accent: #155F80;                 /* teal text on light: 6.6:1 */
+  --accent-fill: var(--teal); --on-accent: #FFFFFF;
   color-scheme: light;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -51,13 +56,13 @@ img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 p { margin: 0; }
 h1, h2 { margin: 0; }
-::selection { background: var(--teal); color: var(--navy-990); }
+::selection { background: var(--teal); color: var(--on-teal); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 .wrap { width: 100%; max-width: calc(1320px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
 .mono { font-family: var(--f-mono); font-size: clamp(.72rem, .7rem + .1vw, .78rem); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.skip { position: absolute; left: 12px; top: -60px; z-index: 50; padding: 10px 16px; border-radius: 999px; background: var(--teal); color: var(--navy-990); font-weight: 600; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 50; padding: 10px 16px; border-radius: 999px; background: var(--teal); color: var(--on-teal); font-weight: 600; }
 .skip:focus { top: 12px; }
 
 /* ---------- Top bar ---------- */
@@ -95,37 +100,37 @@ main { flex: 1; display: flex; flex-direction: column; }
 .sky {
   position: absolute; inset: 0 0 calc(var(--sh) * (1 - var(--hz))) 0;
   background:
-    radial-gradient(70% 70% at 50% 100%, rgba(0, 161, 155, .38), rgba(0, 161, 155, .08) 45%, transparent 72%),
+    radial-gradient(70% 70% at 50% 100%, rgba(27, 113, 148, .38), rgba(27, 113, 148, .08) 45%, transparent 72%),
     linear-gradient(180deg, var(--navy-990) 0%, var(--navy-900) 45%, var(--navy-700) 100%);
 }
 .sky::before {
   content: ""; position: absolute; inset: 0; opacity: .7;
   background-image:
-    radial-gradient(1.4px 1.4px at 8% 22%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1px 1px at 17% 58%, #BFEDE8 50%, transparent 51%),
-    radial-gradient(1.2px 1.2px at 26% 12%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1px 1px at 37% 36%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1.6px 1.6px at 48% 8%, #BFEDE8 50%, transparent 51%),
-    radial-gradient(1px 1px at 59% 30%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1.3px 1.3px at 67% 16%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1px 1px at 78% 44%, #BFEDE8 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 88% 20%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1px 1px at 94% 52%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1px 1px at 4% 64%, #EAF1F3 50%, transparent 51%),
-    radial-gradient(1.2px 1.2px at 31% 70%, #BFEDE8 50%, transparent 51%);
+    radial-gradient(1.4px 1.4px at 8% 22%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 17% 58%, #C4E3F0 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 26% 12%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 37% 36%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 48% 8%, #C4E3F0 50%, transparent 51%),
+    radial-gradient(1px 1px at 59% 30%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 67% 16%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 44%, #C4E3F0 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 88% 20%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 94% 52%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 4% 64%, #EAF0F3 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 31% 70%, #C4E3F0 50%, transparent 51%);
   animation: twinkle 7s ease-in-out infinite alternate;
 }
 @keyframes twinkle { from { opacity: .45; } to { opacity: .85; } }
 .sea {
   position: absolute; inset: calc(var(--sh) * var(--hz)) 0 0 0; overflow: hidden;
   background:
-    radial-gradient(46% 90% at 50% 0%, rgba(0, 161, 155, .22), transparent 70%),
-    linear-gradient(180deg, #0A2240 0%, var(--navy-950) 55%, var(--navy-990) 100%);
+    radial-gradient(46% 90% at 50% 0%, rgba(27, 113, 148, .22), transparent 70%),
+    linear-gradient(180deg, #203B5E 0%, #1C3452 55%, var(--bg) 100%);   /* the sea meets the page with no seam */
 }
 .horizon {
   position: absolute; left: 0; right: 0; top: calc(var(--sh) * var(--hz) - 1px); height: 2px; z-index: 3;
-  background: linear-gradient(90deg, transparent, rgba(94, 214, 204, .55) 30%, rgba(234, 241, 243, .9) 50%, rgba(94, 214, 204, .55) 70%, transparent);
-  box-shadow: 0 0 18px 2px rgba(0, 161, 155, .45);
+  background: linear-gradient(90deg, transparent, rgba(98, 184, 218, .55) 30%, rgba(234, 240, 243, .9) 50%, rgba(98, 184, 218, .55) 70%, transparent);
+  box-shadow: 0 0 18px 2px rgba(27, 113, 148, .45);
 }
 .horizon::after {
   content: ""; position: absolute; top: -1px; height: 4px; width: 18%; left: -18%; border-radius: 4px;
@@ -145,9 +150,9 @@ main { flex: 1; display: flex; flex-direction: column; }
 }
 .mark span {
   display: block;
-  background: linear-gradient(180deg, #F5F7F6 0%, #DDF3F0 45%, var(--teal-300) 82%, var(--teal) 100%);
+  background: linear-gradient(180deg, #F5F7F6 0%, #DEEFF4 45%, var(--teal-300) 82%, var(--teal) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
-  filter: drop-shadow(0 0 40px rgba(0, 161, 155, .35));
+  filter: drop-shadow(0 0 40px rgba(27, 113, 148, .35));
 }
 .mark::after {
   content: attr(data-n); position: absolute; left: 0; right: 0; top: 100%;
@@ -161,11 +166,11 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 /* the swell: perspective lines that break the reflection, and a drifting glint */
 .swell { position: absolute; inset: calc(var(--sh) * var(--hz)) 0 0 0; z-index: 4; width: 100%; height: calc(var(--sh) * (1 - var(--hz))); }
-.swell path { fill: none; stroke: rgba(4, 16, 31, .85); stroke-width: 2.4; vector-effect: non-scaling-stroke; }
-.swell .lit path { stroke: rgba(94, 214, 204, .16); stroke-width: 1; }
+.swell path { fill: none; stroke: rgba(25, 46, 73, .85); stroke-width: 2.4; vector-effect: non-scaling-stroke; }
+.swell .lit path { stroke: rgba(98, 184, 218, .16); stroke-width: 1; }
 .glint {
   position: absolute; z-index: 5; top: calc(var(--sh) * var(--hz) + 4px); left: 0; width: 40%; height: calc(var(--sh) * (1 - var(--hz)) * .5);
-  background: radial-gradient(50% 30% at 50% 0%, rgba(191, 237, 232, .28), transparent 70%);
+  background: radial-gradient(50% 30% at 50% 0%, rgba(196, 227, 240, .28), transparent 70%);
   mix-blend-mode: screen; animation: drift 16s ease-in-out infinite alternate;
 }
 @keyframes drift { from { transform: translateX(-20%); } to { transform: translateX(170%); } }
@@ -176,17 +181,17 @@ main { flex: 1; display: flex; flex-direction: column; }
   position: absolute; z-index: 1; left: 84%; height: var(--rh); width: calc(var(--rh) * 1.2);
   top: calc(var(--sh) * var(--hz) - var(--rh) * .873);
 }
-.rig .body { fill: #061428; stroke: rgba(94, 214, 204, .4); stroke-width: .8; stroke-linejoin: round; }
-.rig .truss { fill: none; stroke: rgba(94, 214, 204, .32); stroke-width: .7; }
-.rig .lamp { fill: #BFEDE8; }
-.rig .beacon { fill: #EAF1F3; filter: drop-shadow(0 0 3px #5ED6CC); animation: blink 2.6s steps(1, end) infinite; }
+.rig .body { fill: #1B3250; stroke: rgba(98, 184, 218, .4); stroke-width: .8; stroke-linejoin: round; }
+.rig .truss { fill: none; stroke: rgba(98, 184, 218, .32); stroke-width: .7; }
+.rig .lamp { fill: #C4E3F0; }
+.rig .beacon { fill: #EAF0F3; filter: drop-shadow(0 0 3px #62B8DA); animation: blink 2.6s steps(1, end) infinite; }
 .rig .glow { fill: url(#rigGlow); animation: breathe 4s ease-in-out infinite; transform-origin: 112px 46px; }
 @keyframes blink { 0%, 70% { opacity: 1; } 71%, 100% { opacity: .15; } }
 @keyframes breathe { 0%, 100% { transform: scale(.85); opacity: .7; } 50% { transform: scale(1.1); opacity: 1; } }
 .rig-trail {
   position: absolute; z-index: 4; left: calc(84% + var(--sh) * .1); width: 3px; margin-left: -1.5px;
   top: calc(var(--sh) * var(--hz) + 2px); height: calc(var(--sh) * (1 - var(--hz)) * .7);
-  background: linear-gradient(180deg, rgba(191, 237, 232, .45), transparent); filter: blur(1.5px);
+  background: linear-gradient(180deg, rgba(196, 227, 240, .45), transparent); filter: blur(1.5px);
 }
 
 /* ---------- Copy ---------- */
@@ -204,13 +209,13 @@ main { flex: 1; display: flex; flex-direction: column; }
 .lead { margin-top: 20px; max-width: 46ch; color: var(--fg-muted); font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem); line-height: 1.55; }
 .btn {
   position: relative; display: inline-flex; align-items: center; gap: .7em; margin-top: 30px; padding: 1.05em 1.6em; border-radius: 999px;
-  overflow: hidden; isolation: isolate; background: var(--teal); color: var(--navy-990);
+  overflow: hidden; isolation: isolate; background: var(--teal); color: var(--on-teal);
   font: 600 clamp(.86rem, .84rem + .1vw, .92rem)/1 var(--f-body); letter-spacing: .02em; white-space: nowrap;
   transition: box-shadow .4s var(--ease);
 }
 .btn::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--fg); transform: translateY(101%); transition: transform .5s var(--ease); }
 .btn:hover::before { transform: none; }
-.btn:hover { box-shadow: 0 18px 40px -14px rgba(0, 161, 155, .55); }
+.btn:hover { color: var(--navy-990); box-shadow: 0 18px 40px -14px rgba(27, 113, 148, .55); }   /* navy label on the light sweep */
 .btn svg, .pages svg { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .4s var(--ease); }
 .btn:hover svg { transform: translateX(4px); }
 
@@ -262,37 +267,37 @@ main { flex: 1; display: flex; flex-direction: column; }
    Pale sky fading up into the page, a teal-blue sea, a navy number with a deep-teal foot,
    the platform as a navy silhouette with a teal beacon. Stars and the night flare are off;
    the glint is plain white (screen blending vanishes on light colours). */
-:root[data-theme="light"] .btn:hover { color: #EAF1F3; box-shadow: 0 18px 40px -14px rgba(11, 37, 69, .35); }   /* navy sweep, light label */
+:root[data-theme="light"] .btn:hover { color: #EAF0F3; box-shadow: 0 18px 40px -14px rgba(25, 46, 73, .35); }   /* navy sweep, light label */
 :root[data-theme="light"] .sky {
   background:
-    radial-gradient(70% 70% at 50% 100%, rgba(0, 161, 155, .2), rgba(0, 161, 155, .05) 45%, transparent 72%),
-    linear-gradient(180deg, var(--bg) 0%, #E4F0F2 50%, #C6E2E4 100%);
+    radial-gradient(70% 70% at 50% 100%, rgba(27, 113, 148, .2), rgba(27, 113, 148, .05) 45%, transparent 72%),
+    linear-gradient(180deg, var(--bg) 0%, #E5ECF3 50%, #C8D9E6 100%);
 }
 :root[data-theme="light"] .sky::before { display: none; }
 :root[data-theme="light"] .sea {
   background:
-    radial-gradient(46% 90% at 50% 0%, rgba(0, 161, 155, .16), transparent 70%),
-    linear-gradient(180deg, #A6D0D3 0%, #CFE6E8 50%, var(--bg) 100%);
+    radial-gradient(46% 90% at 50% 0%, rgba(27, 113, 148, .16), transparent 70%),
+    linear-gradient(180deg, #A8C3D6 0%, #D0DFEA 50%, var(--bg) 100%);
 }
 :root[data-theme="light"] .horizon {
-  background: linear-gradient(90deg, transparent, rgba(0, 150, 144, .55) 30%, rgba(4, 110, 104, .95) 50%, rgba(0, 150, 144, .55) 70%, transparent);
-  box-shadow: 0 0 14px 1px rgba(0, 161, 155, .28);
+  background: linear-gradient(90deg, transparent, rgba(27, 113, 148, .55) 30%, rgba(21, 95, 128, .95) 50%, rgba(27, 113, 148, .55) 70%, transparent);
+  box-shadow: 0 0 14px 1px rgba(27, 113, 148, .28);
 }
 :root[data-theme="light"] .mark span {
-  background: linear-gradient(180deg, #0B2545 0%, #163A63 45%, #046E68 82%, #009690 100%);
+  background: linear-gradient(180deg, #192E49 0%, #2A4A72 45%, #155F80 82%, #1B7194 100%);
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 20px 36px rgba(11, 37, 69, .16));
+  filter: drop-shadow(0 20px 36px rgba(25, 46, 73, .16));
 }
-:root[data-theme="light"] .mark::after { color: #046E68; opacity: .2; }
-:root[data-theme="light"] .swell path { stroke: rgba(207, 230, 232, .9); }
-:root[data-theme="light"] .swell .lit path { stroke: rgba(4, 110, 104, .16); }
+:root[data-theme="light"] .mark::after { color: #155F80; opacity: .2; }
+:root[data-theme="light"] .swell path { stroke: rgba(208, 223, 234, .9); }
+:root[data-theme="light"] .swell .lit path { stroke: rgba(21, 95, 128, .16); }
 :root[data-theme="light"] .glint { background: radial-gradient(50% 30% at 50% 0%, rgba(255, 255, 255, .75), transparent 70%); mix-blend-mode: normal; }
-:root[data-theme="light"] .rig .body { fill: #163A63; stroke: rgba(11, 37, 69, .7); }
-:root[data-theme="light"] .rig .truss { stroke: rgba(11, 37, 69, .55); }
+:root[data-theme="light"] .rig .body { fill: #2A4A72; stroke: rgba(25, 46, 73, .7); }
+:root[data-theme="light"] .rig .truss { stroke: rgba(25, 46, 73, .55); }
 :root[data-theme="light"] .rig .lamp { fill: rgba(246, 249, 250, .8); }
-:root[data-theme="light"] .rig .beacon { fill: #00A19B; filter: drop-shadow(0 0 3px rgba(0, 161, 155, .6)); }
+:root[data-theme="light"] .rig .beacon { fill: #1B7194; filter: drop-shadow(0 0 3px rgba(27, 113, 148, .6)); }
 :root[data-theme="light"] .rig .glow { display: none; }
-:root[data-theme="light"] .rig-trail { background: linear-gradient(180deg, rgba(11, 37, 69, .2), transparent); }
+:root[data-theme="light"] .rig-trail { background: linear-gradient(180deg, rgba(25, 46, 73, .2), transparent); }
 </style>
 </head>
 <body>
@@ -310,6 +315,7 @@ main { flex: 1; display: flex; flex-direction: column; }
         <g mask="url(#ttMask)"><circle class="tt-core" cx="12" cy="12" r="5" fill="currentColor"/></g>
         <g class="tt-rays" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 1.8v2.4M12 19.8v2.4M1.8 12h2.4M19.8 12h2.4M4.8 4.8l1.7 1.7M17.5 17.5l1.7 1.7M4.8 19.2l1.7-1.7M17.5 6.5l1.7-1.7"/></g></svg>
     </button>
+    <span data-lang-ui="head"></span>
     <a class="top-link" href="/contact.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6.2L20.5 7"/></svg><span class="tl-text">Contact us</span></a>
   </div>
 </header>
@@ -320,7 +326,7 @@ main { flex: 1; display: flex; flex-direction: column; }
     <div class="sea"></div>
     <div class="mark" data-n="404"><span>404</span></div>
     <svg class="rig" viewBox="0 0 120 110" preserveAspectRatio="xMidYMax meet">
-      <defs><radialGradient id="rigGlow"><stop offset="0" stop-color="#BFEDE8" stop-opacity=".9"/><stop offset=".4" stop-color="#5ED6CC" stop-opacity=".35"/><stop offset="1" stop-color="#00A19B" stop-opacity="0"/></radialGradient></defs>
+      <defs><radialGradient id="rigGlow"><stop offset="0" stop-color="#C4E3F0" stop-opacity=".9"/><stop offset=".4" stop-color="#62B8DA" stop-opacity=".35"/><stop offset="1" stop-color="#1B7194" stop-opacity="0"/></radialGradient></defs>
       <circle class="glow" cx="112" cy="46" r="9"/>
       <path class="truss" d="M28 30v66M34 30v66M88 30v66M94 30v66M28 40l6 8M34 40l-6 8M28 74l6 8M34 74l-6 8M88 40l6 8M94 40l-6 8M88 74l6 8M94 74l-6 8"/>
       <path class="body" d="M54 58 60 12l6 46z"/>
