@@ -121,7 +121,7 @@
     <div class="foot-word" aria-hidden="true">SAA GROUP</div>
   </div>
   <div class="wrap foot-bottom">
-    <span>© ${new Date().getFullYear()} SAA Group of Establishments. All rights reserved.</span>
+    <span>© ${new Date().getFullYear()} SAA Group. All rights reserved.</span>
     <nav class="foot-legal" aria-label="Legal"><a href="${u('privacy.html')}">Privacy policy</a><a href="${u('terms.html')}">Terms of use</a><button type="button" class="foot-link" data-cookie-settings>Cookie settings</button></nav>
     <span>Abu Dhabi · United Arab Emirates</span>
   </div>
