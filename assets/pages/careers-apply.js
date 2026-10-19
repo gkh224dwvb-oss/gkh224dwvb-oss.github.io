@@ -7,7 +7,7 @@
       with #applyForm so the page opens at the form
       (General application and Emiratisation registration replace the old
       saaest.com CV and Emiratisation forms)
-   3. Application form -> mailto to saaest@eim.ae (same checks as the
+   3. Application form -> mailto to both recruitment inboxes (same checks as the
       contact form: linked errors, honeypot, 3 s time trap, 3 sends per
       10 minutes, control characters stripped)
    FORM SERVICE: to post to a form service later, replace openMail(href) in
@@ -17,7 +17,9 @@
   'use strict';
 
   const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const EMAIL = 'saaest@eim.ae';
+  /* applications go to both recruitment inboxes (SA, 19 Oct 2026); a mailto takes them comma separated */
+  const EMAIL = 'recruitment2@saaest.com,cv@saaest.com';
+  const EMAIL_TEXT = 'recruitment2@saaest.com and cv@saaest.com';
   const GENERAL = 'General application';
   const EMIRATI = 'Emiratisation registration (UAE Nationals)';   /* also an <option> in careers.html */
   const $ = id => document.getElementById(id);
@@ -226,11 +228,11 @@
     const ic = document.createElement('span'); ic.className = 'ok-ic'; ic.innerHTML = ICON_OK;
     const txt = document.createElement('span');
     const b = document.createElement('b'); b.textContent = name;
-    const a = document.createElement('a'); a.href = 'mailto:' + EMAIL; a.textContent = EMAIL;
+    const a = document.createElement('a'); a.href = 'mailto:' + EMAIL; a.textContent = EMAIL_TEXT;
     const cv = document.createElement('strong'); cv.textContent = 'Attach your CV (PDF) to that email before you press send.';
     if (name) txt.append('Thank you, ', b, '. '); else txt.append('Thank you. ');
     txt.append('Your email app should now open with your application to ', a, '. ', cv,
-      ' If nothing opens, email your CV to ' + EMAIL + ' with the role in the subject, or call +971 2 627 0622.');
+      ' If nothing opens, email your CV to ' + EMAIL_TEXT + ' with the role in the subject, or call +971 2 627 0622.');
     out.append(ic, txt);
   }
 
@@ -252,7 +254,7 @@
       return;
     }
     if (performance.now() - readyAt < GUARD.MIN_MS) { say('That was quick. Please wait a moment, then press Send application again.'); return; }
-    if (GUARD.limited()) { say('You have sent several messages in the last few minutes. Please wait a little, or email your CV to ' + EMAIL + ' directly.'); return; }
+    if (GUARD.limited()) { say('You have sent several messages in the last few minutes. Please wait a little, or email your CV to ' + EMAIL_TEXT + ' directly.'); return; }
 
     const kind = data.role === EMIRATI ? 'Emiratisation registration' : 'Job application';
     const lines = [
