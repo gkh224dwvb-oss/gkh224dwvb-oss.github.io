@@ -21,7 +21,7 @@
 
   const KB = [
     { id: 'about', k: ['about', 'who are you', 'what is saa', 'company', 'history', 'founded', 'since', 'background', 'overview', 'what do you do', 'tell me'],
-      a: `SAA Group of Establishments was founded in <b>1993</b> by H.E. Saeed Abdulla Rashed Al Shamsi, its Owner and Chairman. Based in Abu Dhabi, it is a UAE Government licensed recruitment agency supplying <b>more than 2,500 employees</b>, mainly to the Oil &amp; Gas sector. <a href="about.html">Read our story</a>.`,
+      a: `SAA Group was founded in <b>1993</b> by H.E. Saeed Abdulla Rashed Al Shamsi, its Owner and Chairman. Based in Abu Dhabi, it is a UAE Government licensed recruitment agency supplying <b>more than 2,500 employees</b>, mainly to the Oil &amp; Gas sector. <a href="about.html">Read our story</a>.`,
       f: ['Group companies', 'Services', 'Contact details'] },
     { id: 'services', k: ['service', 'services', 'offer', 'provide', 'manpower', 'recruit', 'staffing', 'supply', 'onshore', 'offshore', 'workers', 'labour', 'labor', 'outsourc', 'technician', 'engineer'],
       a: `Our core service is <b>recruitment and manpower supply</b> for onshore and offshore oil and gas fields and facilities. Across the group we also cover:<ul><li>Construction, maintenance and real estate</li><li>Transport</li><li>Safety and environment</li><li>Import and export</li></ul><a href="services.html">See all services</a>.`,
