@@ -60,7 +60,7 @@
       a: `SAA Group is led by:<ul><li><b>H.E. Saeed Abdulla Rashed Al Shamsi</b>, Founder, Owner and Chairman</li><li><b>H.E. Shamis Alshamsi</b>, Chief Executive Officer</li><li><b>Mr. Mohamed El Naggar</b>, Acting Manager and Head of Operations</li><li><b>Dr. Ahmed Abdullah Al Ali</b>, Group Consultant</li><li><b>Mr. Iqbal Ahmed</b>, Business Development Manager</li></ul>You can meet Mohamed at ADIPEC 2026. <a href="about.html#leadership">Our leadership</a>.`,
       f: ['Meet at ADIPEC', 'About SAA'] },
     { id: 'clients', k: ['clients', 'customers', 'who do you work', 'references', 'sector', 'industries', 'oil', 'gas', 'energy', 'private', 'public', 'government'],
-      a: `We have served <b>more than 100 clients</b> across the <b>semi-government, government and private</b> sectors, with a specialism in Oil &amp; Gas. Most of the 2,500+ employees we supply work in the UAE's Oil &amp; Gas sector. See <a href="clients.html">the clients we have served</a>.`,
+      a: `We have served <b>more than 100 clients</b> across the <b>government, semi-government and private</b> sectors, with a specialism in Oil &amp; Gas. Most of the 2,500+ employees we supply work in the UAE's Oil &amp; Gas sector. See <a href="clients.html">the clients we have served</a>.`,
       f: ['Services', 'How do I hire through SAA?'] },
     { id: 'hello', k: ['hi', 'hello', 'hey', 'salam', 'marhaba', 'good morning', 'good afternoon', 'good evening', 'مرحبا', 'السلام'],
       a: `Marhaba, and welcome to SAA Group. I can help with our services, jobs, Emiratisation, ADIPEC 2026 or how to reach us.`, f: ['Services', 'Find a job', 'Meet at ADIPEC'] },
