@@ -32,9 +32,9 @@
     { id: 'contact', href: 'contact.html', label: 'Contact' }
   ];
   const EXT = {
-    cv: 'careers.html?role=general#apply',
+    cv: 'careers.html?role=general#applyForm',
     jobs: 'careers.html#jobs',
-    emirati: 'careers.html?role=emiratisation#apply',
+    emirati: 'careers.html?role=emiratisation#applyForm',
     map: 'https://www.google.com/maps?q=24.4912691,54.3608709'
   };
   const ARROW = '<svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -180,6 +180,7 @@
   }
   /* anchor links scroll smoothly, then move keyboard focus to the target */
   document.addEventListener('click', e => {
+    if (e.defaultPrevented) return;   /* a page script handled it (e.g. Careers picking a role) */
     const a = e.target.closest('a[href^="#"]');
     if (!a || a.getAttribute('href').length < 2) return;
     let el = null; try { el = document.querySelector(a.getAttribute('href')); } catch (_) { return; }
@@ -370,16 +371,16 @@
   function isInternal(a) {
     if (!a || a.target === '_blank' || a.hasAttribute('download')) return false;
     const href = a.getAttribute('href') || '';
-    return /^\/?[a-z0-9-]+\.html(#[\w-]+)?$/i.test(href); /* includes privacy.html and terms.html */
+    return /^\/?[a-z0-9-]+\.html(\?[\w=&%-]*)?(#[\w-]+)?$/i.test(href); /* includes privacy.html and terms.html, and careers.html?role=... */
   }
   document.addEventListener('click', e => {
     const a = e.target.closest('a');
-    if (!isInternal(a) || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    if (e.defaultPrevented || !isInternal(a) || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
     e.preventDefault();
     /* a link to a section of this same page (e.g. careers.html#jobs on Careers) scrolls there, no curtain */
     const hr = a.getAttribute('href'), hi = hr.indexOf('#');
     const here = location.pathname.split('/').pop() || 'index.html';
-    if (hi > 0 && hr.slice(0, hi).replace(/^\//, '') === here) {
+    if (hi > 0 && hr.slice(0, hi).split('?')[0].replace(/^\//, '') === here) {
       const el = document.getElementById(hr.slice(hi + 1));
       if (el) {
         if (doc.classList.contains('menu-open')) setMenu(false);

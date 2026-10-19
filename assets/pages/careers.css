@@ -423,6 +423,7 @@
    ========================================================================= */
 .btn:hover .arr-down { transform: translateY(3px); }
 .pc-jobs:hover .pc-go svg { transform: translateY(3px); }
+.pc-emi:hover .pc-go svg, .pc-cv:hover .pc-go svg { transform: translateX(3px); }   /* these two stay on the page too */
 
 /* ---------- Open positions ---------- */
 .jobs { background: linear-gradient(180deg, var(--bg-deep), var(--bg) 60%); overflow: clip; }
@@ -580,9 +581,6 @@
 .ap-msg .ok-ic { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--teal); color: var(--navy-990); }
 .ap-msg a { color: var(--teal-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .ap-msg b, .ap-msg strong { color: var(--navy); font-weight: 700; }
-.ap-portal { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin-top: 22px; padding-inline: 4px; font-size: var(--t-sm); color: var(--ink-muted); }
-.ap-portal .tlink { display: inline; }
-.ap-portal-h { font-size: var(--t-xs); color: var(--ink-muted); }
 
 .hp-field { position: absolute !important; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 .hp-field input { font-size: 16px; }

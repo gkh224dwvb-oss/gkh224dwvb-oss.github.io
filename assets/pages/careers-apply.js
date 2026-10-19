@@ -3,7 +3,8 @@
    1. Job list: built from window.SAA_JOBS (assets/data/jobs.js), with
       category filter chips when there are two or more categories
    2. "Apply now" (any [data-apply-role]): picks the role in the form,
-      scrolls to it, focuses the first field. ?role= in the URL picks it too
+      scrolls to it, focuses the first field. ?role= in the URL picks it too,
+      with #applyForm so the page opens at the form
       (General application and Emiratisation registration replace the old
       saaest.com CV and Emiratisation forms)
    3. Application form -> mailto to saaest@eim.ae (same checks as the
@@ -111,6 +112,7 @@
      2. ROLE PICKER + "Apply now"
      --------------------------------------------------------------------- */
   const form = $('applyForm');
+  const roleFor = v => { v = String(v || '').toLowerCase(); return v === 'general' ? GENERAL : v === 'emiratisation' ? EMIRATI : (jobs.find(j => j.id === v) || {}).title; };
   const fRole = $('aRole');
   if (fRole) {
     const gen = fRole.querySelector('option[value="' + GENERAL + '"]');
@@ -120,9 +122,8 @@
       o.value = j.title; o.textContent = j.title + (j.example ? ' (example listing)' : '');
       fRole.insertBefore(o, gen || null);
     });
-    /* links from other pages pick the role: careers.html?role=general|emiratisation|<job id>#apply */
-    const want = (new URLSearchParams(location.search).get('role') || '').toLowerCase();
-    const pre = want === 'general' ? GENERAL : want === 'emiratisation' ? EMIRATI : (jobs.find(j => j.id === want) || {}).title;
+    /* links from other pages pick the role: careers.html?role=general|emiratisation|<job id>#applyForm */
+    const pre = roleFor(new URLSearchParams(location.search).get('role'));
     if (pre && [...fRole.options].some(o => o.value === pre)) fRole.value = pre;
   }
 
@@ -144,12 +145,21 @@
     const picked = $('apPicked');
     if (picked) picked.textContent = role ? 'Role selected: ' + role + '.' : '';
   }
+  /* [data-apply-role], and links to careers.html?role=... clicked while already on Careers (the URL would not change, so
+     nothing would be picked). Capture phase, so site.js's page-transition handler sees defaultPrevented and leaves it. */
   document.addEventListener('click', e => {
-    const b = e.target.closest('[data-apply-role]');
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    const b = e.target.closest('[data-apply-role], a[href*="role="]');
     if (!b) return;
+    let role = b.getAttribute('data-apply-role');
+    if (role === null) {
+      const url = new URL(b.href, location.href);
+      if (url.pathname !== location.pathname) return;
+      role = roleFor(url.searchParams.get('role'));
+    }
     e.preventDefault();
-    goApply(b.getAttribute('data-apply-role'));
-  });
+    goApply(role);
+  }, true);
 
   /* ---------------------------------------------------------------------
      3. APPLICATION FORM -> mailto
@@ -192,7 +202,7 @@
     const chk = (ok, el, text) => { setErr(el, ok ? '' : text); if (!ok) bad.push(el); };
     const nv = GUARD.line(fName.value), ev = GUARD.line(fEmail.value), pv = GUARD.line(fPhone.value);
     const tv = GUARD.line(fNat.value), lv = GUARD.line(fLoc.value), mv = GUARD.text(fMsg.value);
-    chk(!!fRole.value, fRole, 'Please choose a role, or choose General application.');
+    chk(!!fRole.value, fRole, 'Please choose a role, General application or Emiratisation registration.');
     chk(nv.length >= 2 && nv.length <= 100, fName, nv.length > 100 ? 'Please shorten your name to 100 characters.' : 'Please enter your full name.');
     chk(EMAIL_RE.test(ev) && ev.length <= 254, fEmail, ev ? 'Please check your email address, for example name@example.com.' : 'Please enter your email address.');
     chk(phoneOk(pv), fPhone, pv ? 'Please check your phone number. Use digits, spaces and an optional + at the start.' : 'Please enter a phone or WhatsApp number.');
@@ -244,8 +254,9 @@
     if (performance.now() - readyAt < GUARD.MIN_MS) { say('That was quick. Please wait a moment, then press Send application again.'); return; }
     if (GUARD.limited()) { say('You have sent several messages in the last few minutes. Please wait a little, or email your CV to ' + EMAIL + ' directly.'); return; }
 
+    const kind = data.role === EMIRATI ? 'Emiratisation registration' : 'Job application';
     const lines = [
-      'Job application',
+      kind,
       '',
       'Role: ' + data.role,
       'Full name: ' + data.name,
@@ -259,7 +270,7 @@
     lines.push('', 'CV: attached as a PDF.', '',
       'I agree that SAA Group may use my details for recruitment, as described in its privacy policy.',
       'Sent from the careers page of the SAA Group website.');
-    const subject = GUARD.line('Job application: ' + data.role + ' · ' + data.name);
+    const subject = GUARD.line((data.role === EMIRATI ? kind : kind + ': ' + data.role) + ' · ' + data.name);
     const href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\r\n'));
 
     GUARD.record();

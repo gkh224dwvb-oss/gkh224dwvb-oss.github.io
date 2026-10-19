@@ -24,7 +24,7 @@
 (function () {
   'use strict';
   var defaults = {
-    siteUrl: 'https://www.saaest.com',
+    siteUrl: 'https://www.saagroup.ae',
     chatEndpoint: '',
     analytics: { ga4: '' },
     forceHttps: true,

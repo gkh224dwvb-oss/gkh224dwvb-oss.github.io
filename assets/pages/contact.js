@@ -511,9 +511,9 @@
   const form = document.getElementById('enqForm');
   if (form) {
     const EXT = window.SAA_EXT || {
-      cv: 'careers.html?role=general#apply',
+      cv: 'careers.html?role=general#applyForm',
       jobs: 'careers.html#jobs',
-      emirati: 'careers.html?role=emiratisation#apply'
+      emirati: 'careers.html?role=emiratisation#applyForm'
     };
     const link = (href, text) => '<a href="' + href + '">' + text + '</a>';
     const ROLES = {

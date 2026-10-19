@@ -12,9 +12,9 @@
   const MAX_LEN = 500, HISTORY_SENT = 12, MIN_GAP = 1000, PER_MIN = 20;
   const BASE = document.body.dataset.base || '';
   const EXT = {
-    cv: 'careers.html?role=general#apply',
+    cv: 'careers.html?role=general#applyForm',
     jobs: 'careers.html#jobs',
-    emirati: 'careers.html?role=emiratisation#apply',
+    emirati: 'careers.html?role=emiratisation#applyForm',
     map: 'https://www.google.com/maps?q=24.4912691,54.3608709'
   };
   const ext = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${text}<span class="sr-only"> (opens in a new tab)</span></a>`;
@@ -37,7 +37,7 @@
       f: ['Emiratisation', 'Contact details'] },
     { id: 'emirati', k: ['emirati', 'emiratisation', 'emiratization', 'national', 'uae national', 'local talent', 'tawteen'],
       a: `Emiratisation is central to our strategy: <b>national jobs for national talents</b>. UAE Nationals can <a href="${EXT.emirati}">register with us</a> on our careers page and enter the job market.`,
-      f: ['Register my CV', 'About SAA'] },
+      f: ['Send my CV', 'About SAA'] },
     { id: 'quality', k: ['quality', 'process', 'iso', 'standard', 'qms', 'audit', 'certif', 'compliance', 'accredit', 'licen'],
       a: `Quality drives our growth. Our system covers five areas: <b>Management Responsibility</b>, <b>Resource Management</b>, <b>Support</b>, <b>Analysis &amp; Improvement</b> and <b>Service Realization</b>. We are a UAE Government licensed recruitment agency. For specific certificates, please contact our team. <a href="quality.html">How we work</a>.`,
       f: ['Services', 'Contact details'] },
@@ -75,7 +75,7 @@
   ];
   const CHIPS = {
     'Services': 'services', 'Group companies': 'companies', 'Contact details': 'contact', 'How do I hire through SAA?': 'hire',
-    'Quality process': 'quality', 'Meet at ADIPEC': 'adipec', 'Emiratisation': 'emirati', 'Register my CV': 'jobs', 'Find a job': 'jobs', 'About SAA': 'about', 'Our leadership': 'leadership',
+    'Quality process': 'quality', 'Meet at ADIPEC': 'adipec', 'Emiratisation': 'emirati', 'Send my CV': 'jobs', 'Find a job': 'jobs', 'About SAA': 'about', 'Our leadership': 'leadership',
     'Privacy policy': 'privacy', 'Terms of use': 'terms'
   };
   const START = ['Services', 'Find a job', 'Meet at ADIPEC', 'Contact details'];
@@ -191,7 +191,7 @@
   log.addEventListener('click', e => {
     const a = e.target.closest('a[href*="#"]');
     if (!a) return;
-    const h = a.getAttribute('href'), i = h.indexOf('#'), pg = h.slice(0, i).replace(/^\//, '');
+    const h = a.getAttribute('href'), i = h.indexOf('#'), pg = h.slice(0, i).split('?')[0].replace(/^\//, '');
     if (!pg || pg === (location.pathname.split('/').pop() || 'index.html')) close();
   });
   addEventListener('keydown', e => {
