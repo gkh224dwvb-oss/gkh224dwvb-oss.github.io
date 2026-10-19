@@ -1,2 +1,7 @@
+# SAA Group website
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /tools/
+Disallow: /api/
+
+Sitemap: https://www.saagroup.ae/sitemap.xml
