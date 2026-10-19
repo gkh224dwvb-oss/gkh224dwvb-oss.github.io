@@ -289,11 +289,22 @@
 }
 
 /* ---------- Leadership ---------- */
-.team-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 36px); align-items: start; }
+/* five leaders: one stepped row of five on wide screens, three over two (centred) on mid widths, a list on phones */
+.team-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(18px, 2vw, 32px); align-items: start; }
 .team-card { min-width: 0; }
-.team-card:nth-child(2) { margin-top: clamp(0px, 3vw, 48px); }
-.team-card:nth-child(3) { margin-top: clamp(0px, 6vw, 96px); }
-.team-card:nth-child(4) { margin-top: clamp(0px, 9vw, 144px); }
+.team-card:nth-child(2) { margin-top: clamp(0px, 2.5vw, 36px); }
+.team-card:nth-child(3) { margin-top: clamp(0px, 5vw, 72px); }
+.team-card:nth-child(4) { margin-top: clamp(0px, 7.5vw, 108px); }
+.team-card:nth-child(5) { margin-top: clamp(0px, 10vw, 144px); }
+@media (min-width: 1180px) {
+  .team-grid .team-name { font-size: clamp(1.2rem, .7rem + 1vw, 1.7rem); }
+}
+@media (min-width: 861px) and (max-width: 1179px) {
+  .team-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: clamp(40px, 5vw, 64px); }
+  .team-card { grid-column: span 2; }
+  .team-card:nth-child(4) { grid-column: 2 / span 2; margin-top: 0; }
+  .team-card:nth-child(5) { grid-column: 4 / span 2; margin-top: clamp(0px, 3vw, 36px); }
+}
 /* no photo yet: initials on navy */
 .team-photo.team-initials { display: grid; place-items: center; background: radial-gradient(120% 90% at 80% 0%, var(--navy-700) 0%, var(--navy) 45%, var(--navy-950) 100%); }
 .team-initials b { font-family: var(--f-display); font-weight: 900; font-stretch: 125%; font-size: clamp(2rem, 6vw, 5.5rem); line-height: 1; letter-spacing: -.03em; color: transparent; -webkit-text-stroke: 1.5px var(--teal-300); }
