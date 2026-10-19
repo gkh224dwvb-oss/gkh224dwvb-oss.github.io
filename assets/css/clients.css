@@ -1,0 +1,167 @@
+/* =========================================================================
+   SAA GROUP: clients (marquee + grid), drawn by assets/js/clients.js
+   Data: assets/data/clients.js. Logo files: assets/img/clients/.
+   A client without a logo file shows as its name in the display face.
+   ========================================================================= */
+.cl {
+  --cl-h: 40px;                                            /* logo height */
+  --cl-type: clamp(1.45rem, 1rem + 1.45vw, 2.4rem);         /* name size in the band */
+  --cl-gap: clamp(48px, 4.6vw, 80px);                       /* space between clients */
+  position: relative; min-width: 0;
+}
+@media (max-width: 860px) { .cl { --cl-h: 34px; } }
+@media (max-width: 560px) { .cl { --cl-h: 28px; --cl-gap: 40px; } }
+
+/* Shared */
+.cl-chip { position: relative; display: inline-flex; align-items: center; justify-content: center; isolation: isolate; border-radius: 12px; transition: opacity .6s var(--ease); }
+.cl-chip.is-wait { opacity: 0; } /* until the logo file has loaded: a missing file never flashes a broken image */
+.cl-logo {
+  display: block; width: auto; height: calc(var(--cl-h) * var(--k, 1)); max-width: none; object-fit: contain;
+  transition: filter .5s var(--ease), opacity .5s var(--ease);
+}
+.cl-word {
+  display: block; font-family: var(--f-display); font-weight: 760; font-stretch: 90%;
+  letter-spacing: -.02em; word-spacing: .1em; line-height: 1.04; white-space: nowrap;
+  transition: color .45s var(--ease), opacity .45s var(--ease), text-shadow .45s var(--ease);
+}
+
+/* ---------- Marquee (on dark) ---------- */
+.cl--marquee .cl-viewport {
+  overflow: hidden; padding-block: 10px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.cl-track { display: flex; width: max-content; animation: cl-scroll var(--cl-dur, 120s) linear infinite; will-change: transform; }
+.cl-set { display: flex; flex: none; align-items: center; margin: 0; padding: 0; list-style: none; }
+.cl-item {
+  position: relative; flex: none; display: flex; align-items: center; justify-content: center;
+  height: calc(var(--cl-h) * 1.45 + 24px); padding-inline: calc(var(--cl-gap) / 2);
+}
+/* a small teal triangle (after the SAA emblem) sits exactly halfway between two clients */
+.cl-item::after {
+  content: ""; position: absolute; right: 0; top: 50%; width: 9px; height: 8px; translate: 50% -50%;
+  background: var(--teal-400); clip-path: polygon(50% 0, 100% 100%, 0 100%); opacity: .85;
+}
+:root[data-theme="light"] .cl-item::after { background: var(--teal); }
+.cl-item .cl-chip { padding: 12px 18px; max-width: calc(var(--cl-h) * 5.6 + 36px); }
+.cl-item .cl-chip.is-word { padding: 8px 2px; max-width: none; }
+.cl-item .cl-word { font-size: var(--cl-type); color: var(--fg); opacity: .75; }
+.cl-item .cl-chip.is-word:hover .cl-word, .cl-item a.cl-chip.is-word:focus-visible .cl-word {
+  opacity: 1; color: #fff; text-shadow: 0 0 22px rgba(94, 214, 204, .35);
+}
+:root[data-theme="light"] .cl-item .cl-chip.is-word:hover .cl-word, :root[data-theme="light"] .cl-item a.cl-chip.is-word:focus-visible .cl-word {
+  color: var(--navy-990); text-shadow: 0 0 22px rgba(0, 161, 155, .22);
+}
+/* logos: white silhouettes at 70% on dark; full colour on a light chip on hover */
+.cl-item .cl-logo { max-width: calc(var(--cl-h) * 5.6); filter: brightness(0) invert(1); opacity: .7; }
+/* light mode: navy silhouettes (this filter turns black into #0C2146, a hair off --navy) at the name marks' .75,
+   so logos and names read as one ink. No hue-rotate: it would sweep the colours on hover. */
+:root[data-theme="light"] :where(.cl-item:not(.is-keep)) .cl-logo {
+  filter: brightness(0) invert(86%) sepia(26%) saturate(244%) brightness(94%) contrast(107%) invert(100%); opacity: .75;
+}
+.cl-item .cl-chip:not(.is-word)::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--white);
+  opacity: 0; transform: scale(.94); transition: opacity .45s var(--ease), transform .45s var(--ease);
+}
+/* invert: false keeps the logo on a light chip, softened to greyscale until hover */
+.cl-item.is-keep .cl-chip:not(.is-word)::before { opacity: .8; transform: none; }
+.cl-item.is-keep .cl-logo { filter: grayscale(1); opacity: .75; }
+.cl-item .cl-chip:not(.is-word):hover::before, .cl-item a.cl-chip:not(.is-word):focus-visible::before { opacity: 1; transform: none; }
+:root[data-theme="light"] .cl-item .cl-chip:not(.is-word)::before { background: var(--paper); box-shadow: 0 14px 34px -20px rgba(11, 37, 69, .4), inset 0 0 0 1px rgba(11, 37, 69, .08); }
+.cl-item .cl-chip:hover .cl-logo, .cl-item a.cl-chip:focus-visible .cl-logo { filter: brightness(1) invert(0) grayscale(0); opacity: 1; }
+/* the same function list at rest values, so the light-mode hover fades through grey to full colour, as dark mode does */
+:root[data-theme="light"] :where(.cl-item:not(.is-keep)) :is(.cl-chip:hover, a.cl-chip:focus-visible) .cl-logo {
+  filter: brightness(1) invert(0) sepia(0) saturate(100%) brightness(100%) contrast(100%) invert(0);
+}
+.cl-item a.cl-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* pause on hover, focus, the pause button, or while off screen */
+.cl--marquee .cl-viewport:hover .cl-track,
+.cl--marquee:focus-within .cl-track,
+.cl--marquee.is-paused .cl-track,
+.cl--marquee.is-off .cl-track { animation-play-state: paused; }
+@keyframes cl-scroll { to { transform: translate3d(-50%, 0, 0); } }
+
+/* pause / play button (WCAG 2.2.2) */
+.cl-toggle {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 16px 0 12px; cursor: pointer;
+  border: 0; border-radius: 999px; background: transparent; color: var(--fg-muted); box-shadow: inset 0 0 0 1px var(--line-dark);
+  font-family: var(--f-mono); font-size: var(--t-xs); font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  transition: color .3s var(--ease), box-shadow .3s var(--ease), background-color .3s var(--ease);
+}
+.cl-toggle svg { width: 16px; height: 16px; flex: none; }
+.cl-toggle path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.cl-toggle:hover { color: var(--fg); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .55); background-color: rgba(0, 161, 155, .08); }
+.cl-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 999px; }
+.cl--marquee > .cl-toggle { margin: 14px var(--gutter) 0 auto; display: flex; }
+@media (pointer: coarse), (max-width: 520px) { .cl-toggle { min-height: 44px; } }
+
+/* still frame (reduced motion): no animation, one wrapped, centred block */
+.cl--marquee.is-static .cl-viewport { -webkit-mask-image: none; mask-image: none; padding-inline: var(--gutter); }
+.cl--marquee.is-static .cl-track { display: block; width: auto; animation: none; transform: none; }
+.cl--marquee.is-static .cl-set { flex-wrap: wrap; justify-content: center; row-gap: 2px; max-width: var(--maxw); margin-inline: auto; }
+.cl--marquee.is-static .cl-item { height: auto; min-height: calc(var(--cl-h) * 1.2 + 16px); padding-inline: clamp(14px, 1.8vw, 26px); }
+.cl--marquee.is-static .cl-item:last-child::after { display: none; }
+.cl--marquee.is-static .cl-word { font-size: clamp(1.2rem, .95rem + .9vw, 1.9rem); }
+@media (prefers-reduced-motion: reduce) {
+  .cl-track { animation: none !important; transform: none !important; }
+  .cl-toggle { display: none !important; }
+}
+
+/* ---------- Grid (on light) ---------- */
+.cl-grid {
+  --cols: var(--cl-cols-lg, 5);
+  display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  margin: 0; padding: 0; list-style: none;
+  border-top: 1px solid var(--line); border-left: 1px solid var(--line);
+}
+@media (max-width: 1100px) { .cl-grid { --cols: var(--cl-cols-md, 4); } }
+@media (max-width: 560px) { .cl-grid { --cols: 2; } }
+.cl-tile {
+  position: relative; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; min-width: 0;
+  min-height: clamp(116px, 10vw, 156px); padding: clamp(18px, 2vw, 28px) clamp(16px, 1.8vw, 26px);
+  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  transition: background-color .4s var(--ease);
+}
+.cl-tile::after {
+  content: ""; position: absolute; top: 16px; right: 16px; width: 9px; height: 8px;
+  background: var(--teal); clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  opacity: 0; translate: 0 4px; transition: opacity .4s var(--ease), translate .4s var(--ease);
+}
+.cl-tile .cl-chip { display: flex; justify-content: flex-start; max-width: 100%; padding: 0; border-radius: 6px; }
+.cl-tile .cl-logo { max-width: min(100%, calc(var(--cl-h) * 4.6)); filter: grayscale(1); opacity: .72; }
+.cl-tile .cl-word {
+  font-size: clamp(1.1rem, .9rem + .55vw, 1.5rem); line-height: 1.08; color: var(--ink);
+  white-space: normal; text-wrap: balance; overflow-wrap: anywhere;
+}
+.cl-former {
+  font-family: var(--f-mono); font-size: var(--t-xs); line-height: 1.4; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-muted); overflow-wrap: anywhere;
+}
+.cl-tile:hover { background-color: var(--white); }
+.cl-tile:hover::after { opacity: 1; translate: 0 0; }
+.cl-tile:hover .cl-logo, .cl-tile a.cl-chip:focus-visible .cl-logo { filter: grayscale(0); opacity: 1; }
+.cl-tile:hover .cl-word { color: var(--navy-990); }
+.cl-tile a.cl-chip:focus-visible { outline: 2px solid var(--teal-ink); outline-offset: 4px; }
+
+/* ---------- Band section around the marquee (Home, Clients page) ---------- */
+.clients-band { position: relative; overflow: clip; padding-block: clamp(64px, 8vw, 120px) clamp(20px, 2.4vw, 36px); background: var(--bg); }
+.cb-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "eye line ctl"; align-items: center; gap: 16px clamp(24px, 4vw, 64px); margin-bottom: clamp(28px, 3.4vw, 48px); }
+.cb-head .eyebrow { grid-area: eye; }
+.cb-line { grid-area: line; font-family: var(--f-display); font-weight: 600; font-stretch: 108%; font-size: clamp(1.1rem, .95rem + .55vw, 1.45rem); line-height: 1.3; color: var(--fg); }
+.cb-controls { grid-area: ctl; display: flex; justify-content: flex-end; }
+.cb-controls:empty { display: none; }
+@media (max-width: 860px) {
+  .cb-head { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "eye ctl" "line line"; }
+}
+.cb-more { margin-top: clamp(24px, 3vw, 40px); }
+.sl-more { margin: 0; }
+
+/* ---------- Logo wall look (8 Oct 2026): open, centred, no rules; logos grey until hover ---------- */
+.cl-grid { border: 0; row-gap: clamp(8px, 1.2vw, 16px); }
+.cl-tile { border: 0; align-items: center; text-align: center; border-radius: 16px; min-height: clamp(120px, 10vw, 160px); }
+.cl-tile .cl-chip { justify-content: center; }
+.cl-tile .cl-logo { filter: grayscale(1) contrast(1.1); opacity: .62; transition: filter .45s var(--ease), opacity .45s var(--ease), transform .45s var(--ease); }
+.cl-tile:hover .cl-logo { transform: scale(1.06); }
+.cl-tile .cl-word { color: var(--ink-muted); }
+.cl-tile:hover { background-color: var(--white); box-shadow: 0 24px 50px -36px rgba(11, 37, 69, .45); }

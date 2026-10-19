@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page not found · SAA Group</title>
+<meta name="description" content="The page you asked for could not be found on the SAA Group website.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#04101F">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/img/brand/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/brand/apple-touch-icon.png">
+<script src="/assets/js/theme.js"></script>
+<link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/fonts.css">
+<style>
+/* SAA Group 404. Self-contained: served at any missing URL, so every link is root-absolute
+   and the styles live here (site.css assumes the scripted header and footer). The only scripts are
+   theme.js, which sets <html data-theme> from the visitor's saved dark/light choice, and theme-switch.js
+   at the end for the header's sun/moon switch (a file, because the CSP blocks inline scripts): dark is the night scene below, light mode turns it
+   into a daylight scene (overrides at the end), and switching repaints it through CSS alone. */
+:root {
+  --navy-990: #020A16; --navy-950: #04101F; --navy-900: #071A33; --navy: #0B2545; --navy-700: #163A63;
+  --teal: #00A19B; --teal-400: #19C2B8; --teal-300: #5ED6CC; --teal-100: #BFEDE8;
+  --fg: #EAF1F3; --fg-muted: #93A8BC; --line-dark: rgba(234, 241, 243, .12);
+  --f-display: "Archivo", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gutter: clamp(16px, 4vw, 56px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --sh: clamp(300px, 56vh, 600px);   /* scene height */
+  --hz: .64;                         /* horizon, as a share of the scene */
+  --bg: var(--navy-990); --fg-rgb: 234, 241, 243; --accent: var(--teal-300);   /* colour-mode tokens (dark values) */
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #F6F9FA; --fg: #0B2545; --fg-muted: #46607A; --fg-rgb: 11, 37, 69; --line-dark: rgba(11, 37, 69, .14);
+  --accent: #046E68;                 /* teal text on light: 5.4:1 */
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+body {
+  margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; overflow-x: hidden;
+  background: var(--bg); color: var(--fg);
+  font: 400 clamp(1rem, .97rem + .18vw, 1.1rem)/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+p { margin: 0; }
+h1, h2 { margin: 0; }
+::selection { background: var(--teal); color: var(--navy-990); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { width: 100%; max-width: calc(1320px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.mono { font-family: var(--f-mono); font-size: clamp(.72rem, .7rem + .1vw, .78rem); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 50; padding: 10px 16px; border-radius: 999px; background: var(--teal); color: var(--navy-990); font-weight: 600; }
+.skip:focus { top: 12px; }
+
+/* ---------- Top bar ---------- */
+.top { position: absolute; inset: 0 0 auto 0; z-index: 20; padding-top: env(safe-area-inset-top, 0px); }
+.top .wrap { height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.logo { display: inline-flex; align-items: center; gap: 12px; }
+.logo img { width: 46px; height: 42px; object-fit: contain; }
+.logo .logo-l, :root[data-theme="light"] .logo .logo-d { display: none; }
+:root[data-theme="light"] .logo .logo-l { display: block; }
+.logo-text { display: grid; line-height: 1.05; }
+.logo-text b { font-family: var(--f-display); font-weight: 800; font-size: 1.22rem; letter-spacing: .02em; }
+.logo-text span { font-family: var(--f-mono); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--fg-muted); }
+.top-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; font-size: .9rem; font-weight: 600; box-shadow: inset 0 0 0 1.5px rgba(var(--fg-rgb), .22); transition: box-shadow .3s, color .3s; }
+.top-link:hover { color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.top-link svg { display: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }   /* phones only */
+/* dark / light switch, as in the site header: a sun in dark mode, a moon in light mode (shown by the script at the end) */
+.theme-toggle {
+  flex: none; width: 44px; height: 44px; margin-left: auto; border-radius: 50%; border: 0; cursor: pointer; padding: 0;
+  display: grid; place-items: center; background: rgba(var(--fg-rgb), .08); color: var(--fg); transition: background-color .3s;
+}
+.theme-toggle[hidden] { display: none; }
+.theme-toggle:hover { background: rgba(var(--fg-rgb), .16); }
+.theme-toggle:focus-visible { border-radius: 50%; }
+.theme-toggle svg { width: 22px; height: 22px; overflow: visible; }
+.tt-core { transform-box: fill-box; transform-origin: center; transition: transform .6s var(--ease); }
+.tt-cut { transform: translate(9px, -9px); transition: transform .6s var(--ease); }
+.tt-rays { transform-box: view-box; transform-origin: 12px 12px; transition: transform .6s var(--ease), opacity .35s; }
+:root[data-theme="light"] .tt-core { transform: scale(1.7); }
+:root[data-theme="light"] .tt-cut { transform: none; }
+:root[data-theme="light"] .tt-rays { transform: rotate(-60deg) scale(.4); opacity: 0; }
+
+/* ---------- Scene: night sky, offshore horizon, the number and its reflection ---------- */
+main { flex: 1; display: flex; flex-direction: column; }
+.scene { position: relative; height: var(--sh); overflow: hidden; isolation: isolate; flex: none; }
+.sky {
+  position: absolute; inset: 0 0 calc(var(--sh) * (1 - var(--hz))) 0;
+  background:
+    radial-gradient(70% 70% at 50% 100%, rgba(0, 161, 155, .38), rgba(0, 161, 155, .08) 45%, transparent 72%),
+    linear-gradient(180deg, var(--navy-990) 0%, var(--navy-900) 45%, var(--navy-700) 100%);
+}
+.sky::before {
+  content: ""; position: absolute; inset: 0; opacity: .7;
+  background-image:
+    radial-gradient(1.4px 1.4px at 8% 22%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 17% 58%, #BFEDE8 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 26% 12%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 37% 36%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 48% 8%, #BFEDE8 50%, transparent 51%),
+    radial-gradient(1px 1px at 59% 30%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 67% 16%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 44%, #BFEDE8 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 88% 20%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 94% 52%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1px 1px at 4% 64%, #EAF1F3 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 31% 70%, #BFEDE8 50%, transparent 51%);
+  animation: twinkle 7s ease-in-out infinite alternate;
+}
+@keyframes twinkle { from { opacity: .45; } to { opacity: .85; } }
+.sea {
+  position: absolute; inset: calc(var(--sh) * var(--hz)) 0 0 0; overflow: hidden;
+  background:
+    radial-gradient(46% 90% at 50% 0%, rgba(0, 161, 155, .22), transparent 70%),
+    linear-gradient(180deg, #0A2240 0%, var(--navy-950) 55%, var(--navy-990) 100%);
+}
+.horizon {
+  position: absolute; left: 0; right: 0; top: calc(var(--sh) * var(--hz) - 1px); height: 2px; z-index: 3;
+  background: linear-gradient(90deg, transparent, rgba(94, 214, 204, .55) 30%, rgba(234, 241, 243, .9) 50%, rgba(94, 214, 204, .55) 70%, transparent);
+  box-shadow: 0 0 18px 2px rgba(0, 161, 155, .45);
+}
+.horizon::after {
+  content: ""; position: absolute; top: -1px; height: 4px; width: 18%; left: -18%; border-radius: 4px;
+  background: linear-gradient(90deg, transparent, #fff, transparent); filter: blur(1px); opacity: .8;
+  animation: sweep 9s var(--ease) infinite;
+}
+@keyframes sweep { 0% { transform: translateX(0); } 60%, 100% { transform: translateX(660%); } }
+
+/* the number sits on the horizon */
+.mark {
+  position: absolute; left: 50%; z-index: 2;
+  bottom: calc(var(--sh) * (1 - var(--hz)));
+  transform: translateX(-50%);
+  font-family: var(--f-display); font-weight: 900; font-stretch: 125%;
+  font-size: min(27vw, calc(var(--sh) * .56), 20rem); line-height: .72; letter-spacing: -.04em;
+  white-space: nowrap; user-select: none;
+}
+.mark span {
+  display: block;
+  background: linear-gradient(180deg, #F5F7F6 0%, #DDF3F0 45%, var(--teal-300) 82%, var(--teal) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 40px rgba(0, 161, 155, .35));
+}
+.mark::after {
+  content: attr(data-n); position: absolute; left: 0; right: 0; top: 100%;
+  color: var(--teal-300); opacity: .26; filter: blur(1.2px);
+  transform: scaleY(-1); transform-origin: 50% 50%;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .4) 35%, transparent 80%);
+  mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .4) 35%, transparent 80%);
+  animation: wobble 6s ease-in-out infinite;
+}
+@keyframes wobble { 0%, 100% { transform: scaleY(-1) skewX(0deg); } 50% { transform: scaleY(-1.04) skewX(-2deg); } }
+
+/* the swell: perspective lines that break the reflection, and a drifting glint */
+.swell { position: absolute; inset: calc(var(--sh) * var(--hz)) 0 0 0; z-index: 4; width: 100%; height: calc(var(--sh) * (1 - var(--hz))); }
+.swell path { fill: none; stroke: rgba(4, 16, 31, .85); stroke-width: 2.4; vector-effect: non-scaling-stroke; }
+.swell .lit path { stroke: rgba(94, 214, 204, .16); stroke-width: 1; }
+.glint {
+  position: absolute; z-index: 5; top: calc(var(--sh) * var(--hz) + 4px); left: 0; width: 40%; height: calc(var(--sh) * (1 - var(--hz)) * .5);
+  background: radial-gradient(50% 30% at 50% 0%, rgba(191, 237, 232, .28), transparent 70%);
+  mix-blend-mode: screen; animation: drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift { from { transform: translateX(-20%); } to { transform: translateX(170%); } }
+
+/* a distant offshore platform on the horizon */
+.rig {
+  --rh: calc(var(--sh) * .2);
+  position: absolute; z-index: 1; left: 84%; height: var(--rh); width: calc(var(--rh) * 1.2);
+  top: calc(var(--sh) * var(--hz) - var(--rh) * .873);
+}
+.rig .body { fill: #061428; stroke: rgba(94, 214, 204, .4); stroke-width: .8; stroke-linejoin: round; }
+.rig .truss { fill: none; stroke: rgba(94, 214, 204, .32); stroke-width: .7; }
+.rig .lamp { fill: #BFEDE8; }
+.rig .beacon { fill: #EAF1F3; filter: drop-shadow(0 0 3px #5ED6CC); animation: blink 2.6s steps(1, end) infinite; }
+.rig .glow { fill: url(#rigGlow); animation: breathe 4s ease-in-out infinite; transform-origin: 112px 46px; }
+@keyframes blink { 0%, 70% { opacity: 1; } 71%, 100% { opacity: .15; } }
+@keyframes breathe { 0%, 100% { transform: scale(.85); opacity: .7; } 50% { transform: scale(1.1); opacity: 1; } }
+.rig-trail {
+  position: absolute; z-index: 4; left: calc(84% + var(--sh) * .1); width: 3px; margin-left: -1.5px;
+  top: calc(var(--sh) * var(--hz) + 2px); height: calc(var(--sh) * (1 - var(--hz)) * .7);
+  background: linear-gradient(180deg, rgba(191, 237, 232, .45), transparent); filter: blur(1.5px);
+}
+
+/* ---------- Copy ---------- */
+.copy {
+  position: relative; z-index: 6; flex: 1;
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px clamp(40px, 7vw, 120px);
+  align-items: start; padding-top: clamp(8px, 2vw, 24px); padding-bottom: clamp(48px, 7vw, 96px);
+}
+.eyebrow { display: inline-flex; align-items: center; gap: .75em; color: var(--accent); }
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+.copy h1 {
+  margin-top: 18px; font-family: var(--f-display); font-weight: 800; font-stretch: 115%;
+  font-size: clamp(2.1rem, 1.3rem + 3vw, 4.4rem); line-height: .98; letter-spacing: -.02em; text-wrap: balance; max-width: 14ch;
+}
+.lead { margin-top: 20px; max-width: 46ch; color: var(--fg-muted); font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem); line-height: 1.55; }
+.btn {
+  position: relative; display: inline-flex; align-items: center; gap: .7em; margin-top: 30px; padding: 1.05em 1.6em; border-radius: 999px;
+  overflow: hidden; isolation: isolate; background: var(--teal); color: var(--navy-990);
+  font: 600 clamp(.86rem, .84rem + .1vw, .92rem)/1 var(--f-body); letter-spacing: .02em; white-space: nowrap;
+  transition: box-shadow .4s var(--ease);
+}
+.btn::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--fg); transform: translateY(101%); transition: transform .5s var(--ease); }
+.btn:hover::before { transform: none; }
+.btn:hover { box-shadow: 0 18px 40px -14px rgba(0, 161, 155, .55); }
+.btn svg, .pages svg { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .4s var(--ease); }
+.btn:hover svg { transform: translateX(4px); }
+
+.pages h2 { color: var(--fg-muted); margin-bottom: 10px; }
+.pages ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-dark); }
+.pages li { border-bottom: 1px solid var(--line-dark); }
+.pages li a {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 2px; min-height: 52px;
+  font-family: var(--f-display); font-weight: 700; font-stretch: 110%; font-size: clamp(1.1rem, 1rem + .5vw, 1.4rem); line-height: 1.1;
+  transition: color .3s, padding .4s var(--ease);
+}
+.pages li a svg { color: var(--accent); flex: none; }
+.pages li a:hover { color: var(--accent); padding-left: 10px; }
+.pages li a:hover svg { transform: translateX(4px); }
+.pages li a:focus-visible { outline-offset: -2px; }
+.mail { margin-top: 22px; color: var(--fg-muted); font-size: .95rem; }
+.mail a { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.mail a:hover { text-decoration-thickness: 2px; }
+
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 22px calc(22px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line-dark); color: var(--fg-muted); font-size: .8rem; }
+
+@media (max-width: 860px) {
+  .copy { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  :root { --sh: clamp(250px, 38vh, 340px); --hz: .62; }
+  .top .wrap { height: 72px; gap: 8px; }
+  .logo-text span { display: none; }
+  /* the contact link becomes a round mail button beside the switch, so the name keeps one line */
+  .top-link { width: 44px; padding: 0; justify-content: center; }
+  .top-link svg { display: block; }
+  .top-link .tl-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .mark { font-size: min(28vw, calc(var(--sh) * .6)); }
+  .rig { left: 85%; --rh: calc(var(--sh) * .13); }
+  .rig-trail { left: calc(85% + var(--sh) * .065); }
+  .glint { width: 70%; }
+}
+@media (max-width: 359px) {   /* 320px phones: a smaller emblem, as in the site header */
+  .logo { gap: 10px; }
+  .logo img { width: 40px; height: 36px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .horizon::after { display: none; }
+}
+
+/* ---------- Light mode: the same scene by day ----------
+   Pale sky fading up into the page, a teal-blue sea, a navy number with a deep-teal foot,
+   the platform as a navy silhouette with a teal beacon. Stars and the night flare are off;
+   the glint is plain white (screen blending vanishes on light colours). */
+:root[data-theme="light"] .btn:hover { color: #EAF1F3; box-shadow: 0 18px 40px -14px rgba(11, 37, 69, .35); }   /* navy sweep, light label */
+:root[data-theme="light"] .sky {
+  background:
+    radial-gradient(70% 70% at 50% 100%, rgba(0, 161, 155, .2), rgba(0, 161, 155, .05) 45%, transparent 72%),
+    linear-gradient(180deg, var(--bg) 0%, #E4F0F2 50%, #C6E2E4 100%);
+}
+:root[data-theme="light"] .sky::before { display: none; }
+:root[data-theme="light"] .sea {
+  background:
+    radial-gradient(46% 90% at 50% 0%, rgba(0, 161, 155, .16), transparent 70%),
+    linear-gradient(180deg, #A6D0D3 0%, #CFE6E8 50%, var(--bg) 100%);
+}
+:root[data-theme="light"] .horizon {
+  background: linear-gradient(90deg, transparent, rgba(0, 150, 144, .55) 30%, rgba(4, 110, 104, .95) 50%, rgba(0, 150, 144, .55) 70%, transparent);
+  box-shadow: 0 0 14px 1px rgba(0, 161, 155, .28);
+}
+:root[data-theme="light"] .mark span {
+  background: linear-gradient(180deg, #0B2545 0%, #163A63 45%, #046E68 82%, #009690 100%);
+  -webkit-background-clip: text; background-clip: text;
+  filter: drop-shadow(0 20px 36px rgba(11, 37, 69, .16));
+}
+:root[data-theme="light"] .mark::after { color: #046E68; opacity: .2; }
+:root[data-theme="light"] .swell path { stroke: rgba(207, 230, 232, .9); }
+:root[data-theme="light"] .swell .lit path { stroke: rgba(4, 110, 104, .16); }
+:root[data-theme="light"] .glint { background: radial-gradient(50% 30% at 50% 0%, rgba(255, 255, 255, .75), transparent 70%); mix-blend-mode: normal; }
+:root[data-theme="light"] .rig .body { fill: #163A63; stroke: rgba(11, 37, 69, .7); }
+:root[data-theme="light"] .rig .truss { stroke: rgba(11, 37, 69, .55); }
+:root[data-theme="light"] .rig .lamp { fill: rgba(246, 249, 250, .8); }
+:root[data-theme="light"] .rig .beacon { fill: #00A19B; filter: drop-shadow(0 0 3px rgba(0, 161, 155, .6)); }
+:root[data-theme="light"] .rig .glow { display: none; }
+:root[data-theme="light"] .rig-trail { background: linear-gradient(180deg, rgba(11, 37, 69, .2), transparent); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="/">
+      <img class="logo-d" src="/assets/img/logo-emblem-white.png" alt="" width="46" height="42">
+      <img class="logo-l" src="/assets/img/logo-emblem-navy.png" alt="" width="46" height="42">
+      <span class="logo-text"><b>SAA GROUP</b><span>Est. 1993 · Abu Dhabi</span></span><span class="sr-only">, home page</span>
+    </a>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light mode" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><mask id="ttMask"><rect width="24" height="24" fill="#fff"/><circle class="tt-cut" cx="17" cy="7" r="7.5" fill="#000"/></mask>
+        <g mask="url(#ttMask)"><circle class="tt-core" cx="12" cy="12" r="5" fill="currentColor"/></g>
+        <g class="tt-rays" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 1.8v2.4M12 19.8v2.4M1.8 12h2.4M19.8 12h2.4M4.8 4.8l1.7 1.7M17.5 17.5l1.7 1.7M4.8 19.2l1.7-1.7M17.5 6.5l1.7-1.7"/></g></svg>
+    </button>
+    <a class="top-link" href="/contact.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6.2L20.5 7"/></svg><span class="tl-text">Contact us</span></a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="scene" aria-hidden="true">
+    <div class="sky"></div>
+    <div class="sea"></div>
+    <div class="mark" data-n="404"><span>404</span></div>
+    <svg class="rig" viewBox="0 0 120 110" preserveAspectRatio="xMidYMax meet">
+      <defs><radialGradient id="rigGlow"><stop offset="0" stop-color="#BFEDE8" stop-opacity=".9"/><stop offset=".4" stop-color="#5ED6CC" stop-opacity=".35"/><stop offset="1" stop-color="#00A19B" stop-opacity="0"/></radialGradient></defs>
+      <circle class="glow" cx="112" cy="46" r="9"/>
+      <path class="truss" d="M28 30v66M34 30v66M88 30v66M94 30v66M28 40l6 8M34 40l-6 8M28 74l6 8M34 74l-6 8M88 40l6 8M94 40l-6 8M88 74l6 8M94 74l-6 8"/>
+      <path class="body" d="M54 58 60 12l6 46z"/>
+      <path class="truss" d="M56 48h8M57 38h6M58.5 28h3M56 48l6-10M64 48l-6-10M57 38l4-10M63 38l-4-10"/>
+      <path class="body" d="M18 58h86v10H18z"/>
+      <path class="body" d="M72 44h22v14H72z"/>
+      <path class="body" d="M22 66h80l-6 6H28z"/>
+      <path class="truss" d="M30 58 8 38M104 62l8-16"/>
+      <circle class="lamp" cx="76" cy="50" r=".9"/><circle class="lamp" cx="81" cy="50" r=".9"/><circle class="lamp" cx="86" cy="50" r=".9"/><circle class="lamp" cx="22" cy="63" r=".9"/><circle class="lamp" cx="98" cy="63" r=".9"/>
+      <circle class="beacon" cx="60" cy="11" r="1.6"/>
+    </svg>
+    <svg class="swell" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <g><path d="M0 2.85H100"/><path d="M0 10.65H100"/><path d="M0 23.01H100"/><path d="M0 39.75H100"/><path d="M0 60.74H100"/><path d="M0 85.89H100"/></g>
+      <g class="lit"><path d="M0 0.76H100"/><path d="M0 6.17H100"/><path d="M0 16.28H100"/><path d="M0 30.85H100"/><path d="M0 49.72H100"/><path d="M0 72.8H100"/></g>
+    </svg>
+    <div class="rig-trail"></div>
+    <div class="glint"></div>
+    <div class="horizon"></div>
+  </div>
+
+  <div class="wrap copy">
+    <div>
+      <p class="eyebrow mono">Error 404 · Page not found</p>
+      <h1>This page is off the map.</h1>
+      <p class="lead">The link may be old or mistyped. Head back to the home page, or go straight to the page you need.</p>
+      <a class="btn" href="/">Back to the home page <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <nav class="pages" aria-labelledby="pagesTitle">
+      <h2 class="mono" id="pagesTitle">Popular pages</h2>
+      <ul>
+        <li><a href="/services.html">Services <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><a href="/careers.html">Careers <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><a href="/adipec.html">ADIPEC 2026 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        <li><a href="/contact.html">Contact <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      </ul>
+      <p class="mail">Still lost? Email <a href="mailto:saaest@eim.ae">saaest@eim.ae</a> or call <a href="tel:+97126270622">+971 2 627 0622</a>.</p>
+    </nav>
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <span>© SAA Group of Establishments</span>
+  <span>Abu Dhabi · United Arab Emirates</span>
+</footer>
+<script src="/assets/js/theme-switch.js"></script>
+</body>
+</html>

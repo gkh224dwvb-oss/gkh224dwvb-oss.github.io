@@ -1,0 +1,24 @@
+/* =========================================================================
+   SAA GROUP: Clients page (clients.html)
+   The band and grid themselves are drawn by assets/js/clients.js and styled
+   in assets/css/clients.css; this file only lays out the page around them.
+   ========================================================================= */
+.c-hero h1 { max-width: 12ch; }
+.ch-foot { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px clamp(32px, 6vw, 96px); align-items: end; margin-top: clamp(24px, 3vw, 40px); }
+.ch-foot .lead { margin-top: 0; max-width: 46ch; }
+.ch-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin: 0; }
+.ch-meta > div { border-top: 1px solid rgba(var(--fg-rgb), .18); padding-top: 14px; min-width: 0; }
+.ch-meta dt { color: var(--accent); margin-bottom: 8px; }
+.ch-meta dd { margin: 0; color: var(--fg); }
+.ch-meta dd.num { font-family: var(--f-display); font-weight: 900; font-stretch: 120%; font-size: var(--t-xl); line-height: 1; }
+.ch-meta div:last-child dd.num { font-size: clamp(1.1rem, .9rem + .7vw, 1.6rem); line-height: 1.15; }
+.ch-plus { color: var(--accent); }
+.c-band { padding-top: clamp(40px, 5vw, 72px); }
+.c-note { margin-top: clamp(28px, 3vw, 44px); font-size: var(--t-sm); max-width: 70ch; }
+@media (max-width: 860px) {
+  .ch-foot { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .ch-meta { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ch-meta div:last-child { grid-column: 1 / -1; }
+}
