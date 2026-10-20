@@ -140,14 +140,15 @@
   function look(key, kind, el, hint) {
     if (!key) return null;
     var txt = plain(key);
-    if (!LETTER.test(txt) || NOT_TEXT.test(txt)) return null;
+    /* no words to translate; a right-to-left page still isolates a bare number such as the fax +971 2 626 8577 */
+    if (!LETTER.test(txt) || NOT_TEXT.test(txt)) return RTL[lang] && /\d[ \u00a0]+\d/.test(txt) ? iso(key) : null;
     var v = lookIn(key, 0);
     if (v == null && notes) note(key, kind, el, hint);
     return v != null && RTL[lang] ? iso(v) : v;
   }
-  /* right to left: phone numbers, emails and web addresses inside a translation keep their own order
+  /* right to left: phone numbers, figures such as 2,500+, coordinates (24°29′28.6″ N), emails and web addresses inside a translation keep their own order
      (wrapped in invisible left-to-right isolates; only the text between tags is touched) */
-  var RUN = /(\+?\d[\d\u00a0 ()-]{5,}\d|[\w.+-]+@[\w-]+(?:\.[\w-]+)+|https?:\/\/[^\s<]+|www\.[^\s<]+)/g;
+  var RUN = /(\+?\d[\d\u00a0 ()-]{5,}\d|\d[\d,.\u00a0]*\+(?!\d)|\d+°\d+′[\d.]+″(?:(?:&nbsp;|[ \u00a0])[NSEW](?![A-Za-z]))?|\d[\d.,]*°(?:(?:&nbsp;|[ \u00a0])[NSEW](?![A-Za-z]))?|[\w.+-]+@[\w-]+(?:\.[\w-]+)+|https?:\/\/[^\s<]+|www\.[^\s<]+)/g;
   function iso(v) {
     return v.replace(/(^|>)([^<]+)/g, function (m, a, tx) { return a + tx.replace(RUN, function (r) { return '\u2066' + r + '\u2069'; }); });
   }

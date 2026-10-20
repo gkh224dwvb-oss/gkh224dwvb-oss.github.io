@@ -83,7 +83,9 @@
     if (cta) {
       /* the title is split for its reveal straight away, so it is translated here, before the split */
       const t = esc(I18N ? I18N.t(cta.dataset.title || 'Let’s staff your next project.') : cta.dataset.title || 'Let’s staff your next project.');
-      const l = esc(cta.dataset.lead || 'Tell us the roles, the numbers and the location. Onshore or offshore, our team in Abu Dhabi will come back to you.');
+      /* the lead too, so its phone number can be kept on one line (a translation would no longer match after that) */
+      const lead = cta.dataset.lead || 'Tell us the roles, the numbers and the location. Onshore or offshore, our team in Abu Dhabi will come back to you.';
+      const l = esc(I18N ? I18N.t(lead) : lead).replace(/\+?\d[\d \u00a0]{5,}\d/g, m => '<span class="nowrap">' + m + '</span>');
       const b = esc(cta.dataset.button || 'Talk to SAA');
       const h = (cta.dataset.href || 'contact.html').trim(), out = /^https?:/i.test(h);
       /* one solid primary button; the rings are decoration only */
@@ -331,8 +333,9 @@
   function setupCounters() {
     document.querySelectorAll('[data-count]').forEach(el => {
       const end = parseFloat(el.dataset.count), year = end >= 1900 && end <= 2100, start = year ? end - 40 : 0;
-      /* years stay plain (1993); other figures get a thousands separator (2,500) */
-      const fmt = v => (year ? String(Math.round(v)) : Math.round(v).toLocaleString('en-GB'));
+      /* years stay plain (1993); other figures get a thousands separator (2,500; 2 500 in Russian, as its translations write it) */
+      const loc = document.documentElement.lang === 'ru' ? 'ru' : 'en-GB';
+      const fmt = v => (year ? String(Math.round(v)) : Math.round(v).toLocaleString(loc));
       if (reduce || !ScrollTrigger) { el.textContent = fmt(end); return; }
       const o = { v: start };
       gsap.to(o, { v: end, duration: 2.2, ease: 'power3.out', onUpdate: () => { el.textContent = fmt(o.v); },

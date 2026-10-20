@@ -234,6 +234,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 .mail { margin-top: 22px; color: var(--fg-muted); font-size: .95rem; }
 .mail a { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .mail a:hover { text-decoration-thickness: 2px; }
+.mail a[href^="tel:"] { white-space: nowrap; }
 
 .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 22px calc(22px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line-dark); color: var(--fg-muted); font-size: .8rem; }
 

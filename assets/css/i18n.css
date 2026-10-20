@@ -152,7 +152,9 @@ html[dir="rtl"].menu-open .menu-panel { clip-path: circle(150% at 48px 40px); }
 [dir="rtl"] .tlink::after { transform-origin: left; }
 [dir="rtl"] .tlink:hover::after { transform-origin: right; }
 [dir="rtl"] :is(.progress, .preloader .pl-bar i) { transform-origin: right; }
-[dir="rtl"] .figure-num sup { margin-left: 0; margin-right: .05em; }
+/* "2,500+" keeps its plus on the right, as in English (Home figures, Services counter) */
+[dir="rtl"] .figure-num:has(> sup) { direction: ltr; unicode-bidi: isolate; justify-self: start; }
+[dir="rtl"] .sv-big.num { direction: ltr; unicode-bidi: isolate; text-align: right; }
 /* footer, chat and cookie choices */
 [dir="rtl"] :is(.foot-legal a, .foot-link, .chat-fab .txt) { text-align: right; }
 [dir="rtl"] .chat-close, [dir="rtl"] .cc-tag { margin-left: 0; margin-right: auto; }
@@ -172,4 +174,15 @@ html[dir="rtl"].menu-open .menu-panel { clip-path: circle(150% at 48px 40px); }
    so both keep left-to-right order (RTL would show 1993 as 3991 and run the ticks against their labels) */
 [dir="rtl"] .time .yr, [dir="rtl"] .time .ruler { direction: ltr; }
 [dir="rtl"] .time .yr-tag { direction: rtl; left: auto; right: .04em; }
-[dir="rtl"] .time .yr-tag::before { margin-right: 0; margin-left: 10px; }
+/* ADIPEC countdown: each unit is a flex row of digit slots, so it keeps left-to-right order (12, not 21);
+   the units themselves still run right to left, each with its own label */
+[dir="rtl"] .cd-num { direction: ltr; }
+/* Contact: a coordinate row reads number, degree and N/E left to right, with its label on the right */
+[dir="rtl"] .coord { direction: ltr; justify-content: flex-end; }
+[dir="rtl"] .coord-k { order: 1; direction: rtl; }
+/* Clients: the "100+" figure keeps its plus on the right */
+[dir="rtl"] .ch-meta dd.num:not(.ch-sectors) { direction: ltr; text-align: right; }
+/* phone menu: ADIPEC 2026 is all Latin, so i18n.js marks its link ltr; the row still runs right to left (number on the right) */
+[dir="rtl"] .menu-panel li > a { direction: rtl; }
+/* About badge: the ring text on its circle path is laid out from the path start (it vanishes in rtl) */
+[dir="rtl"] .ah-ring text { direction: ltr; }

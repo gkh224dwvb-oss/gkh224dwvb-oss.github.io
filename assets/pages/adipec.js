@@ -514,7 +514,9 @@
     /* "in your time zone" hint for visitors outside the UAE */
     if (local && new Date(OPEN).getTimezoneOffset() !== -240) {
       try {
-        const f = new Intl.DateTimeFormat(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        /* in the page language (Western digits) when translated; English keeps the visitor's own format */
+        const loc = window.SAAI18n && SAAI18n.lang && SAAI18n.lang !== 'en' ? document.documentElement.lang + '-u-nu-latn' : undefined;
+        const f = new Intl.DateTimeFormat(loc, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
         local.textContent = 'In your time zone: ' + f.format(new Date(OPEN)) + '.';
       } catch (_) { /* optional */ }
     }

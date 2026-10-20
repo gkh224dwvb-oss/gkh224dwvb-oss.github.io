@@ -19,6 +19,10 @@
                    are never redirected. To preview over plain http, use
                    localhost: on a LAN address (192.168.x) the pages' own
                    upgrade-insecure-requests tag asks for https files.
+   - recruitApi    Web app URL of the recruitment backend (Google Apps Script, see
+                   admin-system/backend/SETUP.md in the project files), ending in /exec.
+                   With it, the careers form sends applications and CVs there and the
+                   team sees them in /admin/. Leave it '' to keep the email-app form.
    - debug         true logs analytics events to the browser console.
    ========================================================================= */
 (function () {
@@ -26,6 +30,7 @@
   var defaults = {
     siteUrl: 'https://www.saagroup.ae',
     chatEndpoint: '',
+    recruitApi: '',
     analytics: { ga4: '' },
     forceHttps: true,
     debug: false

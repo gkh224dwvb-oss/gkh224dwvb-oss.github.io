@@ -138,7 +138,7 @@
   font-family: var(--f-mono); font-weight: 500; font-size: clamp(1.45rem, .9rem + 2.1vw, 2.75rem);
   line-height: 1.12; letter-spacing: -.01em; font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.coord-k { flex: none; width: 3.4rem; font-size: var(--t-xs); color: var(--fg-faint); transform: translateY(-.35em); }
+.coord-k { flex: none; min-width: 3.4rem; font-size: var(--t-xs); color: var(--fg-faint); transform: translateY(-.35em); }
 .coord-v { color: var(--fg); }
 .coord-v .d { display: inline-block; transition: color .5s, text-shadow .5s; }
 .coord-v .d.idle { color: var(--fg-faint); }

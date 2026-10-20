@@ -144,7 +144,7 @@
   position: absolute; left: .04em; bottom: calc(100% + 4px); white-space: nowrap;
   color: var(--accent); font-size: var(--t-xs);
 }
-.yr-tag::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-fill); margin-right: 10px; box-shadow: 0 0 12px var(--accent-fill); vertical-align: 1px; }
+.yr-tag::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-fill); margin-inline-end: 10px; box-shadow: 0 0 12px var(--accent-fill); vertical-align: 1px; }
 
 .time-caps { position: relative; z-index: 2; }
 .caps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 32px; }

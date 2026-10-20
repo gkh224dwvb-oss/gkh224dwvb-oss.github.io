@@ -600,3 +600,6 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 /* 12px floor for the logo strapline and the chat pill caption (launch check: no text under 12px) */
 .logo-text span { font-size: var(--t-xs); letter-spacing: .1em; }
 .chat-fab .sub { font-size: var(--t-xs); letter-spacing: .08em; }
+
+/* a phone number stays on one line (links here; plain text gets .nowrap from site.js) */
+a[href^="tel:"], .nowrap { white-space: nowrap; }

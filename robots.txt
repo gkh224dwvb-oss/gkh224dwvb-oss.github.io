@@ -3,5 +3,6 @@ User-agent: *
 Allow: /
 Disallow: /tools/
 Disallow: /api/
+Disallow: /admin/
 
 Sitemap: https://www.saagroup.ae/sitemap.xml

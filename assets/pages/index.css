@@ -513,7 +513,7 @@
 @keyframes tick { from { transform: translateY(-30%); opacity: 0; } to { transform: none; opacity: 1; } }
 .at-units { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(100%, 440px); border-top: 1px solid var(--line-dark); }
 .at-u { display: grid; justify-items: center; gap: 8px; padding-top: 18px; }
-.at-u + .at-u { border-left: 1px solid var(--line-dark); }
+.at-u + .at-u { border-inline-start: 1px solid var(--line-dark); }
 .at-u .at-n { font-size: clamp(2rem, 1.4rem + 1.6vw, 3rem); }
 .at-u .mono { color: var(--fg-faint); }
 .at-status { color: var(--fg-muted); text-align: center; }
