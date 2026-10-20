@@ -168,3 +168,8 @@ html[dir="rtl"].menu-open .menu-panel { clip-path: circle(150% at 48px 40px); }
 @media (max-width: 520px) { [dir="rtl"] .hero-foot { padding-right: 84px; } }
 /* phone menu: the number stays on the right of a Latin item such as "ADIPEC 2026" */
 [dir="rtl"] .menu-panel li small { unicode-bidi: isolate; }
+/* About time scene: the rolling year is a flex row of digit reels and the ruler a flex row of year ticks,
+   so both keep left-to-right order (RTL would show 1993 as 3991 and run the ticks against their labels) */
+[dir="rtl"] .time .yr, [dir="rtl"] .time .ruler { direction: ltr; }
+[dir="rtl"] .time .yr-tag { direction: rtl; left: auto; right: .04em; }
+[dir="rtl"] .time .yr-tag::before { margin-right: 0; margin-left: 10px; }
