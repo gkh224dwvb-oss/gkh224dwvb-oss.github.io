@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SAA Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#192E49">
+<!-- Scripts only from this site; connections only to this site and the Google Apps Script backend
+     (the /exec URL answers through a redirect to script.googleusercontent.com).
+     If recruitApi in assets/js/config.js ever points somewhere else, add that origin to connect-src. -->
+<meta http-equiv="Content-Security-Policy" content="script-src 'self'; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="icon" href="../assets/img/brand/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/img/brand/apple-touch-icon.png">
+<link rel="preload" href="../assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/country-picker.css">
+<link rel="stylesheet" href="admin.css">
+<script defer src="../assets/js/config.js"></script>
+<script defer src="../assets/data/countries.js"></script>
+<script defer src="../assets/js/country-picker.js"></script>
+<script defer src="admin.js"></script>
+</head>
+<body>
+
+<!-- Line icons (stroke 1.8, round caps), used as <svg><use href="#i-name"></use></svg> -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-cvs" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="i-file-plus" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14h6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M3 12.5h18"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 7l2.5 2.5M14 9l2 2"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 16l-4-4 4-4M6 12h10"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.6 5.6A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.6 3.4M6.6 6.6C3.9 8.4 2.5 12 2.5 12S6 18.5 12 18.5c1.9 0 3.5-.6 4.9-1.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="m3 3 18 18"/></symbol>
+  <symbol id="i-details" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M14 4v16M17 8.5h0M17 12h0"/><path d="M7 9h3.5M7 12.5h3.5M7 16h3.5"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4.5h6V7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M5 19.5h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17.2h0"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 6v4.5h-4.5"/><path d="M19.4 10.5A7.5 7.5 0 1 0 18 16"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6.5L20.5 7"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h3.5l1.5 4.5-2.2 1.4a11 11 0 0 0 6.3 6.3l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5C10.6 20 4 13.4 3.5 5.6A1.5 1.5 0 0 1 5 4z"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v4M15 3v4"/><path d="M6.5 7h11v3.5a5.5 5.5 0 0 1-11 0z"/><path d="M12 16v5"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M5 15v3.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V15"/></symbol>
+</svg>
+
+<noscript><p class="noscript">The SAA admin panel needs JavaScript. Please turn it on and reload the page.</p></noscript>
+
+<!-- Shown until admin.js decides which screen to open -->
+<div class="boot" id="scr-boot" role="status"><span class="spinner" aria-hidden="true"></span><span>Loading the admin panel…</span></div>
+
+<!-- ================= Not connected ================= -->
+<main class="gate" id="scr-offline" hidden>
+  <div class="gate-card">
+    <div class="gate-brand">
+      <img src="../assets/img/logo-emblem-navy.png" alt="" width="242" height="220">
+      <div><span class="wordmark">SAA GROUP</span><span class="tag-red">Administration panel</span></div>
+    </div>
+    <div class="gate-icon" aria-hidden="true"><svg class="ic"><use href="#i-plug"></use></svg></div>
+    <h1 class="gate-title">The admin panel is not connected yet</h1>
+    <p class="gate-text">The recruitment backend has to be set up first. Once it is live, its web app address goes into <code>assets/js/config.js</code> as <code>recruitApi</code>.</p>
+    <p class="gate-foot"><a class="tl" href="../index.html">Go to the website</a></p>
+  </div>
+</main>
+
+<!-- ================= Login ================= -->
+<main class="gate" id="scr-login" hidden>
+  <div class="gate-card">
+    <div class="gate-brand">
+      <img src="../assets/img/logo-emblem-navy.png" alt="" width="242" height="220">
+      <div><span class="wordmark">SAA GROUP</span><span class="tag-red">Administration panel</span></div>
+    </div>
+    <h1 class="gate-title">Log in</h1>
+    <p class="gate-text">For the SAA recruitment team.</p>
+    <div class="notice" id="login-notice" role="status" hidden></div>
+    <form class="form" id="login-form" novalidate>
+      <div class="field">
+        <label for="login-user">Username</label>
+        <input id="login-user" name="user" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="64">
+      </div>
+      <div class="field">
+        <label for="login-pass">Password</label>
+        <div class="pw">
+          <input id="login-pass" name="pass" type="password" autocomplete="current-password" required maxlength="128">
+          <button type="button" class="pw-toggle" data-pw="login-pass" aria-pressed="false" aria-controls="login-pass"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg><span>Show</span></button>
+        </div>
+      </div>
+      <p class="form-err" id="login-err" role="alert" hidden></p>
+      <button class="btn btn-wide" type="submit" id="login-btn"><span>Log in</span></button>
+    </form>
+    <p class="gate-foot"><a class="tl" href="../index.html">Back to the website</a></p>
+  </div>
+</main>
+
+<!-- ================= The panel ================= -->
+<div class="app" id="scr-app" hidden>
+  <a class="skip" href="#main">Skip to content</a>
+  <aside class="side" id="side">
+    <div class="side-top">
+      <a class="side-brand" href="#/cvs" aria-label="SAA Admin, CVs">
+        <img src="../assets/img/logo-emblem-white.png" alt="" width="242" height="220">
+        <span class="side-name"><span class="wordmark">SAA GROUP</span><span class="side-sub">Admin</span></span>
+      </a>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="side-nav">
+        <svg class="ic" aria-hidden="true"><use href="#i-menu"></use></svg><span>Menu</span>
+      </button>
+    </div>
+    <nav class="side-nav" id="side-nav" aria-label="Admin menu">
+      <p class="side-h">CVs</p>
+      <ul>
+        <li><a href="#/cvs" data-nav="cvs"><svg class="ic" aria-hidden="true"><use href="#i-cvs"></use></svg><span>View CVs</span><span class="badge" id="badge-new" hidden></span></a></li>
+        <li><a href="#/cvs" data-nav="search" data-focus-search><svg class="ic" aria-hidden="true"><use href="#i-search"></use></svg><span>Search CVs</span></a></li>
+        <li><a href="#/add-cv" data-nav="add-cv"><svg class="ic" aria-hidden="true"><use href="#i-file-plus"></use></svg><span>Add CV</span></a></li>
+        <li><a href="#/add-emiratisation" data-nav="add-emiratisation"><svg class="ic" aria-hidden="true"><use href="#i-star"></use></svg><span>Add Emiratisation CV</span></a></li>
+      </ul>
+      <p class="side-h">Jobs</p>
+      <ul>
+        <li><a href="#/jobs" data-nav="jobs"><svg class="ic" aria-hidden="true"><use href="#i-briefcase"></use></svg><span>Jobs</span><span class="badge badge-soft" id="badge-jobs" hidden></span></a></li>
+        <li><a href="#/jobs/new" data-nav="jobs-new"><svg class="ic" aria-hidden="true"><use href="#i-plus"></use></svg><span>Add a job</span></a></li>
+      </ul>
+      <p class="side-h">Account</p>
+      <ul>
+        <li><a href="#/password" data-nav="password"><svg class="ic" aria-hidden="true"><use href="#i-key"></use></svg><span>Change password</span></a></li>
+        <li><button type="button" class="js-logout"><svg class="ic" aria-hidden="true"><use href="#i-logout"></use></svg><span>Log out</span></button></li>
+      </ul>
+      <p class="side-foot">Logged in as <strong id="who">admin</strong><span id="who-until"></span></p>
+    </nav>
+  </aside>
+
+  <div class="main-col">
+    <header class="topbar">
+      <p class="tag-red">Administration panel</p>
+      <div class="topbar-r">
+        <a class="tl tl-quiet" href="../careers.html" target="_blank" rel="noopener">Careers page<svg class="ic" aria-hidden="true"><use href="#i-external"></use></svg></a>
+        <span class="who-chip" id="who-chip">admin</span>
+        <button type="button" class="btn btn-sm btn-ghost js-logout"><svg class="ic" aria-hidden="true"><use href="#i-logout"></use></svg><span>Log out</span></button>
+      </div>
+    </header>
+
+    <main id="main" class="main" tabindex="-1">
+
+      <!-- ===== CVs ===== -->
+      <section class="view" id="v-cvs" aria-labelledby="h-cvs">
+        <div class="view-head">
+          <div>
+            <h1 class="view-title" id="h-cvs">CVs</h1>
+            <p class="view-sub" id="cvs-sub">Every CV sent from the careers page or added by the team.</p>
+          </div>
+          <div class="view-actions">
+            <button type="button" class="btn btn-ghost" id="btn-export"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg><span>Export CSV</span></button>
+            <a class="btn" href="#/add-cv"><svg class="ic" aria-hidden="true"><use href="#i-plus"></use></svg><span>Add CV</span></a>
+          </div>
+        </div>
+
+        <div class="stat-pills" id="stat-pills" role="group" aria-label="Quick filter by status"></div>
+
+        <form class="filters card" id="filters" role="search" novalidate>
+          <div class="f f-q">
+            <label for="f-q">Search</label>
+            <div class="search-in">
+              <svg class="ic" aria-hidden="true"><use href="#i-search"></use></svg>
+              <input id="f-q" type="search" placeholder="Name, email, phone, ref or text" maxlength="120" autocomplete="off" spellcheck="false">
+            </div>
+          </div>
+          <button type="button" class="filters-toggle" id="filters-toggle" aria-expanded="false" aria-controls="filters-more">
+            <svg class="ic" aria-hidden="true"><use href="#i-filter"></use></svg><span>Filters</span><span class="fcount" id="filters-count" hidden></span>
+          </button>
+          <div class="filters-more" id="filters-more">
+            <div class="f f-pos">
+              <label for="f-position">Position</label>
+              <select id="f-position"><option value="">All positions</option></select>
+            </div>
+            <div class="f f-nat">
+              <label for="f-nat">Nationality</label>
+              <div class="cp-host" id="f-nat-host"></div>
+            </div>
+            <div class="f">
+              <label for="f-kind">Type</label>
+              <select id="f-kind">
+                <option value="">All types</option>
+                <option value="job">Job</option>
+                <option value="general">General</option>
+                <option value="emiratisation">Emiratisation</option>
+              </select>
+            </div>
+            <div class="f">
+              <label for="f-status">Status</label>
+              <select id="f-status">
+                <option value="">All statuses</option>
+                <option value="new">New</option>
+                <option value="shortlisted">Shortlisted</option>
+                <option value="contacted">Contacted</option>
+                <option value="rejected">Not suitable</option>
+                <option value="hired">Hired</option>
+              </select>
+            </div>
+            <div class="f f-date">
+              <label for="f-from">From</label>
+              <input id="f-from" type="date">
+            </div>
+            <div class="f f-date">
+              <label for="f-to">To</label>
+              <input id="f-to" type="date">
+            </div>
+            <div class="f f-clear">
+              <button type="button" class="btn btn-ghost btn-sm" id="f-clear" disabled><svg class="ic" aria-hidden="true"><use href="#i-x"></use></svg><span>Clear filters</span></button>
+            </div>
+          </div>
+        </form>
+
+        <div class="listbar">
+          <p class="count" id="cvs-count" aria-live="polite"></p>
+          <div class="listbar-r">
+            <label class="mini"><span>Sort</span>
+              <select id="f-sort"><option value="new">Newest first</option><option value="old">Oldest first</option></select>
+            </label>
+            <label class="mini"><span>Show</span>
+              <select id="f-size"><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+              <span>entries</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="spam-hint" id="spam-hint" hidden>
+          <svg class="ic" aria-hidden="true"><use href="#i-alert"></use></svg>
+          <span id="spam-hint-text"></span>
+          <button type="button" class="btn btn-sm btn-ghost" id="spam-select">Select them</button>
+        </div>
+
+        <div class="bulkbar" id="bulkbar" hidden>
+          <span id="bulk-count"></span>
+          <button type="button" class="btn btn-sm btn-danger" id="bulk-delete"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg><span>Delete selected</span></button>
+          <button type="button" class="btn btn-sm btn-ghost" id="bulk-clear">Clear selection</button>
+        </div>
+
+        <div class="table-card card" id="cv-card">
+          <div class="table-scroll">
+            <table class="tbl cvt" id="cv-table">
+              <caption class="sr-only">CVs received</caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="c-num"><label class="chk"><input type="checkbox" id="chk-all"><span class="sr-only">Select all CVs on this page</span></label><span>#</span></th>
+                  <th scope="col" class="c-ref">Ref</th>
+                  <th scope="col" class="c-date">Date</th>
+                  <th scope="col" class="c-name">Name</th>
+                  <th scope="col" class="c-contact">Contact</th>
+                  <th scope="col" class="c-nat">Nationality</th>
+                  <th scope="col" class="c-pos">Position</th>
+                  <th scope="col" class="c-kind">Type</th>
+                  <th scope="col" class="c-exp">Experience</th>
+                  <th scope="col" class="c-status">Status</th>
+                  <th scope="col" class="c-act">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="cv-tbody"></tbody>
+            </table>
+          </div>
+          <div class="state" id="cv-state" hidden></div>
+        </div>
+
+        <nav class="pager" id="cv-pager" aria-label="CV pages" hidden></nav>
+      </section>
+
+      <!-- ===== Add CV ===== -->
+      <section class="view" id="v-add-cv" aria-labelledby="h-add" hidden>
+        <div class="view-head">
+          <div>
+            <h1 class="view-title" id="h-add">Add CV</h1>
+            <p class="view-sub">For CVs the team receives by hand, by email or at an event. No email is sent to the applicant.</p>
+          </div>
+        </div>
+        <div class="card form-card">
+          <div class="notice ok" id="add-done" role="status" tabindex="-1" hidden>
+            <svg class="ic" aria-hidden="true"><use href="#i-check"></use></svg>
+            <div><strong id="add-done-title">CV added</strong><span id="add-done-text"></span></div>
+            <div class="notice-actions">
+              <a class="btn btn-sm" href="#/cvs" id="add-done-view">View in CVs</a>
+              <button type="button" class="btn btn-sm btn-ghost" id="add-again">Add another</button>
+            </div>
+          </div>
+          <form class="form" id="add-form" novalidate>
+            <fieldset class="seg-field">
+              <legend>Type of CV</legend>
+              <div class="seg" role="radiogroup">
+                <label><input type="radio" name="kind" value="job" checked><span>For a job</span></label>
+                <label><input type="radio" name="kind" value="general"><span>General</span></label>
+                <label><input type="radio" name="kind" value="emiratisation"><span>Emiratisation</span></label>
+              </div>
+            </fieldset>
+            <div class="field" id="add-role-field">
+              <label for="add-role">Position</label>
+              <input id="add-role" name="role" type="text" list="add-role-list" maxlength="120" autocomplete="off" placeholder="Pick a job or type a position" aria-describedby="add-role-hint">
+              <datalist id="add-role-list"></datalist>
+              <p class="hint" id="add-role-hint">Open jobs are suggested as you type.</p>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="add-name">Full name</label>
+                <input id="add-name" name="name" type="text" maxlength="100" autocomplete="off" required>
+              </div>
+              <div class="field">
+                <label for="add-nat">Nationality</label>
+                <div class="cp-host" id="add-nat-host"></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="add-email">Email</label>
+                <input id="add-email" name="email" type="email" maxlength="254" autocomplete="off" spellcheck="false" required>
+              </div>
+              <div class="field">
+                <label for="add-phone">Phone</label>
+                <input id="add-phone" name="phone" type="tel" maxlength="30" autocomplete="off" placeholder="+971 50 123 4567" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="add-location">Current location</label>
+                <input id="add-location" name="location" type="text" maxlength="80" autocomplete="off" placeholder="City, country" required>
+              </div>
+              <div class="field">
+                <label for="add-exp">Experience</label>
+                <select id="add-exp" name="experience" required>
+                  <option value="">Choose</option>
+                  <option>Less than 1 year</option>
+                  <option>1 to 2 years</option>
+                  <option>3 to 5 years</option>
+                  <option>6 to 10 years</option>
+                  <option>More than 10 years</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="add-message">Notes from the applicant <span class="opt">optional</span></label>
+              <textarea id="add-message" name="message" maxlength="1500" rows="4"></textarea>
+            </div>
+            <div class="field">
+              <label for="add-notes">Team notes <span class="opt">optional, only the team sees them</span></label>
+              <textarea id="add-notes" name="notes" maxlength="2000" rows="3" placeholder="For example where the CV came from"></textarea>
+            </div>
+            <div class="field">
+              <span class="label" id="add-cv-label">CV file <span class="opt">optional</span></span>
+              <div class="file-drop" id="add-drop">
+                <input id="add-cv" name="cv" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png" aria-labelledby="add-cv-label add-cv-btn" aria-describedby="add-cv-hint">
+                <label for="add-cv" class="btn btn-ghost btn-sm" id="add-cv-btn"><svg class="ic" aria-hidden="true"><use href="#i-upload"></use></svg><span>Choose file</span></label>
+                <span class="file-name" id="add-cv-name">No file chosen</span>
+                <button type="button" class="icon-btn" id="add-cv-clear" aria-label="Remove the file" hidden><svg class="ic" aria-hidden="true"><use href="#i-x"></use></svg></button>
+              </div>
+              <p class="hint" id="add-cv-hint">PDF, Word (.doc, .docx), JPG or PNG, up to 5 MB.</p>
+            </div>
+            <p class="form-err" id="add-err" role="alert" hidden></p>
+            <div class="form-actions">
+              <button class="btn" type="submit" id="add-btn"><svg class="ic" aria-hidden="true"><use href="#i-check"></use></svg><span>Add CV</span></button>
+              <button class="btn btn-ghost" type="reset" id="add-reset">Clear form</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ===== Jobs ===== -->
+      <section class="view" id="v-jobs" aria-labelledby="h-jobs" hidden>
+        <div class="view-head">
+          <div>
+            <h1 class="view-title" id="h-jobs">Jobs</h1>
+            <p class="view-sub">Changes go live on the careers page automatically: open jobs are listed there and closed jobs are hidden.</p>
+          </div>
+          <div class="view-actions">
+            <a class="btn" href="#/jobs/new"><svg class="ic" aria-hidden="true"><use href="#i-plus"></use></svg><span>Add a job</span></a>
+          </div>
+        </div>
+        <div class="table-card card" id="jobs-card">
+          <div class="table-scroll">
+            <table class="tbl jbt" id="jobs-table">
+              <caption class="sr-only">All jobs, open and closed</caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="j-title">Title</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="j-num">Positions</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Type</th>
+                  <th scope="col" class="j-date">Posted</th>
+                  <th scope="col" class="j-open">Open</th>
+                  <th scope="col" class="c-act">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="jobs-tbody"></tbody>
+            </table>
+          </div>
+          <div class="state" id="jobs-state" hidden></div>
+        </div>
+      </section>
+
+      <!-- ===== Change password ===== -->
+      <section class="view" id="v-password" aria-labelledby="h-pw" hidden>
+        <div class="view-head">
+          <div>
+            <h1 class="view-title" id="h-pw">Change password</h1>
+            <p class="view-sub">Use 8 to 64 characters. Other devices logged in with the old password are logged out.</p>
+          </div>
+        </div>
+        <div class="card form-card form-narrow">
+          <div class="notice ok" id="pw-done" role="status" tabindex="-1" hidden>
+            <svg class="ic" aria-hidden="true"><use href="#i-check"></use></svg>
+            <div><strong>Password changed</strong><span>Use the new password next time you log in. Other sessions have been logged out.</span></div>
+          </div>
+          <form class="form" id="pw-form" novalidate>
+            <input type="text" name="username" autocomplete="username" class="sr-only" tabindex="-1" aria-hidden="true" id="pw-user">
+            <div class="field">
+              <label for="pw-old">Current password</label>
+              <div class="pw">
+                <input id="pw-old" type="password" autocomplete="current-password" required maxlength="128">
+                <button type="button" class="pw-toggle" data-pw="pw-old" aria-pressed="false" aria-controls="pw-old"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg><span>Show</span></button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="pw-new">New password</label>
+              <div class="pw">
+                <input id="pw-new" type="password" autocomplete="new-password" required minlength="8" maxlength="64" aria-describedby="pw-new-hint">
+                <button type="button" class="pw-toggle" data-pw="pw-new" aria-pressed="false" aria-controls="pw-new"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg><span>Show</span></button>
+              </div>
+              <p class="hint" id="pw-new-hint">8 to 64 characters.</p>
+            </div>
+            <div class="field">
+              <label for="pw-confirm">Confirm new password</label>
+              <div class="pw">
+                <input id="pw-confirm" type="password" autocomplete="new-password" required minlength="8" maxlength="64">
+                <button type="button" class="pw-toggle" data-pw="pw-confirm" aria-pressed="false" aria-controls="pw-confirm"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg><span>Show</span></button>
+              </div>
+            </div>
+            <p class="form-err" id="pw-err" role="alert" hidden></p>
+            <div class="form-actions">
+              <button class="btn" type="submit" id="pw-btn"><svg class="ic" aria-hidden="true"><use href="#i-lock"></use></svg><span>Change password</span></button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ===== CV details drawer ===== -->
+<dialog class="drawer" id="dlg-cv" aria-labelledby="cvd-name">
+  <div class="drawer-in">
+    <header class="drawer-head">
+      <div class="drawer-titles">
+        <p class="mono" id="cvd-ref"></p>
+        <h2 class="drawer-title" id="cvd-name"></h2>
+        <div class="tags" id="cvd-tags"></div>
+      </div>
+      <button type="button" class="icon-btn" data-close aria-label="Close details"><svg class="ic" aria-hidden="true"><use href="#i-x"></use></svg></button>
+    </header>
+    <div class="drawer-body" id="cvd-body"></div>
+    <footer class="drawer-foot">
+      <button type="button" class="btn btn-ghost btn-danger-ghost" id="cvd-delete"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg><span>Delete</span></button>
+      <button type="button" class="btn" id="cvd-view"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg><span>View CV</span></button>
+    </footer>
+  </div>
+</dialog>
+
+<!-- ===== Job form drawer ===== -->
+<dialog class="drawer" id="dlg-job" aria-labelledby="job-title-h">
+  <form class="drawer-in" id="job-form" novalidate>
+    <header class="drawer-head">
+      <div class="drawer-titles">
+        <p class="mono" id="job-id-label"></p>
+        <h2 class="drawer-title" id="job-title-h">Add a job</h2>
+      </div>
+      <button type="button" class="icon-btn" data-close aria-label="Close the job form"><svg class="ic" aria-hidden="true"><use href="#i-x"></use></svg></button>
+    </header>
+    <div class="drawer-body">
+      <div class="form">
+        <div class="field">
+          <label for="job-title">Job title</label>
+          <input id="job-title" name="title" type="text" required minlength="2" maxlength="120" autocomplete="off" placeholder="For example Heavy Duty Driver">
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="job-category">Category</label>
+            <input id="job-category" name="category" type="text" maxlength="60" autocomplete="off" list="job-cat-list" placeholder="For example Transport">
+            <datalist id="job-cat-list"></datalist>
+          </div>
+          <div class="field">
+            <label for="job-positions">Positions</label>
+            <input id="job-positions" name="positions" type="number" inputmode="numeric" min="1" max="999" step="1" value="1" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="job-location">Location</label>
+            <input id="job-location" name="location" type="text" maxlength="80" autocomplete="off" placeholder="For example Abu Dhabi">
+          </div>
+          <div class="field">
+            <label for="job-type">Type</label>
+            <input id="job-type" name="type" type="text" maxlength="60" autocomplete="off" list="job-type-list" placeholder="For example Full time">
+            <datalist id="job-type-list"><option value="Full time"></option><option value="Part time"></option><option value="Contract"></option><option value="Temporary"></option><option value="To be confirmed"></option></datalist>
+          </div>
+        </div>
+        <div class="field">
+          <label for="job-posted">Posted</label>
+          <input id="job-posted" name="posted" type="date">
+        </div>
+        <div class="field">
+          <label for="job-summary">Summary</label>
+          <textarea id="job-summary" name="summary" rows="3" maxlength="600" placeholder="One or two sentences shown on the careers page"></textarea>
+        </div>
+        <div class="field">
+          <label for="job-req">Requirements <span class="opt">one per line</span></label>
+          <textarea id="job-req" name="requirements" rows="5" maxlength="3000"></textarea>
+        </div>
+        <label class="switch-row" for="job-open">
+          <input id="job-open" name="open" type="checkbox" class="switch-in" checked>
+          <span class="switch" aria-hidden="true"></span>
+          <span><strong>Open</strong><span class="hint">Open jobs are listed on the careers page.</span></span>
+        </label>
+        <p class="form-err" id="job-err" role="alert" hidden></p>
+      </div>
+    </div>
+    <footer class="drawer-foot">
+      <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+      <button type="submit" class="btn" id="job-save"><svg class="ic" aria-hidden="true"><use href="#i-check"></use></svg><span>Save job</span></button>
+    </footer>
+  </form>
+</dialog>
+
+<!-- ===== Confirm ===== -->
+<dialog class="confirm" id="dlg-confirm" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+  <div class="confirm-in">
+    <div class="confirm-icon" aria-hidden="true"><svg class="ic"><use href="#i-trash"></use></svg></div>
+    <h2 id="confirm-title" class="confirm-title"></h2>
+    <p id="confirm-text" class="confirm-text"></p>
+    <p id="confirm-sub" class="confirm-sub" hidden></p>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-ghost" id="confirm-cancel">Cancel</button>
+      <button type="button" class="btn btn-danger" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+</body>
+</html>

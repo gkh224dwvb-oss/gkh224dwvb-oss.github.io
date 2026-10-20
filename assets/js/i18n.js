@@ -242,8 +242,12 @@
     var all = el.querySelectorAll('*');
     for (var i = 0; i < all.length; i++) attrs(all[i]);
   }
+  /* a textarea's content is what the visitor types, but its placeholder is ours */
+  function textareaOk(el) { return el.localName === 'textarea' && el.getAttribute('translate') !== 'no' && !el.hasAttribute('data-i18n-skip'); }
   function walk(el) {
-    if (el.nodeType !== 1 || skipEl(el)) return;
+    if (el.nodeType !== 1) return;
+    if (textareaOk(el)) { attrs(el); return; }
+    if (skipEl(el)) return;
     if (el.firstChild && inlineOnly(el) && hasLetters(el)) { seg(el); attrsDeep(el); return; }
     for (var n = el.firstChild, next; n; n = next) {
       next = n.nextSibling;
@@ -380,6 +384,7 @@
   new MutationObserver(function (recs) {
     for (var i = 0; i < recs.length; i++) {
       var r = recs[i], tg = r.target;
+      if (r.type === 'attributes' && textareaOk(tg)) { if (r.attributeName !== 'value' && !blocked(tg.parentNode)) attr(tg, r.attributeName); continue; }   /* e.g. Contact's placeholder for each role */
       if (blocked(tg)) continue;
       if (r.type === 'attributes') { attr(tg, r.attributeName); continue; }
       for (var j = 0; j < r.addedNodes.length; j++) {

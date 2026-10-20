@@ -602,3 +602,57 @@
   .jobs-dot::after { animation: none; opacity: 0; }
   .job-card::after { transition: none; }
 }
+
+/* ---------- Apply: nationality list, CV upload and sending (assets/pages/careers-apply.js) ----------
+   The country list itself is styled in assets/css/country-picker.css; on this soft-white section it
+   takes the form colours. The CV field and the sending states show only with the recruitment system. */
+.ap-file { position: relative; }
+.apply .ap-file input {
+  position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; padding: 0; border: 0;
+  opacity: 0; cursor: pointer; font-size: 16px;
+}
+.ap-file-ui {
+  display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 12px 14px; padding-inline-start: 16px;
+  border-radius: 12px; border: 1.5px dashed rgba(21, 95, 128, .45); background: var(--white); color: var(--ink);
+  transition: border-color .25s, background .25s, box-shadow .25s;
+}
+.ap-file-ui svg { flex: none; width: 26px; height: 26px; color: var(--teal-ink); }
+.ap-file-t { flex: 1; min-width: 0; display: grid; }
+.ap-file-none { color: var(--ink-muted); }
+.ap-file-name { font-weight: 600; overflow-wrap: anywhere; }   /* careers-apply.js isolates the name and the size, so the line follows the page */
+.ap-file-btn { flex: none; padding: 10px 16px; border-radius: 999px; background: var(--navy); color: var(--on-dark); font: 600 var(--t-sm)/1 var(--f-body); letter-spacing: .02em; }
+.ap-file:hover .ap-file-ui { border-color: var(--teal-ink); background: var(--teal-050); }
+.ap-file.has-file .ap-file-ui { border-style: solid; border-color: rgba(21, 95, 128, .35); background: var(--teal-050); }
+.ap-file input:focus-visible + .ap-file-ui { border-style: solid; border-color: var(--teal-ink); box-shadow: 0 0 0 4px rgba(27, 113, 148, .2); }
+.ap-file input[aria-invalid="true"] + .ap-file-ui { border-color: #B42318; box-shadow: 0 0 0 3px rgba(180, 35, 24, .12); }
+.ap-hint { font-size: var(--t-sm); line-height: 1.45; color: var(--ink-muted); }
+@media (max-width: 400px) { .ap-file-ui svg { display: none; } }
+
+/* sending: the button waits with a spinner, the message box says what is happening */
+.ap-submit .btn:disabled { cursor: progress; }
+.ap-submit .btn:disabled::before { transform: translateY(101%); }
+.ap-submit .btn:disabled:hover { color: var(--on-teal); box-shadow: none; }
+.ap-submit .btn.is-sending .arr { display: none; }
+.ap-submit .btn.is-sending::after {
+  content: ""; flex: none; width: 1.1em; height: 1.1em; border-radius: 50%;
+  border: 2px solid currentColor; border-inline-end-color: transparent; animation: apSpin .8s linear infinite;
+}
+.ap-msg.wait { color: var(--ink-muted); }
+.ap-msg.wait::before {
+  content: ""; flex: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 50%;
+  border: 2px solid var(--teal-ink); border-inline-end-color: transparent; animation: apSpin .8s linear infinite;
+}
+@keyframes apSpin { to { transform: rotate(360deg); } }
+.ap-msg.err { flex-wrap: wrap; align-items: center; }
+.ap-err-t { flex: 1 1 260px; }
+.apply .ap-msg .ap-mail-btn { padding: .85em 1.3em; color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(180, 35, 24, .45); }
+.apply .ap-msg .ap-mail-btn:hover { color: var(--on-dark); }
+.ap-ok { display: grid; gap: 4px; }
+.ap-ok-t { font-weight: 600; color: var(--navy); }
+.ap-ok-ref b { font-family: var(--f-mono); font-size: .95em; letter-spacing: .04em; }
+.ap-msg:focus { outline: none; }
+.ap-msg:focus-visible { outline: 2px solid var(--teal-ink); outline-offset: 3px; }
+@media (max-width: 560px) { .apply .ap-msg .ap-mail-btn { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .ap-submit .btn.is-sending::after, .ap-msg.wait::before { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
+}

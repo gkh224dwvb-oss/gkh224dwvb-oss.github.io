@@ -484,7 +484,7 @@
   /* ---------------------------------------------------------------------
      5. ENQUIRY FORM -> mailto
      Spam and safety checks:
-     - honeypot "company_website": hidden from people; if a bot fills it we pretend success and send nothing
+     - honeypot (#fWebsite, named saa_hpx so autofill and password managers skip it): hidden from people; if a bot fills it we pretend success and send nothing
      - time trap: a send within 3 s of the form becoming ready is refused with a friendly retry message
      - session limit: 3 sends per 10 minutes (sessionStorage; if storage is blocked there is no limit)
      - clean lines: control characters and header-injection newlines are stripped before the mailto is built

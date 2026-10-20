@@ -40,6 +40,7 @@
 <link rel="stylesheet" href="assets/css/consent.css">
 <link rel="stylesheet" href="assets/css/i18n.css">
 <!-- seo:end -->
+<link rel="stylesheet" href="assets/css/country-picker.css">
 <link rel="stylesheet" href="assets/pages/careers.css">
 </head>
 <body data-page="careers">
@@ -108,7 +109,10 @@
           <span class="eyebrow">Apply</span>
           <h2 class="display" id="applyTitle" data-split>Apply in two minutes.</h2>
         </div>
-        <p class="lead" data-reveal>Fill in the form below. It prepares an email to our recruitment team. Attach your CV as a PDF and press send.</p>
+        <div class="ap-lead" data-reveal>
+          <p class="lead" data-apply-mode="mail">Fill in the form below. It prepares an email to our recruitment team. Attach your CV as a PDF and press send.</p>
+          <p class="lead" data-apply-mode="api" hidden>Fill in the form below and add your CV as a PDF, Word file or photo. It goes straight to our recruitment team.</p>
+        </div>
       </div>
 
       <div class="apply-grid">
@@ -119,9 +123,13 @@
               <span class="ap-n" aria-hidden="true">1</span>
               <span class="ap-step-b"><b>Choose a role</b><span>Pick an open position or send a general application. UAE Nationals can choose Emiratisation registration.</span></span>
             </li>
-            <li class="ap-step">
+            <li class="ap-step" data-apply-mode="mail">
               <span class="ap-n" aria-hidden="true">2</span>
               <span class="ap-step-b"><b>Send your details and CV</b><span>Fill in the form. Your email app opens with your details filled in. Attach your CV (PDF) and press send.</span></span>
+            </li>
+            <li class="ap-step" data-apply-mode="api" hidden>
+              <span class="ap-n" aria-hidden="true">2</span>
+              <span class="ap-step-b"><b>Send your details and CV</b><span>Fill in the form, add your CV and press Send application.</span></span>
             </li>
             <li class="ap-step">
               <span class="ap-n" aria-hidden="true">3</span>
@@ -132,7 +140,7 @@
         </div>
 
         <div class="apply-main">
-          <form class="form ap-form" id="applyForm" novalidate aria-labelledby="apFormT" aria-describedby="apNote">
+          <form class="form ap-form" id="applyForm" method="post" action="mailto:recruitment2@saaest.com,cv@saaest.com" enctype="text/plain" novalidate aria-labelledby="apFormT" aria-describedby="apNote">
             <h3 class="ap-form-t" id="apFormT">Your application</h3>
             <p class="ap-req">All fields are required unless marked optional.</p>
 
@@ -169,7 +177,7 @@
               </div>
               <div class="field">
                 <label for="aNat">Nationality</label>
-                <input id="aNat" name="nationality" type="text" autocapitalize="words" maxlength="60" required aria-describedby="aNatErr">
+                <div class="ap-nat" id="aNatPick"><input id="aNat" name="nationality" type="text" autocapitalize="words" maxlength="60" required aria-describedby="aNatErr"></div>
                 <span class="field-err" id="aNatErr"></span>
               </div>
             </div>
@@ -184,16 +192,29 @@
                 <div class="ap-select">
                   <select id="aExp" name="experience" required aria-describedby="aExpErr">
                     <option value="">Choose</option>
-                    <option>Less than 1 year</option>
-                    <option>1 to 2 years</option>
-                    <option>3 to 5 years</option>
-                    <option>6 to 10 years</option>
-                    <option>More than 10 years</option>
+                    <option value="Less than 1 year">Less than 1 year</option>
+                    <option value="1 to 2 years">1 to 2 years</option>
+                    <option value="3 to 5 years">3 to 5 years</option>
+                    <option value="6 to 10 years">6 to 10 years</option>
+                    <option value="More than 10 years">More than 10 years</option>
                   </select>
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <span class="field-err" id="aExpErr"></span>
               </div>
+            </div>
+            <div class="field ap-cv" data-apply-mode="api" hidden>
+              <label for="aCv">Your CV</label>
+              <div class="ap-file">
+                <input id="aCv" name="cv" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" disabled aria-describedby="aCvHint aCvErr">
+                <div class="ap-file-ui" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M12 18v-6 M9.5 14.5L12 12l2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span class="ap-file-t"><span class="ap-file-none" id="aCvNone">No file chosen</span><span class="ap-file-name" id="aCvName" translate="no" hidden></span></span>
+                  <span class="ap-file-btn">Choose file</span>
+                </div>
+              </div>
+              <span class="ap-hint" id="aCvHint">PDF, Word or a photo of your CV, up to 5 MB.</span>
+              <span class="field-err" id="aCvErr"></span>
             </div>
             <div class="field">
               <label for="aMsg">Short message <span class="opt">(optional)</span></label>
@@ -208,13 +229,14 @@
             </div>
 
             <div class="hp-field" aria-hidden="true">
-              <label for="aWebsite">Leave this field empty</label>
-              <input id="aWebsite" name="company_website" type="text" tabindex="-1" autocomplete="off">
+              <label for="aHpx">Leave this field empty</label>
+              <input id="aHpx" name="saa_hpx" type="text" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other">
             </div>
 
             <div class="ap-submit">
-              <button class="btn" type="submit">Send application <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-              <p class="ap-note" id="apNote">This opens your email app with your application to recruitment2@saaest.com and cv@saaest.com. Attach your CV (PDF), then press send.</p>
+              <button class="btn" type="submit"><span class="ap-send-t">Send application</span> <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <p class="ap-note" id="apNote" data-apply-mode="mail">This opens your email app with your application to recruitment2@saaest.com and cv@saaest.com. Attach your CV (PDF), then press send.</p>
+              <p class="ap-note" id="apNoteApi" data-apply-mode="api" hidden>Your application and CV go straight to our recruitment team.</p>
             </div>
             <div class="form-msg ap-msg" id="apMsg" role="status" aria-live="polite"></div>
           </form>
@@ -407,7 +429,8 @@
             <span class="step-num" aria-hidden="true">04</span>
             <span class="step-part mono">Part 4 of 4</span>
             <h3 class="step-title">Professional history.</h3>
-            <p class="step-text">Your work history and relevant experience. Then attach the PDF to the email the application form opens.</p>
+            <p class="step-text" data-apply-mode="mail">Your work history and relevant experience. Then attach the PDF to the email the application form opens.</p>
+            <p class="step-text" data-apply-mode="api" hidden>Your work history and relevant experience. Then add the file to the application form.</p>
           </div>
         </li>
       </ol>
@@ -440,7 +463,8 @@
         <div class="acc-item">
           <h3 class="acc-h"><button class="acc-btn" type="button" id="faqQ3" aria-expanded="true" aria-controls="faqA3"><span>I&rsquo;m a UAE National, where do I start?</span><span class="acc-ic" aria-hidden="true"></span></button></h3>
           <div class="acc-panel" id="faqA3" role="region" aria-labelledby="faqQ3"><div class="acc-in">
-            <p>Start with <a class="tlink" href="#apply" data-apply-role="Emiratisation registration (UAE Nationals)">Emiratisation registration</a>. Emiratisation is one of our strategic priorities: national jobs for national talents. Fill in the form, then attach your CV to the email it opens and press send.</p>
+            <p data-apply-mode="mail">Start with <a class="tlink" href="#apply" data-apply-role="Emiratisation registration (UAE Nationals)">Emiratisation registration</a>. Emiratisation is one of our strategic priorities: national jobs for national talents. Fill in the form, then attach your CV to the email it opens and press send.</p>
+            <p data-apply-mode="api" hidden>Start with <a class="tlink" href="#apply" data-apply-role="Emiratisation registration (UAE Nationals)">Emiratisation registration</a>. Emiratisation is one of our strategic priorities: national jobs for national talents. Fill in the form, add your CV and press Send application.</p>
           </div></div>
         </div>
         <div class="acc-item">
@@ -465,6 +489,8 @@
 <script src="assets/js/consent.js" defer></script>
 <script src="assets/js/chat.js" defer></script>
 <script src="assets/data/jobs.js" defer></script>
+<script src="assets/data/countries.js" defer></script>
+<script src="assets/js/country-picker.js" defer></script>
 <script src="assets/pages/careers-apply.js" defer></script>
 <script src="assets/pages/careers.js" defer></script>
 </body>
