@@ -30,7 +30,7 @@
   var defaults = {
     siteUrl: 'https://www.saagroup.ae',
     chatEndpoint: '',
-    recruitApi: '',
+    recruitApi: 'https://script.google.com/macros/s/AKfycbz0z6hYC4i7rr8whGR8EL4AUSlvgCic7lBWOImpFPQuKcPsm3TgENUBFp3tb_PtMCOx/exec',
     analytics: { ga4: '' },
     forceHttps: true,
     debug: false
