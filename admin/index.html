@@ -208,6 +208,24 @@
                 <option value="hired">Hired</option>
               </select>
             </div>
+            <!-- Education and age: shown only once the backend sends facets.educations (admin.js) -->
+            <div class="f f-edu" id="f-edu-field" hidden>
+              <label for="f-edu">Education</label>
+              <select id="f-edu"><option value="">All education levels</option></select>
+            </div>
+            <div class="f f-age" id="f-age-field" role="group" aria-labelledby="f-age-lbl" hidden>
+              <span class="f-lbl" id="f-age-lbl">Age</span>
+              <div class="age-range">
+                <div class="age-box">
+                  <label for="f-age-min"><span class="sr-only">Age </span>from</label>
+                  <input id="f-age-min" type="text" inputmode="numeric" maxlength="2" autocomplete="off" spellcheck="false">
+                </div>
+                <div class="age-box">
+                  <label for="f-age-max"><span class="sr-only">Age </span>to</label>
+                  <input id="f-age-max" type="text" inputmode="numeric" maxlength="2" autocomplete="off" spellcheck="false">
+                </div>
+              </div>
+            </div>
             <div class="f f-date">
               <label for="f-from">From</label>
               <input id="f-from" type="date">
@@ -261,7 +279,7 @@
                   <th scope="col" class="c-nat">Nationality</th>
                   <th scope="col" class="c-pos">Position</th>
                   <th scope="col" class="c-kind">Type</th>
-                  <th scope="col" class="c-exp">Experience</th>
+                  <th scope="col" class="c-exp"><span class="th-edu" id="th-edu" hidden>Education<span class="sr-only"> and</span></span>Experience</th>
                   <th scope="col" class="c-status">Status</th>
                   <th scope="col" class="c-act">Actions</th>
                 </tr>
@@ -341,6 +359,26 @@
                   <option>3 to 5 years</option>
                   <option>6 to 10 years</option>
                   <option>More than 10 years</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row form-row-top" id="add-ae-row" hidden>
+              <div class="field">
+                <label for="add-age">Age <span class="opt">optional</span></label>
+                <input id="add-age" name="age" type="text" inputmode="numeric" maxlength="2" autocomplete="off" spellcheck="false" placeholder="For example 29" aria-describedby="add-age-hint">
+                <p class="hint" id="add-age-hint">In whole years, 18 to 75. Leave it empty if not known.</p>
+              </div>
+              <div class="field">
+                <label for="add-edu">Highest education <span class="opt">optional</span></label>
+                <select id="add-edu" name="education">
+                  <option value="">Not known</option>
+                  <option>Below high school</option>
+                  <option>High school diploma</option>
+                  <option>Vocational or technical certificate</option>
+                  <option>Diploma or Higher Diploma</option>
+                  <option>Bachelor's degree</option>
+                  <option>Master's degree</option>
+                  <option>Doctorate (PhD)</option>
                 </select>
               </div>
             </div>

@@ -38,6 +38,10 @@
   var ROLE_GENERAL = 'General application';
   var ROLE_EMIRATI = 'Emiratisation registration (UAE Nationals)';
   var EXPERIENCE = ['Less than 1 year', '1 to 2 years', '3 to 5 years', '6 to 10 years', 'More than 10 years'];
+  /* Highest education, in this order (API.md "Age and education"). Age is 18 to 75 in whole years. */
+  var EDUCATION = ['Below high school', 'High school diploma', 'Vocational or technical certificate', 'Diploma or Higher Diploma',
+    "Bachelor's degree", "Master's degree", 'Doctorate (PhD)'];
+  var AGE_MIN = 18, AGE_MAX = 75;
   var LANGS = { en: 'English', ar: 'Arabic', hi: 'Hindi', ru: 'Russian', ur: 'Urdu', zh: 'Chinese' };
   var CV_EXT = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
   var SESSION_ENDED = 'Your session ended, please log in again';
@@ -49,12 +53,17 @@
   }) : [];
   var COUNTRY_NAME = new Map(COUNTRIES.map(function (c) { return [c.code, c.name]; }));
 
-  var EMPTY_FILTER = { position: '', nationality: '', kind: '', status: '', q: '', from: '', to: '' };
+  /* ageMin / ageMax are digit strings ('' = no bound) and are sent as numbers */
+  var EMPTY_FILTER = { position: '', nationality: '', kind: '', status: '', q: '', from: '', to: '', education: '', ageMin: '', ageMax: '' };
+  var AE_KEYS = ['education', 'ageMin', 'ageMax'];
   var state = {
     session: null,
     filter: Object.assign({}, EMPTY_FILTER),
     page: 1, pageSize: 25, sort: 'new',
-    rows: [], total: 0, facets: null, loadedOnce: false, appsStale: false,
+    rows: [], total: 0, facets: null, loadedOnce: false, appsStale: false, appsInFlight: false,
+    /* true once an apps answer carries facets.educations: the backend saves age and education.
+       Until then (an older backend) the panel shows and sends nothing about them. */
+    ageEdu: false,
     jobs: null, jobsLoading: null,
     selected: new Set(),
     seq: 0,
@@ -76,6 +85,13 @@
   function clip(s, n) { s = str(s); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
   function plural(n, one, many) { return fmtNum(n) + ' ' + (n === 1 ? one : many); }
   function fmtNum(n) { try { return Number(n).toLocaleString('en-GB'); } catch (_) { return String(n); } }
+  /* Arabic-Indic (U+0660-0669) and Extended Arabic-Indic (U+06F0-06F9) digits become 0-9, as the backend does */
+  function asciiDigits(s) {
+    return str(s).replace(/[٠-٩۰-۹]/g, function (c) {
+      var n = c.charCodeAt(0);
+      return String(n - (n >= 0x06F0 ? 0x06F0 : 0x0660));
+    });
+  }
 
   function isSafeHref(v) {
     if (typeof v !== 'string') return false;
@@ -180,6 +196,10 @@
     ROW_FIELDS.forEach(function (k) { o[k] = str(r[k], k === 'message' || k === 'notes' ? 20000 : 2000); });
     o.cvSize = Number(r.cvSize) > 0 ? Number(r.cvSize) : 0;
     o.nationality = o.nationality.toUpperCase();
+    /* Older backends and older applications have neither: age null, education '' (shown as a dash) */
+    var age = typeof r.age === 'number' ? r.age : (typeof r.age === 'string' && /^\s*\d{1,3}\s*$/.test(r.age) ? Number(r.age) : NaN);
+    o.age = Number.isInteger(age) && age > 0 && age < 150 ? age : null;
+    o.education = str(r.education, 200).trim();
     return o.id ? o : null;
   }
   function cleanJob(j) {
@@ -357,9 +377,11 @@
     revokeAll();
     if (confirmResolve) confirmDone(false);
     closeAllDialogs(true);
-    state.rows = []; state.total = 0; state.facets = null; state.loadedOnce = false; state.jobs = null; state.jobsLoading = null;
+    state.rows = []; state.total = 0; state.facets = null; state.loadedOnce = false; state.appsInFlight = false; state.jobs = null; state.jobsLoading = null;
     state.selected.clear(); state.seq++;
+    clearTimeout(ageTimer);
     state.filter = Object.assign({}, EMPTY_FILTER); state.page = 1;
+    setAgeEdu(false);
     syncFilterInputs();
     $('cv-tbody').textContent = ''; $('jobs-tbody').textContent = '';
     $('pw-form').reset(); $('add-form').reset(); clearErrors($('add-form')); clearErrors($('pw-form'));
@@ -395,7 +417,7 @@
     clearInterval(state.idleTimer);
     state.idleTimer = setInterval(function () { if (state.session && isIdle(state.session)) idleOut(); }, 30000);
     route(false);
-    if (!state.loadedOnce && currentRoute() !== 'cvs') loadApps();
+    if (!state.loadedOnce && !state.appsInFlight && currentRoute() !== 'cvs') loadApps();
     loadJobs();
   }
 
@@ -617,13 +639,63 @@
   /* =====================================================================
      CVs
      ===================================================================== */
+  /* An age range (from and/or to) counts as one filter */
   function filtersActive() {
-    return Object.keys(state.filter).filter(function (k) { return !!state.filter[k]; }).length;
+    var f = state.filter;
+    var n = Object.keys(f).filter(function (k) { return k !== 'ageMin' && k !== 'ageMax' && !!f[k]; }).length;
+    return n + (f.ageMin || f.ageMax ? 1 : 0);
   }
   function appsRequest(page, pageSize) {
     var f = {};
-    Object.keys(state.filter).forEach(function (k) { if (state.filter[k]) f[k] = state.filter[k]; });
+    Object.keys(state.filter).forEach(function (k) {
+      var v = state.filter[k];
+      if (!v) return;
+      if (AE_KEYS.indexOf(k) >= 0) {
+        if (!state.ageEdu) return;          /* an older backend never gets these */
+        if (k !== 'education') v = Number(v);
+      }
+      f[k] = v;
+    });
     return { filter: f, page: page, pageSize: pageSize, sort: state.sort };
+  }
+  /* The backend has age and education (facets.educations came back): show their filters, the table
+     lines, the Add CV fields and the CSV columns. Turned off again (an older backend redeployed), it
+     drops any age or education filter and says so by returning true. */
+  function setAgeEdu(on) {
+    on = !!on;
+    if (state.ageEdu === on) return false;
+    state.ageEdu = on;
+    var dropped = false;
+    if (!on) {
+      clearTimeout(ageTimer);
+      AE_KEYS.forEach(function (k) { if (state.filter[k]) { state.filter[k] = ''; dropped = true; } });
+    }
+    $('f-edu-field').hidden = !on;
+    $('f-age-field').hidden = !on;
+    $('filters').classList.toggle('has-ae', on);
+    $('th-edu').hidden = !on;
+    $('add-ae-row').hidden = !on;
+    syncFilterInputs();
+    return dropped;
+  }
+  /* An age box: digits only (Arabic-Indic digits typed on an Arabic keyboard count), no leading zeros */
+  function ageBound(v) {
+    var d = asciiDigits(v).replace(/\D/g, '').slice(0, 2);
+    return d ? String(parseInt(d, 10)) : '';
+  }
+  var ageTimer = 0;
+  function applyAge(swap) {
+    clearTimeout(ageTimer);
+    if (!state.ageEdu) return;
+    var a = ageBound($('f-age-min').value), b = ageBound($('f-age-max').value);
+    /* The backend swaps a reversed range too; once typing is done the boxes show it the right way round */
+    if (swap && a && b && +a > +b) { var t = a; a = b; b = t; }
+    if (swap) { $('f-age-min').value = a; $('f-age-max').value = b; }
+    if (state.filter.ageMin === a && state.filter.ageMax === b) return;
+    state.filter.ageMin = a; state.filter.ageMax = b;
+    state.page = 1;
+    syncFilterInputs();
+    loadApps();
   }
   function setFilter(key, val) {
     if (state.filter[key] === val) return;
@@ -640,6 +712,12 @@
     setSelect($('f-status'), f.status);
     $('f-from').value = f.from; $('f-to').value = f.to;
     $('f-to').min = f.from || ''; $('f-from').max = f.to || '';
+    setSelect($('f-edu'), f.education);
+    /* A box being typed in keeps its text (its own timer applies it) */
+    [['f-age-min', f.ageMin], ['f-age-max', f.ageMax]].forEach(function (x) {
+      var el = $(x[0]);
+      if (el !== document.activeElement && ageBound(el.value) !== x[1]) el.value = x[1];
+    });
     if (pickerValue(state.pickers.nat) !== f.nationality) pickerSet(state.pickers.nat, f.nationality);
     var n = filtersActive();
     var moreCount = n - (f.q ? 1 : 0);
@@ -658,6 +736,7 @@
   function loadApps() {
     var seq = ++state.seq;
     state.appsStale = false;
+    state.appsInFlight = true;
     var table = $('cv-table');
     if (!state.loadedOnce) skeleton(); else table.classList.add('is-loading');
     table.setAttribute('aria-busy', 'true');
@@ -665,6 +744,10 @@
     if (!state.loadedOnce) $('cvs-count').textContent = 'Loading CVs…';
     return api('apps', appsRequest(state.page, state.pageSize)).then(function (d) {
       if (seq !== state.seq) return;
+      if (d.facets && typeof d.facets === 'object' && setAgeEdu(Array.isArray(d.facets.educations))) {
+        /* The backend no longer has age and education: ask again without those filters */
+        state.page = 1; loadApps(); return;
+      }
       state.total = Math.max(0, toInt(d.total));
       state.rows = arr(d.rows).map(cleanRow).filter(Boolean);
       state.facets = d.facets && typeof d.facets === 'object' ? d.facets : state.facets;
@@ -679,6 +762,7 @@
       listError(e);
     }).then(function () {
       if (seq !== state.seq) return;
+      state.appsInFlight = false;
       table.classList.remove('is-loading');
       table.removeAttribute('aria-busy');
     });
@@ -719,13 +803,14 @@
     if (state.total === 0) {
       countEl.append(n ? 'No CVs match the filters' : 'No CVs yet');
     } else {
-      countEl.append(h('strong', null, fmtNum(state.total)), ' ', state.total === 1 ? 'CV' : 'CVs', n ? ' match the filters' : ' in total');
+      countEl.append(h('strong', null, fmtNum(state.total)), ' ', state.total === 1 ? 'CV' : 'CVs', n ? (state.total === 1 ? ' matches the filters' : ' match the filters') : ' in total');
     }
     if (!state.rows.length) {
       st.className = 'state';
       st.textContent = '';
       if (n) {
-        st.append(icon('search'), h('strong', null, 'No CVs match these filters'), h('span', null, 'Try a different position, nationality or date, or clear the filters.'),
+        st.append(icon('search'), h('strong', null, 'No CVs match these filters'),
+          h('span', null, state.ageEdu ? 'Try a different position, nationality, education, age or date, or clear the filters.' : 'Try a different position, nationality or date, or clear the filters.'),
           h('button', { type: 'button', class: 'btn btn-sm btn-ghost', onclick: clearFilters }, icon('x'), h('span', null, 'Clear filters')));
       } else {
         st.append(icon('cvs'), h('strong', null, 'No CVs yet'), h('span', null, 'Applications sent from the careers page will appear here.'),
@@ -765,7 +850,9 @@
     var tags = h('div', { class: 'tags' });
     if (spam) tags.append(h('span', { class: 'tag tag-spam', title: 'A link in the name, or several links or link code in the message' }, icon('alert'), 'Possible spam'));
     if (r.source === 'admin') tags.append(h('span', { class: 'tag tag-admin' }, 'Added by team'));
-    tr.append(h('td', { class: 'name-cell' }, h('div', { class: 'nm', title: r.name.length > 60 ? clip(r.name, 300) : null }, r.name || '(no name)'), tags));
+    tr.append(h('td', { class: 'name-cell' }, h('div', { class: 'nm', title: r.name.length > 60 ? clip(r.name, 300) : null }, r.name || '(no name)'),
+      state.ageEdu ? h('div', { class: 'age-line' }, 'Age ', r.age != null ? h('b', null, String(r.age)) : h('span', { class: 'muted' }, '—')) : null,
+      tags));
 
     tr.append(contactCell(r));
 
@@ -776,7 +863,7 @@
     if (r.position === ROLE_EMIRATI) pc.title = r.position;
     tr.append(pc);
     tr.append(labelled('Type', 'kind-cell', h('span', { class: 'kind kind-' + (KIND_LABEL.has(r.kind) ? r.kind : 'general') }, kindLabel(r.kind))));
-    tr.append(labelled('Experience', 'exp-cell', r.experience || '—'));
+    tr.append(state.ageEdu ? qualCell(r) : labelled('Experience', 'exp-cell', r.experience || '—'));
     tr.append(labelled('Status', 'c-status', statusSelect(r)));
 
     var who = r.name ? clip(r.name, 50) : r.ref;
@@ -819,6 +906,14 @@
     var v = h('div', { class: 'v' });
     for (var i = 2; i < arguments.length; i++) append(v, arguments[i]);
     return h('td', { 'data-label': label, class: cls }, v);
+  }
+  /* With age and education: the Experience column holds the highest education above the experience
+     (its header reads "Education / Experience"); the phone cards show them as two labelled lines */
+  function qualCell(r) {
+    var part = function (label, cls, val) {
+      return h('div', { class: 'q ' + cls, 'data-label': label }, h('div', { class: 'v' }, val ? val : h('span', { class: 'muted' }, '—')));
+    };
+    return h('td', { class: 'exp-cell qual-cell' }, part('Education', 'q-edu', r.education), part('Experience', 'q-exp', r.experience));
   }
   function contactCell(r) {
     var cell = labelled('Contact', 'contact-cell'), td = cell.firstChild;
@@ -891,7 +986,17 @@
       if (!o.value) return;
       o.textContent = statusLabel(o.value) + (sts.has(o.value) ? ' (' + fmtNum(sts.get(o.value)) + ')' : '');
     });
+    renderEduOptions();
     renderPills();
+  }
+  /* Every level in list order, with its count over all CVs like the other filters */
+  function renderEduOptions() {
+    var sel = $('f-edu');
+    var counts = facetMap(state.facets && state.facets.educations);
+    sel.textContent = '';
+    sel.append(h('option', { value: '' }, 'All education levels'));
+    EDUCATION.forEach(function (v) { sel.append(h('option', { value: v }, v + (counts.has(v) ? ' (' + fmtNum(counts.get(v)) + ')' : ''))); });
+    setSelect(sel, state.filter.education);
   }
   function renderPositionOptions() {
     var sel = $('f-position');
@@ -1081,14 +1186,18 @@
     };
     next().then(function () {
       if (!all.length) { toast('There are no CVs to export with these filters.'); return; }
-      var head = ['Ref', 'Received (Gulf time)', 'Name', 'Email', 'Phone', 'Nationality', 'Nationality code', 'Position', 'Type', 'Experience',
-        'Location', 'Status', 'Source', 'Message', 'Notes', 'CV file', 'Possible spam', 'Last updated'];
+      /* Age and Highest education only once the backend has them (they sit where the table shows them) */
+      var ae = state.ageEdu;
+      var head = ['Ref', 'Received (Gulf time)', 'Name', 'Email', 'Phone', 'Nationality', 'Nationality code'].concat(ae ? ['Age'] : [],
+        ['Position', 'Type'], ae ? ['Highest education'] : [], ['Experience',
+        'Location', 'Status', 'Source', 'Message', 'Notes', 'CV file', 'Possible spam', 'Last updated']);
       var lines = [head.map(csvCell).join(',')];
       all.forEach(function (r) {
         var d = parseDate(r.created);
-        lines.push([r.ref, d ? gulfISODate(d) + ' ' + DTF_TIME.format(d) : r.created, r.name, r.email, r.phone, natName(r), r.nationality,
-          r.position, kindLabel(r.kind), r.experience, r.location, statusLabel(r.status), r.source === 'admin' ? 'Added by team' : (r.source === 'website' ? 'Website' : r.source),
-          r.message, r.notes, r.cvName, isSpam(r) ? 'Yes' : '', r.updated ? fmtDateTime(r.updated) : ''].map(csvCell).join(','));
+        lines.push([r.ref, d ? gulfISODate(d) + ' ' + DTF_TIME.format(d) : r.created, r.name, r.email, r.phone, natName(r), r.nationality].concat(
+          ae ? [r.age != null ? r.age : ''] : [], [r.position, kindLabel(r.kind)], ae ? [r.education] : [], [r.experience,
+          r.location, statusLabel(r.status), r.source === 'admin' ? 'Added by team' : (r.source === 'website' ? 'Website' : r.source),
+          r.message, r.notes, r.cvName, isSpam(r) ? 'Yes' : '', r.updated ? fmtDateTime(r.updated) : '']).map(csvCell).join(','));
       });
       saveFile(new Blob(['﻿' + lines.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' }), 'saa-cvs-' + gulfISODate() + '.csv');
       toast('Exported ' + plural(all.length, 'CV', 'CVs') + ' to a CSV file.');
@@ -1098,6 +1207,7 @@
   }
 
   function clearFilters() {
+    clearTimeout(ageTimer);
     state.filter = Object.assign({}, EMPTY_FILTER);
     state.page = 1;
     syncFilterInputs();
@@ -1141,7 +1251,10 @@
     add('Type', kindLabel(row.kind));
     var nn = natName(row);
     add('Nationality', nn ? h('span', { class: 'nat' }, flagEl(row.nationality), h('span', null, nn)) : '');
+    var ae = state.ageEdu || row.age != null || !!row.education;
+    if (ae) add('Age', row.age != null ? String(row.age) : '');
     add('Location', row.location);
+    if (ae) add('Highest education', row.education);
     add('Experience', row.experience);
     add('Email', row.email ? (mail ? h('a', { href: mail }, row.email) : row.email) : '');
     add('Phone', row.phone ? (tel ? h('a', { href: tel }, row.phone) : row.phone) : '');
@@ -1236,6 +1349,8 @@
     setAddKind(emirati ? 'emiratisation' : (addKind() === 'emiratisation' ? 'job' : addKind()));
     if (emirati && !pickerValue(state.pickers.add)) pickerSet(state.pickers.add, 'AE');
     fillRoleList();
+    /* the Age and Education fields wait for a first CV list from the backend: ask again if that first try failed */
+    if (!state.loadedOnce && !state.appsInFlight) loadApps();
   }
   function fillRoleList() {
     var dl = $('add-role-list');
@@ -1343,6 +1458,20 @@
     if (EXPERIENCE.indexOf(req.experience) < 0) err('add-exp', 'Choose the experience.');
     if (req.message.length > 1500) err('add-message', 'Keep it under 1,500 characters.');
     else if (linkCount(req.message) > 2) err('add-message', 'At most 2 links are allowed.');
+    /* Age and highest education: optional, and only sent to a backend that saves them */
+    if (state.ageEdu) {
+      var ageTxt = asciiDigits($('add-age').value).trim();
+      if (ageTxt) {
+        var age = /^\d{1,2}$/.test(ageTxt) ? parseInt(ageTxt, 10) : NaN;
+        if (!(age >= AGE_MIN && age <= AGE_MAX)) err('add-age', 'Enter the age in whole years (18 to 75), or leave it empty.');
+        else req.age = age;
+      }
+      var edu = $('add-edu').value;
+      if (edu) {
+        if (EDUCATION.indexOf(edu) < 0) err('add-edu', 'Choose the highest education from the list.');
+        else req.education = edu;
+      }
+    }
     if (bad) { formErr('add-err', 'Please check the highlighted fields.'); focusFirstErrorAdd(); return; }
 
     var btn = $('add-btn');
@@ -1372,7 +1501,7 @@
       if (e2.code === 'auth') return;
       if (e2.code === 'file') { setErr($('add-cv'), e2.message); formErr('add-err', e2.message); return; }
       if (e2.fields) {
-        var map = { role: 'add-role', name: 'add-name', email: 'add-email', phone: 'add-phone', location: 'add-location', experience: 'add-exp', message: 'add-message', notes: 'add-notes', cv: 'add-cv', nationality: 'add-nat-host' };
+        var map = { role: 'add-role', name: 'add-name', email: 'add-email', phone: 'add-phone', location: 'add-location', experience: 'add-exp', message: 'add-message', notes: 'add-notes', cv: 'add-cv', nationality: 'add-nat-host', age: 'add-age', education: 'add-edu' };
         Object.keys(e2.fields).forEach(function (k) { if (map[k] && $(map[k])) setErr($(map[k]), clip(str(e2.fields[k]), 200) || 'Please check this field.'); });
       }
       formErr('add-err', e2.message);
@@ -1719,6 +1848,18 @@
     };
     $('f-from').addEventListener('change', dateChange);
     $('f-to').addEventListener('change', dateChange);
+    $('f-edu').addEventListener('change', function () { setFilter('education', EDUCATION.indexOf(this.value) >= 0 ? this.value : ''); });
+    ['f-age-min', 'f-age-max'].forEach(function (id) {
+      var el = $(id);
+      el.addEventListener('input', function () {
+        var clean = asciiDigits(el.value).replace(/\D/g, '').slice(0, 2);
+        if (clean !== el.value) el.value = clean;
+        clearTimeout(ageTimer);
+        ageTimer = setTimeout(function () { applyAge(false); }, 500);
+      });
+      el.addEventListener('change', function () { applyAge(true); });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); applyAge(true); } });
+    });
     $('f-clear').addEventListener('click', clearFilters);
     $('filters-toggle').addEventListener('click', function () {
       var f = $('filters'), open = !f.classList.contains('is-open');
@@ -1787,6 +1928,8 @@
       if (e.target.name === 'kind') { $('add-role-field').hidden = e.target.value !== 'job'; }
     });
     af.addEventListener('input', function (e) {
+      /* Age typed with Arabic-Indic digits shows as 0-9 */
+      if (e.target.id === 'add-age') { var ad = asciiDigits(e.target.value); if (ad !== e.target.value) e.target.value = ad; }
       var f = e.target.closest && e.target.closest('.field');
       if (f && e.target.getAttribute('aria-invalid')) { e.target.removeAttribute('aria-invalid'); var p = f.querySelector('.field-err'); if (p) p.remove(); }
     });

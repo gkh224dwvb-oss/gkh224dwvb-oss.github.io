@@ -128,6 +128,8 @@ code { font-family: var(--f-mono); font-size: .88em; background: var(--teal-050)
 .hint { font-size: 12.5px; color: var(--faint); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .form-row > * { min-width: 0; }
+/* Age has a hint below it: the education select beside it keeps its own height */
+.form-row-top { align-items: start; }
 /* .cp-q is the country picker's own search box: it keeps the picker's styles; .sr-only stays 1px */
 input[type="text"]:not(.cp-q):not(.sr-only), input[type="email"], input[type="tel"], input[type="password"], input[type="search"],
 input[type="number"], input[type="date"], select, textarea {
@@ -336,7 +338,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: poi
 .filters-more { flex: 1 1 100%; min-width: 0; }
 .filters-more { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; align-items: end; }
 .f { display: grid; gap: 5px; min-width: 0; }
-.f > label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+.f > label, .f > .f-lbl { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
 .f select, .f input { min-height: 40px; font-size: 14px; }
 .f-pos, .f-nat { grid-column: span 2; }
 .f-clear { grid-column: -3 / -1; justify-self: end; }
@@ -349,6 +351,13 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: poi
   border: 1px solid #C9D5DD; border-radius: 10px; background: var(--paper); color: var(--ink); font-size: 14px; font-weight: 600;
 }
 .fcount { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--teal); color: #fff; font-size: 11.5px; display: inline-grid; place-items: center; }
+/* Age range: two small boxes, each labelled inside ("from", "to") */
+.age-range { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.age-box { position: relative; min-width: 0; }
+.age-box label { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--faint); cursor: text; }
+/* input[type="text"] so these beat the base text-input rule (same height and size as the selects) */
+.f .age-box input[type="text"] { min-height: 40px; font-size: 14px; padding-left: 44px; padding-right: 8px; font-variant-numeric: tabular-nums; }
+.f .age-box + .age-box input[type="text"] { padding-left: 30px; }
 @container (max-width: 760px) {
   .filters-more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .f-pos, .f-nat { grid-column: span 2; }
@@ -361,6 +370,23 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: poi
   .f-q > label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .filters.is-open .filters-toggle { background: var(--teal-050); border-color: var(--teal); color: var(--teal-ink); }
   .filters:not(.is-open) .filters-more { display: none; }
+}
+/* With Education and Age (.has-ae, set once the backend has them). Six columns:
+   Position, Nationality, Type, Status / Education, Age, From, To, Clear */
+.filters.has-ae .f-edu { grid-column: span 2; }
+.filters.has-ae .f-clear { grid-column: -2 / -1; }
+@container (max-width: 940px) {
+  /* Four columns: Position, Nationality / Type, Status, Education / Age, From, To, Clear */
+  .filters.has-ae .filters-more { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@container (max-width: 760px) {
+  /* Two columns: ... / Education, Age / From, To / Clear */
+  .filters.has-ae .filters-more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filters.has-ae .f-edu { grid-column: auto; }
+  .filters.has-ae .f-clear { grid-column: 1 / -1; }
+}
+@container (max-width: 560px) {
+  .filters.has-ae .f-edu, .filters.has-ae .f-age { grid-column: 1 / -1; }
 }
 
 /* Country picker (assets/css/country-picker.css) sized to match these fields */
@@ -424,6 +450,8 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: poi
 .date small { display: block; font-size: 12px; color: var(--faint); }
 .name-cell { min-width: 100px; max-width: 220px; }
 .nm { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.age-line { margin-top: 2px; font-size: 12px; color: var(--faint); white-space: nowrap; }
+.age-line b { font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
 .contact-cell { max-width: 210px; }
 .contact-cell a, .contact-cell span.plain { display: block; overflow-wrap: break-word; text-decoration: none; }
 .contact-cell a { color: var(--teal-ink); }
@@ -436,6 +464,11 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: poi
 .flag-code { display: inline-grid; place-items: center; min-width: 24px; height: 17px; padding: 0 3px; border-radius: 4px; background: var(--teal-050); color: var(--teal-ink); font: 600 10.5px/1 var(--f-mono); letter-spacing: .04em; align-self: center; }
 .pos-cell { min-width: 96px; max-width: 180px; overflow-wrap: break-word; }
 .exp-cell { min-width: 64px; max-width: 100px; color: var(--muted); }
+/* Education above experience in one column (header "Education / Experience") */
+.th-edu { display: block; margin-bottom: 2px; }
+.qual-cell { min-width: 76px; max-width: 124px; }
+.qual-cell .q-edu { color: var(--ink); overflow-wrap: break-word; }
+.qual-cell .q-exp { margin-top: 4px; }
 .muted { color: var(--faint); }
 .tbl tr.is-spam td:first-child { box-shadow: inset 3px 0 0 var(--red); }
 .tbl tr.is-selected { background: var(--teal-050) !important; }
@@ -539,6 +572,11 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: poi
   .cvt td[data-label] > .v { justify-self: start; min-width: 0; max-width: 100%; }
   .cvt td[data-label]::before { content: attr(data-label); color: var(--faint); font-size: 12.5px; font-weight: 500; padding-top: 1px; }
   .cvt td.contact-cell a, .cvt td.contact-cell span.plain { display: block; }
+  .cvt td.name-cell .age-line { font-size: 13px; }
+  .cvt td.qual-cell { grid-column: 1 / -1; }
+  .cvt td.qual-cell > .q { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: baseline; gap: 10px; margin-top: 6px; font-size: 14px; }
+  .cvt td.qual-cell > .q::before { content: attr(data-label); color: var(--faint); font-size: 12.5px; font-weight: 500; padding-top: 1px; }
+  .cvt td.qual-cell > .q > .v { min-width: 0; }
   .cvt td.c-status { margin-top: 8px; align-items: center; }
   .cvt td.c-act { grid-column: 1 / -1; margin-top: 12px; padding-top: 10px !important; border-top: 1px dashed var(--line); width: auto; }
   .cvt .act { justify-content: flex-start; gap: 6px; flex-wrap: wrap; }

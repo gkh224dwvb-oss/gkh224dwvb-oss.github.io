@@ -203,6 +203,30 @@
                 <span class="field-err" id="aExpErr"></span>
               </div>
             </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="aAge">Age</label>
+                <input id="aAge" name="age" type="text" inputmode="numeric" maxlength="2" autocomplete="off" required aria-describedby="aAgeErr">
+                <span class="field-err" id="aAgeErr"></span>
+              </div>
+              <div class="field">
+                <label for="aEdu">Highest education</label>
+                <div class="ap-select">
+                  <select id="aEdu" name="education" required aria-describedby="aEduErr">
+                    <option value="">Choose</option>
+                    <option value="Below high school">Below high school</option>
+                    <option value="High school diploma">High school diploma</option>
+                    <option value="Vocational or technical certificate">Vocational or technical certificate</option>
+                    <option value="Diploma or Higher Diploma">Diploma or Higher Diploma</option>
+                    <option value="Bachelor's degree">Bachelor&rsquo;s degree</option>
+                    <option value="Master's degree">Master&rsquo;s degree</option>
+                    <option value="Doctorate (PhD)">Doctorate (PhD)</option>
+                  </select>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="field-err" id="aEduErr"></span>
+              </div>
+            </div>
             <div class="field ap-cv" data-apply-mode="api" hidden>
               <label for="aCv">Your CV</label>
               <div class="ap-file">

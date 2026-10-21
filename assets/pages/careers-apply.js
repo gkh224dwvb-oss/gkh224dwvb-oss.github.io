@@ -10,7 +10,9 @@
       (General application and Emiratisation registration replace the old
       saaest.com CV and Emiratisation forms)
    3. Application form. Nationality is a searchable country list
-      (assets/js/country-picker.js, assets/data/countries.js). Two modes:
+      (assets/js/country-picker.js, assets/data/countries.js). Age (18 to 75,
+      Arabic-Indic digits too, sent as a number) and highest education (one of
+      the server's EDUCATION values) follow the API.md rules. Two modes:
       - window.SAA_CONFIG.recruitApi '' (today): a mailto to both recruitment
         inboxes, the visitor attaches the CV
       - recruitApi set (the Apps Script web app, admin-system/API.md): the
@@ -252,7 +254,7 @@
   const openMail = href => { window.location.href = href; };
 
   const fName = $('aName'), fEmail = $('aEmail'), fPhone = $('aPhone'), fLoc = $('aLoc');
-  const fExp = $('aExp'), fMsg = $('aMsg'), fConsent = $('aConsent'), trap = $('aHpx'), fCv = $('aCv');
+  const fExp = $('aExp'), fAge = $('aAge'), fEdu = $('aEdu'), fMsg = $('aMsg'), fConsent = $('aConsent'), trap = $('aHpx'), fCv = $('aCv');
   const out = $('apMsg');
   const sendBtn = form.querySelector('button[type="submit"]'), sendLabel = sendBtn && sendBtn.querySelector('.ap-send-t');
   const SEND = sendLabel ? sendLabel.textContent : '', SENDING = T('Sending…');   /* the button while the CV uploads */
@@ -379,6 +381,10 @@
   };
   const phoneApiOk = v => /^[0-9 +()-]{7,30}$/.test(v) && /^\+?[^+]*$/.test(v) && digits(v) >= 7 && digits(v) <= 15;
   const links = v => (v.match(/\b(?:https?:\/\/|www\.)\S*/gi) || []).length;
+  /* age: a whole number of years, 18 to 75, typed with any digits (0 = not valid). Education: one of the server's
+     EDUCATION values, which are the select's option values in careers.html, in the same order */
+  const ageOf = v => { v = westDigits(GUARD.line(v)); return /^\d{1,3}$/.test(v) && +v >= 18 && +v <= 75 ? +v : 0; };
+  const eduOk = v => !!v && [...fEdu.options].some(o => o.value === v);
   function validate() {
     const bad = [];
     const chk = (ok, el, text) => { setErr(el, ok ? '' : T(text)); if (!ok) bad.push(el); };
@@ -393,6 +399,9 @@
     else { const tv = GUARD.line(fNat.value); chk(tv.length >= 2 && tv.length <= 60, fNat, 'Please enter your nationality.'); }
     chk(lv.length >= 2 && lv.length <= 80, fLoc, 'Please enter your current city and country.');
     chk(!!fExp.value, fExp, 'Please choose your years of experience.');
+    /* checked only when the page has the fields: a careers.html cached from before them can meet this script for a few minutes */
+    if (fAge) chk(!!ageOf(fAge.value), fAge, 'Please enter your age in years (18 to 75).');
+    if (fEdu) chk(eduOk(fEdu.value), fEdu, 'Please choose your highest education.');
     if (API) chk(!cvWhy || cvWhy === 'wait', fCv, CV_MSG[cvWhy] || CV_MSG.none);
     chk(mv.length <= 1500 && (!API || links(mv) <= 2), fMsg, mv.length > 1500 ? 'Please keep your message under 1,500 characters.' : 'Please include no more than two links in your message.');
     chk(fConsent.checked, fConsent, 'Please tick this box so we can use your details for recruitment.');
@@ -440,7 +449,8 @@
     return {
       role: GUARD.line(fRole.value), name: GUARD.line(fName.value), email: GUARD.line(fEmail.value), phone: westDigits(GUARD.line(fPhone.value)),
       nationality: picker ? picker.value : GUARD.line(fNat.value),
-      location: GUARD.line(fLoc.value), experience: GUARD.line(fExp.value), message: GUARD.text(fMsg.value)
+      location: GUARD.line(fLoc.value), experience: GUARD.line(fExp.value), age: fAge ? ageOf(fAge.value) : undefined, education: fEdu ? GUARD.line(fEdu.value) : undefined,
+      message: GUARD.text(fMsg.value)
     };
   }
 
@@ -460,6 +470,8 @@
       'Current location: ' + data.location,
       'Years of experience: ' + data.experience
     ];
+    if (data.age !== undefined) lines.push('Age: ' + data.age);
+    if (data.education !== undefined) lines.push('Highest education: ' + data.education);
     if (data.message) lines.push('', 'Message:', data.message);
     lines.push('', 'CV: attached as a PDF.', '',
       'I agree that SAA Group may use my details for recruitment, as described in its privacy policy.',
@@ -501,7 +513,7 @@
       else out.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' });
     }
   }
-  const FIELDS = { role: fRole, name: fName, email: fEmail, phone: fPhone, nationality: fNat, location: fLoc, experience: fExp, cv: fCv, message: fMsg, consent: fConsent };
+  const FIELDS = { role: fRole, name: fName, email: fEmail, phone: fPhone, nationality: fNat, location: fLoc, experience: fExp, age: fAge, education: fEdu, cv: fCv, message: fMsg, consent: fConsent };
   /* the server found a field the form let through: the same messages as the form's own checks */
   function fieldMsg(k, server) {
     const m = String(server || '');
@@ -513,6 +525,8 @@
       case 'nationality': return 'Please choose your nationality.';
       case 'location': return 'Please enter your current city and country.';
       case 'experience': return 'Please choose your years of experience.';
+      case 'age': return 'Please enter your age in years (18 to 75).';
+      case 'education': return 'Please choose your highest education.';
       case 'message': return /link/i.test(m) ? 'Please include no more than two links in your message.' : 'Please keep your message under 1,500 characters.';
       case 'consent': return 'Please tick this box so we can use your details for recruitment.';
       case 'cv': return CV_MSG[/5 MB/.test(m) ? 'size' : /PDF, Word/.test(m) ? 'type' : /not a real/.test(m) ? 'fake' : /^Attach/.test(m) ? 'none' : 'read'];
@@ -564,7 +578,7 @@
       const ms = Math.min(300000, 60000 + Math.round((s.length - at - 1) / 1048576 * 25000));
       return call({
         action: 'apply', role: data.role, name: data.name, email: data.email, phone: data.phone, nationality: data.nationality,
-        location: data.location, experience: data.experience, message: data.message, consent: true,
+        location: data.location, experience: data.experience, age: data.age, education: data.education, message: data.message, consent: true,
         company_website: trap ? trap.value : '', elapsed: Math.round(performance.now() - readyAt), lang: LANG,
         cv: { name: cvName(f), type: f.type || CV_TYPES[cvExt(f)][0], size: f.size, data: at >= 0 ? s.slice(at + 1) : s }
       }, ms).then(res => {
