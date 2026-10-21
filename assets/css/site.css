@@ -259,7 +259,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 }
 .site-header .wrap { height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .site-header.scrolled { background: rgba(var(--bg-rgb), .9); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 1px 0 var(--line-dark); }
-.site-header.hide { transform: translateY(-100%); }
+.site-header.hide { transform: translateY(-100%); box-shadow: none; }
 .site-header:focus-within { transform: none; } /* keyboard focus brings a hidden header back */
 .logo { display: inline-flex; align-items: center; gap: 12px; color: var(--fg); }
 .logo img { width: 46px; height: 42px; object-fit: contain; }
@@ -338,10 +338,20 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; lin
 .menu-foot > *, .menu-panel .menu-foot a { display: inline-block; padding-block: 4px; }
 .menu-panel .menu-foot a { width: auto; font: inherit; letter-spacing: inherit; color: inherit; transform: none; }
 .menu-panel .menu-foot a:hover, .menu-panel .menu-foot a:focus-visible { color: var(--accent); }
-@media (max-width: 1180px) {
+/* Nine links since Emiratisation joined the menu (20 Oct 2026): the burger takes over up to 1280px (1380px in
+   Russian, whose labels are longest), and above that the nav gap grows with the width from 14px to 28px (23px in
+   Russian), so the links, both switches and the ADIPEC button keep one line beside the full logo and its one-line
+   strapline. The row is at most 1320px wide (--maxw), which sets the top of the range. */
+@media (max-width: 1280px) {
   .nav .nav-link { display: none; }
   .menu-toggle { display: inline-block; }
 }
+@media (min-width: 1281px) { .site-header .wrap .nav { --nav-gap: clamp(14px, 8.4vw - 94px, 28px); gap: var(--nav-gap); } }
+@media (min-width: 1281px) and (max-width: 1380px) {
+  html[data-lang="ru"] .nav .nav-link { display: none; }
+  html[data-lang="ru"] .menu-toggle { display: inline-block; }
+}
+@media (min-width: 1381px) { html[data-lang="ru"] .site-header .wrap .nav { --nav-gap: clamp(14px, 10vw - 124px, 23px); } }
 @media (max-width: 520px) { .nav .btn { display: none; } }
 /* With the dark/light switch in the row, the desktop nav tightens its gaps from 1320px down to 1181px
    (29px to 19px) so the labels, the switch and the ADIPEC button keep one line with room before the logo */

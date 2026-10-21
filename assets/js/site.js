@@ -27,6 +27,7 @@
     { id: 'clients', href: 'clients.html', label: 'Clients' },
     { id: 'quality', href: 'quality.html', label: 'Quality' },
     { id: 'careers', href: 'careers.html', label: 'Careers' },
+    { id: 'emiratisation', href: 'emiratisation.html', label: 'Emiratisation' },
     { id: 'apply', href: 'careers.html#apply', label: 'Apply now' },
     { id: 'adipec', href: 'adipec.html', label: 'ADIPEC 2026' },
     { id: 'contact', href: 'contact.html', label: 'Contact' }
@@ -118,7 +119,7 @@
         <li><a href="${u('careers.html')}">Careers</a></li>
         <li><a href="${u('careers.html#jobs')}">View open jobs</a></li>
         <li><a href="${u('careers.html#apply')}">Apply for a job</a></li>
-        <li><a href="${u(EXT.emirati)}">Emiratisation</a></li>
+        <li><a href="${u('emiratisation.html')}">Emiratisation</a></li>
         <li><a href="${u(EXT.cv)}">Send your CV</a></li></ul></div>
       <div><h2>Contact</h2><ul>
         <li>${TEL}</li><li>${MAIL}</li><li>P.O. Box 27595, Abu Dhabi, UAE</li>

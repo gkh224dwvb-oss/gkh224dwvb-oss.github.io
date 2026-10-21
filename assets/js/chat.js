@@ -40,7 +40,7 @@
       a: `On our careers page you can <a href="careers.html#jobs">see open positions</a> and <a href="careers.html#apply">apply in two minutes</a>. You can also <a href="${EXT.cv}">send us your CV</a> as a general application. Applications go to our recruitment team at <b>recruitment2@saaest.com</b> and <b>cv@saaest.com</b>. We look for applicants who show integrity, responsiveness and consistency, with the right qualifications and experience.`,
       f: ['Emiratisation', 'Contact details'] },
     { id: 'emirati', k: ['emirati', 'emiratisation', 'emiratization', 'national', 'uae national', 'local talent', 'tawteen'],
-      a: `Emiratisation is central to our strategy: <b>national jobs for national talents</b>. UAE Nationals can <a href="${EXT.emirati}">register with us</a> on our careers page and enter the job market.`,
+      a: `Emiratisation is central to our strategy: <b>national jobs for national talents</b>. UAE Nationals can <a href="${EXT.emirati}">register with us</a> on our careers page and enter the job market. Read more on our <a href="emiratisation.html">Emiratisation page</a>.`,
       f: ['Send my CV', 'About SAA'] },
     { id: 'quality', k: ['quality', 'process', 'iso', 'standard', 'qms', 'audit', 'certif', 'compliance', 'accredit', 'licen'],
       a: `Quality drives our growth. Our system covers five areas: <b>Management Responsibility</b>, <b>Resource Management</b>, <b>Support</b>, <b>Analysis &amp; Improvement</b> and <b>Service Realization</b>. We are a UAE Government licensed recruitment agency. For specific certificates, please contact our team. <a href="quality.html">How we work</a>.`,
