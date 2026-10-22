@@ -113,7 +113,7 @@
         <p class="foot-about">Recruitment, manpower supply, onshore and offshore oil and gas fields and facilities services.</p>
       </div>
       <div><h2>Company</h2><ul>
-        <li><a href="${u('about.html')}">About SAA</a></li><li><a href="${u('group.html')}">Group companies</a></li>
+        <li><a href="${u('about.html')}">About SAA</a></li><li><a href="${u('profile.html')}">Company profile</a></li><li><a href="${u('group.html')}">Group companies</a></li>
         <li><a href="${u('services.html')}">Services</a></li><li><a href="${u('clients.html')}">Clients</a></li><li><a href="${u('quality.html')}">Quality</a></li></ul></div>
       <div><h2>Join us</h2><ul>
         <li><a href="${u('careers.html')}">Careers</a></li>

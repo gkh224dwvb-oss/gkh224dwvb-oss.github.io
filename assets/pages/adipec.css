@@ -558,3 +558,51 @@ fieldset.field legend { padding: 0; margin-bottom: 7px; font-size: var(--t-sm); 
   .st-anim .st-fins i, .st-anim .st-fins b, .st-anim .st-frame img { transform: skewX(-24deg); transition: none; }
   .st-anim .st-frame img { transform: none; }
 }
+
+/* ---------- Company profile QR, at the end of the stand section ----------
+   Visitors at the stand scan the code; anyone already on a phone taps the button. The code keeps
+   its white tile (and so its quiet zone) in both modes. The stand's four fins rise at the far end. */
+.st-scan {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) clamp(180px, 20vw, 300px); align-items: center; gap: 22px clamp(24px, 4vw, 64px);
+  margin-top: clamp(32px, 4vw, 56px); padding: clamp(18px, 2.6vw, 36px);
+  border-radius: var(--r-lg); background: var(--card-bg); box-shadow: inset 0 0 0 1px var(--line-dark);
+}
+:root[data-theme="light"] .st-scan { box-shadow: inset 0 0 0 1px var(--line-dark), 0 30px 60px -46px rgba(25, 46, 73, .3); }
+.ss-code { padding: 14px; border-radius: var(--r); background: #FFFFFF; line-height: 0; box-shadow: 0 24px 50px -30px var(--shadow-deep); }
+:root[data-theme="light"] .ss-code { box-shadow: inset 0 0 0 1px var(--line-dark), 0 24px 50px -32px var(--shadow-deep); }
+.ss-code img { display: block; width: 205px; height: 205px; max-width: none; }   /* 5px a module: sharp and easy to scan */
+.ss-copy { display: grid; gap: 12px; justify-items: start; min-width: 0; }
+.ss-k { color: var(--accent); }
+.ss-t {
+  font-family: var(--f-display); font-weight: 900; font-stretch: 116%; letter-spacing: -.02em; line-height: 1;
+  font-size: clamp(1.6rem, 1rem + 1.8vw, 2.8rem); max-width: 16ch; color: var(--fg);
+}
+.ss-d { color: var(--fg-muted); max-width: 40ch; }
+.ss-url {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--f-mono); font-size: var(--t-base); font-weight: 500; line-height: 1.3; color: var(--fg); overflow-wrap: anywhere;
+}
+.ss-url::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-fill); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .18); }
+.ss-go { margin-top: 10px; }
+/* the stand's fins, small: four rising planes and the red mark */
+.ss-art { position: relative; align-self: stretch; min-height: 180px; margin-block: calc(-1 * clamp(18px, 2.6vw, 36px)); }
+.ss-art i, .ss-art b { position: absolute; bottom: 0; width: 16%; border-radius: 3px 3px 0 0; transform-origin: 50% 100%; transform: skewX(-24deg); }
+.ss-art i:nth-child(1) { inset-inline-start: 8%;  height: 46%; background: linear-gradient(180deg, var(--teal-400), var(--teal)); opacity: .55; }
+.ss-art i:nth-child(2) { inset-inline-start: 30%; height: 62%; background: linear-gradient(180deg, rgba(var(--fg-rgb), .22), rgba(var(--fg-rgb), .05)); }
+.ss-art i:nth-child(3) { inset-inline-start: 52%; height: 78%; background: linear-gradient(180deg, var(--teal), rgba(27, 113, 148, .25)); opacity: .7; }
+.ss-art i:nth-child(4) { inset-inline-start: 74%; height: 94%; background: linear-gradient(180deg, rgba(var(--fg-rgb), .18), rgba(var(--fg-rgb), .03)); }
+.ss-art b { inset-inline-start: 97%; width: 2.4%; height: 34%; background: var(--red); opacity: .9; }
+:root[data-theme="light"] .ss-art i:nth-child(1), :root[data-theme="light"] .ss-art i:nth-child(3) { opacity: .32; }
+[dir="rtl"] .ss-art i, [dir="rtl"] .ss-art b { transform: skewX(24deg); }
+
+@media (max-width: 1080px) {
+  .st-scan { grid-template-columns: auto minmax(0, 1fr); }
+  .ss-art { display: none; }
+}
+@media (max-width: 620px) {
+  .st-scan { grid-template-columns: minmax(0, 1fr); padding: 20px 20px 22px; }
+  .ss-code { justify-self: start; padding: 12px; }
+  .ss-code img { width: 164px; height: 164px; }   /* 4px a module */
+  .ss-go { justify-self: stretch; white-space: normal; text-align: center; }
+}

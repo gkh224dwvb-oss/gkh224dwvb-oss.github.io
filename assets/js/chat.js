@@ -24,8 +24,12 @@
   const ext = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${text}<span class="sr-only"> (opens in a new tab)</span></a>`;
 
   const KB = [
+    /* first, so a question that names the profile or brochure and the company gets the profile */
+    { id: 'profile', k: ['company profile', 'your profile', 'saa profile', 'brochure', 'catalogue', 'catalog', 'qr code', 'qr'],
+      a: `Our <b>company profile</b> introduces SAA Group on one page. <a href="profile.html">Open the company profile</a>, or scan the QR code on our <a href="adipec.html#profile">ADIPEC 2026 page</a> to open it on your phone.`,
+      f: ['About SAA', 'Group companies', 'Contact details'] },
     { id: 'about', k: ['about', 'who are you', 'what is saa', 'company', 'history', 'founded', 'since', 'background', 'overview', 'what do you do', 'tell me'],
-      a: `SAA Group was founded in <b>1993</b> by Saeed Abdulla Rashed Al Shamsi, its Owner and Chairman. Based in Abu Dhabi, it is a UAE Government licensed recruitment agency supplying <b>more than 2,500 employees</b>, mainly to the Oil &amp; Gas sector. <a href="about.html">Read our story</a>.`,
+      a: `SAA Group was founded in <b>1993</b> by Saeed Abdulla Rashed Al Shamsi, its Owner and Chairman. Based in Abu Dhabi, it is a UAE Government licensed recruitment agency supplying <b>more than 2,500 employees</b>, mainly to the Oil &amp; Gas sector. <a href="about.html">Read our story</a> or <a href="profile.html">open our company profile</a>.`,
       f: ['Group companies', 'Services', 'Contact details'] },
     { id: 'services', k: ['service', 'services', 'offer', 'provide', 'manpower', 'recruit', 'staffing', 'supply', 'onshore', 'offshore', 'workers', 'labour', 'labor', 'outsourc', 'technician', 'engineer'],
       a: `Our core service is <b>recruitment and manpower supply</b> for onshore and offshore oil and gas fields and facilities. Across the group we also cover:<ul><li>Construction, maintenance and real estate</li><li>Transport</li><li>Safety and environment</li><li>Import and export</li></ul><a href="services.html">See all services</a>.`,
@@ -50,7 +54,7 @@
       f: ['Services', 'Contact details'] },
     { id: 'adipec', k: ['adipec', 'exhibition', 'expo', 'show', 'event', 'stand', 'booth', 'adnec', 'november', 'meet', 'meeting', 'conference'],
       a: `Meet our Acting Manager and Head of Operations, <b>Mohamed El Naggar</b>, and the SAA team at <b>ADIPEC 2026</b>, <b>2–5 November</b> at ADNEC Centre, Abu Dhabi, on <b>stand 16535</b>. <a href="adipec.html#meet">Request a meeting</a>.`,
-      f: ['How do I hire through SAA?', 'Contact details'] },
+      f: ['How do I hire through SAA?', 'Company profile', 'Contact details'] },
     { id: 'contact', k: ['contact', 'phone', 'call', 'telephone', 'number', 'email', 'mail', 'fax', 'address', 'location', 'where', 'office', 'reach', 'po box', 'map', 'whatsapp'],
       a: `You can reach us at:<ul><li>Tel: <b>+971 2 627 0622</b></li><li>Fax: +971 2 626 8577</li><li>Email: <b>saaest@eim.ae</b></li><li>P.O. Box 27595, Abu Dhabi, UAE</li></ul>${ext(EXT.map, 'Open our location in Maps')}`,
       f: ['Meet at ADIPEC', 'Services'] },
@@ -80,7 +84,7 @@
   const CHIPS = {
     'Services': 'services', 'Group companies': 'companies', 'Contact details': 'contact', 'How do I hire through SAA?': 'hire',
     'Quality process': 'quality', 'Meet at ADIPEC': 'adipec', 'Emiratisation': 'emirati', 'Send my CV': 'jobs', 'Find a job': 'jobs', 'About SAA': 'about', 'Our leadership': 'leadership',
-    'Privacy policy': 'privacy', 'Terms of use': 'terms'
+    'Privacy policy': 'privacy', 'Terms of use': 'terms', 'Company profile': 'profile'
   };
   const START = ['Services', 'Find a job', 'Meet at ADIPEC', 'Contact details'];
   const FALLBACK = { a: `I don't have that information yet. Our team can help directly on <b>+971 2 627 0622</b> or at <b>saaest@eim.ae</b>.`, f: ['Services', 'Find a job', 'Contact details'] };

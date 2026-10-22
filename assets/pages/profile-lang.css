@@ -1,0 +1,73 @@
+/* =========================================================================
+   COMPANY PROFILE: choose your language (assets/pages/profile-lang.js)
+   Navy in both colour modes, like the footer. Sits above the chat button and
+   the cookie banner, under the custom cursor and the preloader.
+   ========================================================================= */
+html.pfl-open { overflow: hidden; }
+
+.pfl {
+  position: fixed; inset: 0; z-index: 380; overflow-y: auto; overscroll-behavior: contain;
+  display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top, 0px)) var(--gutter) max(24px, env(safe-area-inset-bottom, 0px));
+  background: radial-gradient(120% 80% at 50% 0%, var(--navy-900) 0%, var(--navy-990) 70%);
+  color: var(--on-dark); color-scheme: dark; --focus: var(--teal-300);
+  transition: opacity .55s var(--ease), visibility 0s linear .55s;
+}
+.pfl.pfl-out { opacity: 0; visibility: hidden; pointer-events: none; }
+.pfl-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(40% 30% at 85% 12%, rgba(27, 113, 148, .35), transparent 70%),
+    radial-gradient(35% 25% at 10% 95%, rgba(27, 113, 148, .22), transparent 70%);
+}
+.pfl-inner { position: relative; width: min(100%, 760px); }
+
+.pfl-brand { display: flex; align-items: center; gap: 14px; margin-bottom: clamp(28px, 5vh, 48px); }
+.pfl-brand img { width: 48px; height: auto; flex: none; }
+.pfl-brand b { display: block; font: 800 1.15rem/1 var(--f-display); letter-spacing: .02em; }
+.pfl-brand .mono { display: block; margin-top: 6px; color: var(--on-dark-muted); }
+
+.pfl-title { margin: 0; font: 800 clamp(2rem, 1.3rem + 3.6vw, 3.6rem)/1 var(--f-display); letter-spacing: -.01em; }
+.pfl-ask { margin: 14px 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 18px; color: var(--on-dark-muted); font-size: var(--t-base); line-height: 1.6; }
+
+.pfl-list {
+  list-style: none; margin: clamp(26px, 4.5vh, 44px) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+}
+@media (min-width: 720px) { .pfl-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; } }
+
+.pfl-opt {
+  position: relative; width: 100%; min-height: 92px; padding: 18px 18px 16px; border: 1px solid rgba(234, 240, 243, .14); border-radius: var(--r);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "native arrow" "en arrow"; align-items: end; gap: 6px 10px;
+  background: rgba(234, 240, 243, .045); color: inherit; text-align: start; cursor: pointer;
+  transition: background-color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
+}
+.pfl-opt:hover { background: rgba(234, 240, 243, .09); border-color: rgba(234, 240, 243, .3); }
+.pfl-opt:active { transform: scale(.98); }
+.pfl-opt:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.pfl-native { grid-area: native; justify-self: start; font: 600 clamp(1.3rem, 1.1rem + .8vw, 1.65rem)/1.2 var(--f-body); }
+.pfl-native[lang="en-GB"], .pfl-native[lang="ru"] { font-family: var(--f-display); font-weight: 800; }
+.pfl-en { grid-area: en; justify-self: start; color: var(--on-dark-muted); }
+.pfl-arrow { grid-area: arrow; align-self: center; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(234, 240, 243, .08); transition: background-color .3s var(--ease), color .3s var(--ease); }
+.pfl-opt:hover .pfl-arrow, .pfl-opt[data-suggested] .pfl-arrow { background: var(--saa-blue); color: #fff; }
+[dir="rtl"] .pfl-arrow svg { transform: scaleX(-1); }
+
+/* the phone's own language */
+.pfl-opt[data-suggested] { border-color: rgba(98, 184, 218, .55); background: rgba(27, 113, 148, .2); }
+.pfl-opt[data-suggested]::before {
+  content: ""; position: absolute; top: 14px; inset-inline-end: 14px; width: 7px; height: 7px; border-radius: 50%; background: var(--red);
+}
+
+.pfl-note { margin: clamp(22px, 4vh, 34px) 0 0; color: var(--on-dark-muted); font-size: var(--t-sm); }
+
+/* after a language is picked the page reloads: show that something is happening */
+.pfl.pfl-busy .pfl-list { opacity: .5; pointer-events: none; transition: opacity .2s; }
+
+@media (max-width: 380px) {
+  .pfl-opt { min-height: 82px; padding: 14px 14px 12px; }
+  .pfl-arrow { width: 28px; height: 28px; }
+  .pfl-native { font-size: 1.15rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pfl, .pfl-opt, .pfl-arrow { transition: none; }
+}
+@media print { .pfl { display: none !important; } html.pfl-open { overflow: visible; } }
