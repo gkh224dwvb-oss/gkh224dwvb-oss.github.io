@@ -22,6 +22,9 @@
   const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const PROFILE_URL = 'https://www.saagroup.ae/profile';
+  /* play once and stay. Not ScrollTrigger's once: true, which kills triggers inside ScrollTrigger's own refresh
+     when the page opens already scrolled down (a reload mid-page) and throws "reading 'pin'" */
+  const ONCE = 'play none none none';
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
@@ -105,6 +108,16 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && nav.classList.contains('open')) { setOpen(false); navToggle.focus(); }
     });
+    /* Tab past the last chapter in the open list: close it and carry on from the current chapter,
+       not from the cover (the list sits at the top of <main>) */
+    navList.addEventListener('keydown', e => {
+      if (e.key !== 'Tab' || e.shiftKey || e.target !== links[links.length - 1]) return;
+      const ch = chapters[Math.max(0, cur)];
+      if (!ch) return;
+      e.preventDefault(); setOpen(false);
+      if (!ch.hasAttribute('tabindex')) ch.setAttribute('tabindex', '-1');
+      ch.focus({ preventScroll: true });
+    });
     /* keyboard focus leaving the open list closes it */
     nav.addEventListener('focusout', e => { if (nav.classList.contains('open') && e.relatedTarget && !nav.contains(e.relatedTarget)) setOpen(false); });
   }
@@ -135,6 +148,8 @@
     return $$('img').filter(img => !img.complete);
   }
   addEventListener('beforeprint', () => { eagerImages(); finishMotion(); });
+  /* printing from the browser menu gives no time to load lazy images: fetch them quietly once the page has settled */
+  addEventListener('load', () => setTimeout(eagerImages, 3000), { once: true });
   $$('[data-print]').forEach(btn => btn.addEventListener('click', () => {
     if (btn.getAttribute('aria-busy') === 'true') return;
     const waiting = eagerImages();
@@ -254,7 +269,7 @@
   function finishMotion() {
     if (road) { road.state.p = 1; road.draw(); }
     const ST = window.ScrollTrigger;
-    if (ST) ST.getAll().forEach(st => { if (st.vars && st.vars.once && st.animation) st.animation.progress(1); });
+    if (ST) ST.getAll().forEach(st => { if (st.vars && (st.vars.once || st.vars.toggleActions === ONCE) && st.animation) st.animation.progress(1); });
   }
 
   /* ---------------------------------------------------------------------
@@ -317,10 +332,10 @@
 
     /* ----- 01: the red rules on the figures, the award laurel ----- */
     const figs = $$('.pf-fig');
-    if (figs.length) gsap.fromTo(figs, { '--k': 0 }, { '--k': 1, duration: 1, ease: 'expo.out', stagger: .12, scrollTrigger: { trigger: '.pf-figs', start: 'top 85%', once: true } });
+    if (figs.length) gsap.fromTo(figs, { '--k': 0 }, { '--k': 1, duration: 1, ease: 'expo.out', stagger: .12, scrollTrigger: { trigger: '.pf-figs', start: 'top 85%', toggleActions: ONCE } });
     const award = $('.pf-award');
     if (award) {
-      const atl = gsap.timeline({ scrollTrigger: { trigger: award, start: 'top 82%', once: true } });
+      const atl = gsap.timeline({ scrollTrigger: { trigger: award, start: 'top 82%', toggleActions: ONCE } });
       atl.from(award, { y: 60, opacity: 0, duration: 1.2, ease: 'expo.out' }, 0)
         .add(drawLines(gsap, $$('.pf-award-laurel', award), { duration: 1.4 }), .3)
         .from($$('.pf-award-leaf', award), { opacity: 0, duration: .8, ease: 'power2.out' }, .9)
@@ -331,21 +346,21 @@
     /* ----- 02: portraits open from the bottom ----- */
     $$('.pf-word-photo').forEach(ph => {
       const img = $('img', ph);
-      const ptl = gsap.timeline({ scrollTrigger: { trigger: ph, start: 'top 85%', once: true } });
+      const ptl = gsap.timeline({ scrollTrigger: { trigger: ph, start: 'top 85%', toggleActions: ONCE } });
       ptl.fromTo(ph, { clipPath: 'inset(100% 0% 0% 0% round 26px)' }, { clipPath: 'inset(0% 0% 0% 0% round 26px)', duration: 1.4, ease: 'expo.inOut', clearProps: 'clipPath' }, 0);
       if (img) ptl.from(img, { scale: 1.18, duration: 1.8, ease: 'expo.out' }, .1);
       const tag = $('.pf-word-tag', ph);
       if (tag) ptl.from(tag, { y: -12, opacity: 0, duration: .8, ease: 'power3.out' }, .9);
     });
     $$('.pf-word-body').forEach(b => {
-      gsap.from(b.children, { y: 40, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: b, start: 'top 85%', once: true } });
+      gsap.from(b.children, { y: 40, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: b, start: 'top 85%', toggleActions: ONCE } });
     });
 
     /* ----- 05: industry tiles rise, and their icons draw themselves ----- */
     const ind = $('.pf-ind-grid');
     if (ind) {
       const tiles = $$('.pf-ind-tile', ind);
-      const itl = gsap.timeline({ scrollTrigger: { trigger: ind, start: 'top 85%', once: true } });
+      const itl = gsap.timeline({ scrollTrigger: { trigger: ind, start: 'top 85%', toggleActions: ONCE } });
       itl.from(tiles, { y: 40, opacity: 0, duration: 1, ease: 'expo.out', stagger: { each: .045, grid: 'auto', from: 'start' } }, 0);
       tiles.forEach((tile, i) => itl.add(drawLines(gsap, $$('.pf-ind-ic svg > *', tile), { duration: 1.2 }), .15 + i * .045));
     }
@@ -355,22 +370,22 @@
       const el = $(list); if (!el) return;
       const shapes = $$(sel, el); if (!shapes.length) return;
       const tw = drawLines(gsap, shapes, { duration: 1.3, stagger: .03, paused: true });
-      ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => tw.play() });
+      ScrollTrigger.create({ trigger: el, start: 'top 85%', onEnter: () => tw.play() });
     });
 
     /* ----- 06: the flag rule runs across, each card's colour bar follows ----- */
     const emi = $('#emiratisation');
     if (emi) {
       const rule = $('.pf-flagrule', emi);
-      if (rule) gsap.fromTo(rule, { '--k': 0 }, { '--k': 1, duration: 1.6, ease: 'expo.inOut', scrollTrigger: { trigger: emi, start: 'top 80%', once: true } });
+      if (rule) gsap.fromTo(rule, { '--k': 0 }, { '--k': 1, duration: 1.6, ease: 'expo.inOut', scrollTrigger: { trigger: emi, start: 'top 80%', toggleActions: ONCE } });
       const cards = $$('.pf-emi-card', emi);
-      if (cards.length) gsap.fromTo(cards, { '--k': 0 }, { '--k': 1, duration: 1.1, ease: 'expo.out', stagger: .12, delay: .25, scrollTrigger: { trigger: '.pf-emi-grid', start: 'top 85%', once: true } });
+      if (cards.length) gsap.fromTo(cards, { '--k': 0 }, { '--k': 1, duration: 1.1, ease: 'expo.out', stagger: .12, delay: .25, scrollTrigger: { trigger: '.pf-emi-grid', start: 'top 85%', toggleActions: ONCE } });
     }
 
     /* ----- 08: the map pins land one by one, then the links between them appear ----- */
     const map = $('.pf-map');
     if (map) {
-      const mtl = gsap.timeline({ scrollTrigger: { trigger: map, start: 'top 80%', once: true } });
+      const mtl = gsap.timeline({ scrollTrigger: { trigger: map, start: 'top 80%', toggleActions: ONCE } });
       const pins = $$('.pf-map-pin', map);
       pins.forEach((pin, i) => {
         mtl.from($$('.pf-map-ring, .pf-map-core', pin), { scale: 0, transformOrigin: '50% 50%', duration: .9, ease: 'back.out(2.2)', stagger: .08 }, .15 + i * .22);
@@ -382,7 +397,7 @@
     /* ----- 10: a line sweeps under each group company ----- */
     const cos = $$('.pf-co');
     if (cos.length) {
-      const ctl = gsap.timeline({ scrollTrigger: { trigger: '.pf-cos', start: 'top 82%', once: true } });
+      const ctl = gsap.timeline({ scrollTrigger: { trigger: '.pf-cos', start: 'top 82%', toggleActions: ONCE } });
       ctl.fromTo(cos, { '--k': 0 }, { '--k': 1, duration: .8, ease: 'power2.inOut', stagger: .1 }, .2)
         .to(cos, { '--k': 0, duration: .8, ease: 'power2.inOut', stagger: .1 }, .75);
     }
