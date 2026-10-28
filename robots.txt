@@ -4,5 +4,6 @@ Allow: /
 Disallow: /tools/
 Disallow: /api/
 Disallow: /admin/
+Disallow: /rotation/
 
 Sitemap: https://www.saagroup.ae/sitemap.xml
