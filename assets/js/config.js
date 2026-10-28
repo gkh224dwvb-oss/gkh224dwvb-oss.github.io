@@ -34,7 +34,7 @@
     siteUrl: 'https://www.saagroup.ae',
     chatEndpoint: '',
     recruitApi: 'https://script.google.com/macros/s/AKfycbz0z6hYC4i7rr8whGR8EL4AUSlvgCic7lBWOImpFPQuKcPsm3TgENUBFp3tb_PtMCOx/exec',
-    rotationApi: '',
+    rotationApi: 'https://script.google.com/macros/s/AKfycby-t5E-nPNQF0xfN5Otg6BPdC50X-HQsBbH0VLCAzrYZajG_Qw27yfBX3sKlwzDNJE6/exec',
     analytics: { ga4: '' },
     forceHttps: true,
     debug: false
