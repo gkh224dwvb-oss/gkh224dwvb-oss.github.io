@@ -23,6 +23,9 @@
                    admin-system/backend/SETUP.md in the project files), ending in /exec.
                    With it, the careers form sends applications and CVs there and the
                    team sees them in /admin/. Leave it '' to keep the email-app form.
+   - rotationApi   Web app URL of the Rotation Control backend (Google Apps Script, see
+                   web/SETUP.md in the employee-rotation-tracker repo), ending in /exec.
+                   /rotation/ shows a "not connected" sign-in screen until it is set.
    - debug         true logs analytics events to the browser console.
    ========================================================================= */
 (function () {
@@ -31,6 +34,7 @@
     siteUrl: 'https://www.saagroup.ae',
     chatEndpoint: '',
     recruitApi: 'https://script.google.com/macros/s/AKfycbz0z6hYC4i7rr8whGR8EL4AUSlvgCic7lBWOImpFPQuKcPsm3TgENUBFp3tb_PtMCOx/exec',
+    rotationApi: 'https://script.google.com/macros/s/AKfycby-t5E-nPNQF0xfN5Otg6BPdC50X-HQsBbH0VLCAzrYZajG_Qw27yfBX3sKlwzDNJE6/exec',
     analytics: { ga4: '' },
     forceHttps: true,
     debug: false
